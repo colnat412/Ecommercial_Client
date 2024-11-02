@@ -1,1 +1,2 @@
-export * from "./svgs/Brand";
+export * from "./svgs";
+export * from "./fonts"

@@ -1,19 +1,53 @@
-import { Account } from '@/types/account';
-import * as SecureStore from 'expo-secure-store';
+import { Account } from "@/types/account";
+import * as SecureStore from "expo-secure-store";
+import { setAccessToken } from "../axios/axiosConfig";
 
+const login = async (account: Account) => {
+     // Set token to axios
+     setAccessToken(account.accessToken);
 
-const login = async (account: Account, token: string) => {
-  const accountData = JSON.stringify(account);
-  await SecureStore.setItemAsync('accountData', accountData);
-  await SecureStore.setItemAsync('token', token);
+     // Save account and token to SecureStore
+     const accountData = JSON.stringify(account);
+     await SecureStore.setItemAsync(
+          "accountData",
+          accountData
+     );
+     await SecureStore.setItemAsync(
+          "token",
+          account.accessToken
+     );
+};
+
+const logout = async () => {
+     // Clear axios token
+     setAccessToken("");
+
+     // Clear SecureStore
+     await SecureStore.deleteItemAsync(
+          "accountData"
+     );
+     await SecureStore.deleteItemAsync("token");
 };
 
 const getAccount = async () => {
-  const accountData = await SecureStore.getItemAsync('accountData');
-  return accountData ? JSON.parse(accountData) : null;
+     const accountData =
+          await SecureStore.getItemAsync(
+               "accountData"
+          );
+     return accountData
+          ? JSON.parse(accountData)
+          : null;
 };
 
-const removeUserData = async () => {
-  await SecureStore.deleteItemAsync('userData');
-    await SecureStore.deleteItemAsync('token');
+const getToken = async () => {
+     return await SecureStore.getItemAsync(
+          "token"
+     );
+};
+
+export const AuthSecureStore = {
+     login,
+     logout,
+     getAccount,
+     getToken,
 };
