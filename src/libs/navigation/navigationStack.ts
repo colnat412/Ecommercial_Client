@@ -1,11 +1,15 @@
 import { RouteProp } from "@react-navigation/native";
-import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
+import {
+     createNativeStackNavigator,
+     NativeStackNavigationProp,
+} from "@react-navigation/native-stack";
 
 export const Stack =
      createNativeStackNavigator<RootStackParamList>();
 
 export type RootStackParamList = {
-        HomePage: undefined;
+     HomePage: undefined;
+     Login: undefined;
 };
 
 declare global {
@@ -16,10 +20,6 @@ declare global {
 }
 
 export type HomeScreenNavigationProp =
-     NativeStackNavigationProp<
-          RootStackParamList
-     >;
-export type HomeScreenRouteProp = RouteProp<
-     RootStackParamList
->;
-
+     NativeStackNavigationProp<RootStackParamList>;
+export type HomeScreenRouteProp =
+     RouteProp<RootStackParamList>;

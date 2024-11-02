@@ -1,4 +1,3 @@
-import { ColorStyleSheet } from "@/constants/color";
 import * as React from "react"
 import Svg, { SvgProps, Path } from "react-native-svg"
 
@@ -8,7 +7,7 @@ interface SVGRProps {
     height?: number;
 }
 
-const SvgComponent = ({ color = "#05CFEA", width = 25, height = 25  , ...props }: SvgProps) => (
+export const Brand = ({ color = "#05CFEA", width = 25, height = 25  , ...props }: SvgProps) => (
     <Svg
         fill="none"
         viewBox="0 0 40 40"
@@ -26,4 +25,3 @@ const SvgComponent = ({ color = "#05CFEA", width = 25, height = 25  , ...props }
         />
     </Svg>
 )
-export default SvgComponent
