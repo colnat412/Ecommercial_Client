@@ -1,8 +1,9 @@
+import { BE_URL } from '@/env';
 import axios from 'axios'
 
 // Create an Axios instance
 export const api = axios.create({
-     baseURL: "http://192.168.99.213:3030",
+     baseURL: BE_URL,
 });
 
 // Function to set the access token
