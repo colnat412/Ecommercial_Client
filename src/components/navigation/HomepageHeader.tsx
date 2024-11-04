@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { Text } from "react-native-paper";
 import { colors } from "@/src/constants/color";
 
-const HomepageHeader = () => {
+export const HomepageHeader = () => {
     const navigation = useNavigation();
 
     return (
@@ -21,5 +21,3 @@ const HomepageHeader = () => {
         </View>
     );
 }
-
-export default HomepageHeader;
