@@ -1,10 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NavigationProp, RouteProp } from "@react-navigation/native";
 
 export type RootTabParamList = {
         HomePage: undefined,
-        Login : undefined,
+            as: undefined
 }
 
 export const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -17,7 +16,7 @@ declare global {
      }
 }
 
-export type HomeScreenNavigationProp =
-     NativeStackNavigationProp<RootTabParamList>;
-export type HomeScreenRouteProp =
+export type ScreenTabNavigationProp =
+     NavigationProp<RootTabParamList>;
+export type ScreenTabRouteProp =
      RouteProp<RootTabParamList>;

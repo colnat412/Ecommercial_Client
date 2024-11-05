@@ -1,12 +1,12 @@
 import { Brand, Cart, User } from "@/src/assets";
-import { style } from "@/src/constants/style";
+import { colors, style } from "@/src/constants";
+import { StackScreenNavigationProp } from "@/src/libs";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
-import { colors } from "@/src/constants/color";
 
-export const HomepageHeader = () => {
-    const navigation = useNavigation();
+export const HomePageHeader = () => {
+    const navigation = useNavigation<StackScreenNavigationProp>();
 
     const goLogin = () => {
         navigation.navigate("Login");

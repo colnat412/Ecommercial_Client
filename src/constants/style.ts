@@ -11,8 +11,8 @@ export const style = StyleSheet.create({
           alignItems: "center",
      },
      body: {
-          flex: 1,
           paddingHorizontal: 16,
+          paddingVertical: 16,
           backgroundColor: colors.mainBackground,
      },
      rowCenter: {
@@ -27,16 +27,10 @@ export const style = StyleSheet.create({
           width: "100%"
      },
      centerContainer: {
-          flex: 1,
           justifyContent: "center",
           alignItems: "center",
      },
      textInput:{
-          backgroundColor: "white",
-          padding: 8,
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: "gray",
           width: "100%",
      },
      button: {

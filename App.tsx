@@ -1,12 +1,11 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { Tab } from './src/libs';
-import { HomePage, Login } from './src/components';
 import { Brand, fonts } from './src/assets';
 import { Provider } from 'react-redux';
 import { PaperProvider } from 'react-native-paper';
 import { theme } from './src/constants/theme';
 import { useFonts } from 'expo-font';
 import { View } from 'react-native';
+import { StackScreenApp } from './src/app';
+
 
 
 
@@ -25,12 +24,7 @@ export default function App() {
 
       // <Provider store={store}>
       <PaperProvider theme={theme}>
-        <NavigationContainer >
-          <Tab.Navigator initialRouteName='Login'>
-            <Tab.Screen name="HomePage" component={HomePage} options={{ headerLeft: () => <Brand />, tabBarIcon: () => <Brand />, headerShown: false }} />
-            <Tab.Screen name="Login" component={Login} options={{tabBarStyle: {display: "none"}, headerShown: false}}/>
-          </Tab.Navigator>
-        </NavigationContainer>
+        <StackScreenApp />
       </PaperProvider>
       // </Provider>
     );

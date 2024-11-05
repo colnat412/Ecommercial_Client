@@ -1,12 +1,6 @@
 import Svg, { SvgProps, Defs, ClipPath, Path, G, Rect } from "react-native-svg";
 import React from "react";
 
-interface SVGRProps {
-    color?: string;
-    width?: number;
-    height?: number;
-}
-
 export const GoBack = ({ color = "#05CFEA", width = 25, height = 25 }: SvgProps) => {
     return (
         <Svg
