@@ -7,13 +7,12 @@ interface SVGRProps {
     height?: number;
 }
 
-export const Brand = ({ color = "#05CFEA", width = 25, height = 25  , ...props }: SvgProps) => (
+export const Brand = ({ color = "#05CFEA", width = 25, height = 25}: SvgProps) => (
     <Svg
         fill="none"
         viewBox="0 0 40 40"
         width={width}
         height={height}
-        {...props}
     >
         <Path
             fill={color}
