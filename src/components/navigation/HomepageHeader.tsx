@@ -1,12 +1,16 @@
 import { Brand, Cart, User } from "@/src/assets";
 import { style } from "@/src/constants/style";
 import { useNavigation } from "@react-navigation/native";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 import { colors } from "@/src/constants/color";
 
 export const HomepageHeader = () => {
     const navigation = useNavigation();
+
+    const goLogin = () => {
+        navigation.navigate("Login");
+    }
 
     return (
         <View style={[style.headerContainer, { backgroundColor: "white" }]}>
@@ -16,7 +20,9 @@ export const HomepageHeader = () => {
             </View>
             <View style={[style.rowCenter, { gap: 16 }]}>
                 <Cart width={20} height={20} color={colors.cart} />
-                <User width={25} height={25} color={"black"} />
+                <TouchableOpacity onPress={goLogin}>
+                    <User width={25} height={25} color={"black"} />
+                </TouchableOpacity>
             </View>
         </View>
     );

@@ -1,5 +1,5 @@
 import * as React from "react";
-import Svg, { SvgProps, Defs, ClipPath, Path, G, Rect } from "react-native-svg";
+import Svg, { SvgProps, Path} from "react-native-svg";
 
 interface SVGRProps {
     color?: string;

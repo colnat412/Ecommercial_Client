@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { Tab } from './src/libs';
-import { HomePage, LoginTest } from './src/components';
+import { HomePage, Login } from './src/components';
 import { Brand, fonts } from './src/assets';
 import { Provider } from 'react-redux';
 import { PaperProvider } from 'react-native-paper';
@@ -26,9 +26,9 @@ export default function App() {
       // <Provider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer >
-          <Tab.Navigator initialRouteName='HomePage'>
+          <Tab.Navigator initialRouteName='Login'>
             <Tab.Screen name="HomePage" component={HomePage} options={{ headerLeft: () => <Brand />, tabBarIcon: () => <Brand />, headerShown: false }} />
-            <Tab.Screen name="Login" component={LoginTest} />
+            <Tab.Screen name="Login" component={Login} options={{tabBarStyle: {display: "none"}, headerShown: false}}/>
           </Tab.Navigator>
         </NavigationContainer>
       </PaperProvider>

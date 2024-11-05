@@ -1,3 +1,3 @@
 export * from "./Homepage"
-export * from "./LoginTest"
+export * from "./Login"
 export * from "./navigation/index"

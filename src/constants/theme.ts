@@ -5,6 +5,7 @@ import { colors } from "./color";
 export const theme: ThemeProp = {
      ...DefaultTheme,
      colors: {
-          primary: colors.brand,
+          primary: colors.brand, //backgroundColor
+          onPrimary: colors.textBrand, //textColor
      },
 };
