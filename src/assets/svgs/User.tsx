@@ -1,12 +1,6 @@
 import * as React from "react";
 import Svg, { SvgProps, Path} from "react-native-svg";
 
-interface SVGRProps {
-    color?: string;
-    width?: number;
-    height?: number;
-}
-
 export const User = ({ color = "#05CFEA", width = 25, height = 25}: SvgProps) => (
     <Svg
         fill="none"

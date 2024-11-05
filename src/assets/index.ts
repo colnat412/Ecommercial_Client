@@ -1,2 +1,2 @@
-export * from "./svgs";
+export * from "./svgs"
 export * from "./fonts"
