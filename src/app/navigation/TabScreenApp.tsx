@@ -1,15 +1,10 @@
 import { Tab } from "@/src/libs";
 import { HomePage } from "../containers/HomePage";
 import { colors } from "@/src/constants";
-import { Home } from "@/src/assets";
+import { Home, Search as SearchIcon, Favorite as FavoriteIcon } from "@/src/assets";
 import { Text } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
-
-interface SVGRProps {
-    color?: string;
-    width?: number;
-    height?: number;
-}
+import { Favorite, Search } from "../containers";
 
 export const TabScreenApp = () => {
     return (
@@ -28,12 +23,27 @@ export const TabScreenApp = () => {
                     <TouchableOpacity {...props} />
                 )
             },
-            tabBarStyle: { height: 40, justifyContent: "center", alignItems: "center" }
-        }}>
+            tabBarStyle: { height: 40, justifyContent: "center", alignItems: "center" },
+
+        }}
+            initialRouteName="Favorite"
+        >
             <Tab.Screen name="HomePage" component={HomePage}
                 options={{
                     title: "Home",
                     tabBarIcon: ({ focused }) => (<Home color={focused ? colors.brand : colors.disable} />)
+                }}
+            />
+            <Tab.Screen name="Search" component={Search}
+                options={{
+                    title: "Search",
+                    tabBarIcon: ({ focused }) => (<SearchIcon color={focused ? colors.brand : colors.disable} />)
+                }}
+            />
+            <Tab.Screen name="Favorite" component={Favorite}
+                options={{
+                    title: "Favorite",
+                    tabBarIcon: ({ focused }) => (<FavoriteIcon color={focused ? colors.brand : colors.disable} />)
                 }}
             />
         </Tab.Navigator>

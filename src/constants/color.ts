@@ -6,6 +6,6 @@ export const colors = {
      secondText: "#929292",
      mainText: "#333333",
      disable: "#000000",
-     outline: "#ECECEC",
+     outline: "#ECECEC", // + underline
      placeholder: "#ABABAB",
 };

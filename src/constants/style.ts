@@ -1,6 +1,13 @@
 import { StyleSheet } from "react-native";
 import { colors } from "./color";
 
+
+
+/**
+ * headerContainer: headderContainer + body
+ * just Body: container
+ */
+
 export const style = StyleSheet.create({
      headerContainer: {
           paddingTop: 32,
@@ -9,8 +16,19 @@ export const style = StyleSheet.create({
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          minHeight: 70,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.outline,
+     },
+     container: {
+          flex: 1,
+          backgroundColor: colors.mainBackground,
+          marginTop: 32,
+          paddingHorizontal: 16,
+          justifyContent: "flex-start",
      },
      body: {
+          flex: 1,
           paddingHorizontal: 16,
           paddingVertical: 16,
           backgroundColor: colors.mainBackground,
@@ -18,19 +36,19 @@ export const style = StyleSheet.create({
      rowCenter: {
           flexDirection: "row",
           alignItems: "center",
-          gap: 8
+          gap: 8,
      },
      columnCenter: {
           flexDirection: "column",
           alignItems: "center",
           gap: 8,
-          width: "100%"
+          width: "100%",
      },
      centerContainer: {
           justifyContent: "center",
           alignItems: "center",
      },
-     textInput:{
+     textInput: {
           width: "100%",
      },
      button: {
@@ -42,5 +60,14 @@ export const style = StyleSheet.create({
      },
      buttonText: {
           width: "100%",
+     },
+     headerText: {
+          fontSize: 24,
+          fontWeight: "bold",
+          fontFamily: "RobotoBold",
+     },
+     titleText: {
+          fontSize: 16,
+          color: colors.secondText,
      },
 });

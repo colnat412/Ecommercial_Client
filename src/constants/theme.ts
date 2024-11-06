@@ -4,7 +4,6 @@ import { colors } from "./color";
 
 
 export const theme: ThemeProp = {
-     ...DefaultTheme,
      colors: {
           ...DefaultTheme.colors,
           primary: colors.brand, //backgroundColor
@@ -12,5 +11,4 @@ export const theme: ThemeProp = {
           outline: colors.outline, //borderColor
           background: colors.mainBackground, //backgroundColor
      },
-
 };
