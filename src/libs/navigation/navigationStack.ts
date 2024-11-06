@@ -22,5 +22,7 @@ declare global {
 
 export type StackScreenNavigationProp =
      NativeStackNavigationProp<RootStackParamList>;
+
 export type StackScreenRouteProp =
      RouteProp<RootStackParamList>;
+

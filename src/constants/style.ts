@@ -28,7 +28,7 @@ export const style = StyleSheet.create({
           justifyContent: "flex-start",
      },
      body: {
-          flex:1,
+          flex: 1,
           paddingHorizontal: 16,
           paddingVertical: 16,
           backgroundColor: colors.mainBackground,
@@ -60,5 +60,14 @@ export const style = StyleSheet.create({
      },
      buttonText: {
           width: "100%",
+     },
+     headerText: {
+          fontSize: 24,
+          fontWeight: "bold",
+          fontFamily: "RobotoBold",
+     },
+     titleText: {
+          fontSize: 16,
+          color: colors.secondText,
      },
 });
