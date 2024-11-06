@@ -1,7 +1,8 @@
 import Svg, { SvgProps, Defs, ClipPath, Path, G, Rect } from "react-native-svg";
 import React from "react";
+import { colors } from "@/src/constants";
 
-export const GoBack = ({ color = "#05CFEA", width = 25, height = 25 }: SvgProps) => {
+export const GoBack = ({ color = colors.brand, width = 25, height = 25 }: SvgProps) => {
     return (
         <Svg
             viewBox="0 0 12 12"
