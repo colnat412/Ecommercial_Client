@@ -1,5 +1,5 @@
 import { StackScreenNavigationProp } from "@/src/libs";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { DismissKeyboardView } from "../components";
 import { ScrollView, View } from "react-native";

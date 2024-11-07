@@ -1,13 +1,17 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationProp, RouteProp } from "@react-navigation/native";
+import {
+     NavigationProp,
+     RouteProp,
+} from "@react-navigation/native";
 
 export type RootTabParamList = {
-        HomePage: undefined,
-            as: undefined
-}
+     HomePage: undefined;
+     Search: undefined;
+     Favorite: undefined;
+};
 
-export const Tab = createBottomTabNavigator<RootTabParamList>();
-
+export const Tab =
+     createBottomTabNavigator<RootTabParamList>();
 
 declare global {
      namespace ReactNavigation {
