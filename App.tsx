@@ -6,10 +6,6 @@ import { useFonts } from 'expo-font';
 import { View } from 'react-native';
 import { StackScreenApp } from './src/app';
 
-
-
-
-
 export default function App() {
   const [fontsLoaded] = useFonts(fonts);
 

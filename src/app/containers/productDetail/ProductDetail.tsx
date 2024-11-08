@@ -1,10 +1,11 @@
 import { colors, style } from "@/src/constants";
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Modal, Portal, Surface, Text } from "react-native-paper";
-import { ProductDetailHeader } from "../navigation/components";
+import { ProductDetailHeader } from "../../navigation/components";
 import { Cancel, Cart, Favorite, Go, HalfStar, Medal, Share, Star, StarProduct, Truck } from "@/src/assets";
-import { useState } from "react";
-import { Product } from "@/src/types";
+import { useEffect, useState } from "react";
+import { Feedback, Product } from "@/src/types";
+import { getReviews } from "./handle";
 
 interface ProductDetailProps {
     product: Product;
@@ -12,6 +13,14 @@ interface ProductDetailProps {
 
 export const ProductDetail = () => {
     const [visibleCart, setVisibleCart] = useState<boolean>(false);
+
+    const [feedback, setFeedback] = useState<Feedback[] | undefined>([]);
+
+    useEffect(() => {
+        getReviews("1").then((data) => {
+            setFeedback(data);
+        });
+    }, []);
 
     const toggleModalCart = () => {
         setVisibleCart(!visibleCart);
@@ -184,42 +193,25 @@ askjdlkqjwdlkjqwoidjhe`
 
                         <View style={{ gap: 12, marginTop: 32 }}>
 
-                            <View style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
-                                <Image source={{ uri: "https://loremflickr.com/640/480?lock=6365946044219392" }}
-                                    width={40}
-                                    height={40}
-                                    alt="avatar"
-                                    style={{ borderRadius: 300 }}
-                                />
-                                <View style={{ flex: 1 }}>
-                                    <View style={[style.rowCenterBetween]}>
-                                        <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>User Name</Text>
-                                        <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
-                                    </View>
-                                    <View style={[style.rowCenterBetween]}>
-                                        <Text style={{ fontSize: 12, color: colors.secondText }}>Good prasdaslkdjasldjasljdlkasjdljaskdjlkasjdlkasjdkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjlkasjdlksajdlkasjldkasjlkdasjlkdjaslkdjaslkdjalkdjlaksdjlaslasdloduct</Text>
-                                    </View>
-                                </View>
-                            </View>
-
-                            <View style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
-                                <Image source={{ uri: "https://loremflickr.com/640/480?lock=6365946044219392" }}
-                                    width={40}
-                                    height={40}
-                                    alt="avatar"
-                                    style={{ borderRadius: 300 }}
-                                />
-                                <View style={{ flex: 1 }}>
-                                    <View style={[style.rowCenterBetween]}>
-                                        <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>User Name</Text>
-                                        <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
-                                    </View>
-                                    <View style={[style.rowCenterBetween]}>
-                                        <Text style={{ fontSize: 12, color: colors.secondText }}>Good prasdaslkdjasldjasljdlkasjdljaskdjlkasjdlkasjdkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjlkasjdlksajdlkasjldkasjlkdasjlkdjaslkdjaslkdjalkdjlaksdjlaslasdloduct</Text>
+                            {feedback ? feedback.slice(0, 5).map((item, index) => (
+                                <View key={index} style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
+                                    <Image source={{ uri: item.imageUrl }}
+                                        width={40}
+                                        height={40}
+                                        alt="avatar"
+                                        style={{ borderRadius: 300 }}
+                                    />
+                                    <View style={{ flex: 1 }}>
+                                        <View style={[style.rowCenterBetween]}>
+                                            <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>{item.detailInfomation.fullName}</Text>
+                                            <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
+                                        </View>
+                                        <View style={[style.rowCenterBetween]}>
+                                            <Text style={{ fontSize: 12, color: colors.secondText }}>{item.comment}</Text>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-
+                            )) : (<></>)}
                         </View>
 
                         <View style={{ width: "100%", height: 0.5, backgroundColor: colors.secondText, marginVertical: 15 }} />
@@ -257,7 +249,7 @@ askjdlkqjwdlkjqwoidjhe`
                     contentContainerStyle={styles.surface}
                     style={[styles.modalContainer]}
                 >
-                    <Surface style={[styles.content, {gap: 12}]}>
+                    <Surface style={[styles.content, { gap: 12 }]}>
                         <View style={[style.rowCenterBetween]}>
                             <Text style={style.headerText}>Add to cart</Text>
                             <TouchableOpacity onPress={toggleModalCart}>
@@ -280,84 +272,34 @@ askjdlkqjwdlkjqwoidjhe`
                     style={{ paddingHorizontal: 12 }}
                 >
                     <Surface style={{ height: "auto", maxHeight: "90%", padding: 12, borderRadius: 4, gap: 12 }} >
-                            <View style={[style.rowCenterBetween]}>
-                                <Text style={style.headerText}>Reviews</Text>
-                                <TouchableOpacity onPress={toggleModalReviews}>
-                                    <Cancel color={colors.disable} />
-                                </TouchableOpacity>
-                            </View>
+                        <View style={[style.rowCenterBetween]}>
+                            <Text style={style.headerText}>Reviews</Text>
+                            <TouchableOpacity onPress={toggleModalReviews}>
+                                <Cancel color={colors.disable} />
+                            </TouchableOpacity>
+                        </View>
                         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
 
-                            <View style={{gap: 12}}>
-
-                                <View style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
-                                    <Image source={{ uri: "https://loremflickr.com/640/480?lock=6365946044219392" }}
-                                        width={40}
-                                        height={40}
-                                        alt="avatar"
-                                        style={{ borderRadius: 300 }}
-                                    />
-                                    <View style={{ flex: 1 }}>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>User Name</Text>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
-                                        </View>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>Good prasdaslkdjasldjasljdlkasjdljaskdjlkasjdlkasjdkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjlkasjdlksajdlkasjldkasjlkdasjlkdjaslkdjaslkdjalkdjlaksdjlaslasdloduct</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
-                                    <Image source={{ uri: "https://loremflickr.com/640/480?lock=6365946044219392" }}
-                                        width={40}
-                                        height={40}
-                                        alt="avatar"
-                                        style={{ borderRadius: 300 }}
-                                    />
-                                    <View style={{ flex: 1 }}>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>User Name</Text>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
-                                        </View>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>Good prasdaslkdjasldjasljdlkasjdljaskdjlkasjdlkasjdkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjlkasjdlksajdlkasjldkasjlkdasjlkdjaslkdjaslkdjalkdjlaksdjlaslasdloduct</Text>
+                            <View style={{ gap: 12 }}>
+                                {feedback ? feedback.slice(0, 5).map((item, index) => (
+                                    <View key={index} style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
+                                        <Image source={{ uri: item.imageUrl }}
+                                            width={40}
+                                            height={40}
+                                            alt="avatar"
+                                            style={{ borderRadius: 300 }}
+                                        />
+                                        <View style={{ flex: 1 }}>
+                                            <View style={[style.rowCenterBetween]}>
+                                                <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>{item.detailInfomation.fullName}</Text>
+                                                <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
+                                            </View>
+                                            <View style={[style.rowCenterBetween]}>
+                                                <Text style={{ fontSize: 12, color: colors.secondText }}>{item.comment}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                                <View style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
-                                    <Image source={{ uri: "https://loremflickr.com/640/480?lock=6365946044219392" }}
-                                        width={40}
-                                        height={40}
-                                        alt="avatar"
-                                        style={{ borderRadius: 300 }}
-                                    />
-                                    <View style={{ flex: 1 }}>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>User Name</Text>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
-                                        </View>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>Good prasdaslkdjasldjasljdlkasjdljaskdjlkasjdlkasjdkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjlkasjdlksajdlkasjldkasjlkdasjlkdjaslkdjaslkdjalkdjlaksdjlaslasdloduct</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={[style.rowCenterCenter, { gap: 32, alignItems: "flex-start" }]}>
-                                    <Image source={{ uri: "https://loremflickr.com/640/480?lock=6365946044219392" }}
-                                        width={40}
-                                        height={40}
-                                        alt="avatar"
-                                        style={{ borderRadius: 300 }}
-                                    />
-                                    <View style={{ flex: 1 }}>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.mainText }}>User Name</Text>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>1 day ago</Text>
-                                        </View>
-                                        <View style={[style.rowCenterBetween]}>
-                                            <Text style={{ fontSize: 12, color: colors.secondText }}>Good prasdaslkdjasldjasljdlkasjdljaskdjlkasjdlkasjdkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjkdjasldjasljdlkasjdljaskdjlkasjdlkasjlkasjdlksajdlkasjldkasjlkdasjlkdjaslkdjaslkdjalkdjlaksdjlaslasdloduct</Text>
-                                        </View>
-                                    </View>
-                                </View>
+                                )) : (<></>)}
                             </View>
                         </ScrollView>
                     </Surface>
