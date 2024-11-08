@@ -16,7 +16,7 @@ export const style = StyleSheet.create({
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          minHeight: 70,
+          minHeight: 40,
           borderBottomWidth: 1,
           borderBottomColor: colors.outline,
      },
@@ -29,13 +29,29 @@ export const style = StyleSheet.create({
      },
      body: {
           flex: 1,
+          backgroundColor: colors.mainBackground,
+     },
+     contentBody: {
+          flex: 1,
+          backgroundColor: colors.mainBackground,
           paddingHorizontal: 16,
           paddingVertical: 16,
-          backgroundColor: colors.mainBackground,
      },
      rowCenter: {
           flexDirection: "row",
           alignItems: "center",
+          gap: 8,
+     },
+     rowCenterBetween: {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
+     },
+     rowCenterCenter: {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
           gap: 8,
      },
      columnCenter: {
@@ -67,7 +83,17 @@ export const style = StyleSheet.create({
           fontFamily: "RobotoBold",
      },
      titleText: {
-          fontSize: 16,
+          fontSize: 8,
           color: colors.secondText,
+     },
+     priceText: {
+          fontSize: 20,
+          fontWeight: "bold",
+          color: colors.brand,
+     },
+     outline: {
+          borderColor: colors.outline,
+          borderWidth: 2,
+          borderRadius: 8,
      },
 });

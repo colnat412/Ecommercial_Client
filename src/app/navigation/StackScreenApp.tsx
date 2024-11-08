@@ -1,7 +1,7 @@
 import { Stack } from "@/src/libs";
 import { NavigationContainer } from "@react-navigation/native";
 import { TabScreenApp } from "./TabScreenApp";
-import { Login, Register } from "../containers";
+import { Login, ProductDetail, Register } from "../containers";
 
 
 export const StackScreenApp = () => {
@@ -11,6 +11,7 @@ export const StackScreenApp = () => {
                 <Stack.Screen name="TabScreenApp" component={TabScreenApp} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="ProductDetail" component={ProductDetail} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -1,6 +1,7 @@
+import { colors } from "@/src/constants";
 import Svg, { Path, SvgProps } from "react-native-svg";
 
-export const Home = ({ color = "#05CFEA", width = 25, height = 25 }: SvgProps) => {
+export const Home = ({ color = colors.brand, width = 25, height = 25 }: SvgProps) => {
     return (
         <Svg
             fill="none"

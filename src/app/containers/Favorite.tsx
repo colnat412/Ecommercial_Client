@@ -4,8 +4,9 @@ import { TextInput } from "react-native-paper";
 import { View } from "react-native";
 import { HeaderTitle } from "../navigation/components";
 import { useEffect, useState } from "react";
-import { Product } from "@/types";
+import { Product } from "@/src/types";
 import axios from "axios";
+import { BE_URL } from "@/env";
 
 export const Favorite = () => {
     const [favoriteData, setFavoriteData] = useState<Product[]>([]);
@@ -13,7 +14,7 @@ export const Favorite = () => {
     useEffect(() => {
         const fetchFavorite = async () => {
             try {
-                const response = await axios.get("http://192.168.100.126:4000/products");
+                const response = await axios.get(`${BE_URL}/products`);
                 setFavoriteData(response.data);
             } catch (error) {
                 console.error(error);
