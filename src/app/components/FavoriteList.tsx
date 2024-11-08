@@ -3,7 +3,7 @@ import { colors, style } from "@/src/constants";
 import { formatCurrency } from "@/src/utils";
 import { Product } from "@/src/types";
 import { useRef, useState } from "react";
-import { Alert, FlatList, Image, Pressable, ScrollView, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Pressable, ScrollView, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { Button, Dialog, Modal, Paragraph, Portal, Text } from "react-native-paper";
 
 interface FavoriteListProps {
@@ -20,7 +20,6 @@ export const FavoriteList = ({ products }: FavoriteListProps) => {
 
 
     const handlePress = () => {
-        Alert.alert("Button Pressed!");
     };
 
     const handleDelete = () => {

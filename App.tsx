@@ -5,6 +5,7 @@ import { theme } from './src/constants/theme';
 import { useFonts } from 'expo-font';
 import { View } from 'react-native';
 import { StackScreenApp } from './src/app';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   const [fontsLoaded] = useFonts(fonts);

@@ -23,10 +23,10 @@ export const TabScreenApp = () => {
                     <TouchableOpacity {...props} />
                 )
             },
-            tabBarStyle: { height: 40, justifyContent: "center", alignItems: "center" },
+            tabBarStyle: { minHeight: 40, justifyContent: "center", alignItems: "center" },
 
         }}
-            initialRouteName="Favorite"
+            initialRouteName="HomePage"
         >
             <Tab.Screen name="HomePage" component={HomePage}
                 options={{
