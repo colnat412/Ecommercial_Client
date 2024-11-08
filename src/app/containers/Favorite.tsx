@@ -4,7 +4,7 @@ import { TextInput } from "react-native-paper";
 import { View } from "react-native";
 import { HeaderTitle } from "../navigation/components";
 import { useEffect, useState } from "react";
-import { Product } from "@/types";
+import { Product } from "@/src/types";
 import axios from "axios";
 
 export const Favorite = () => {

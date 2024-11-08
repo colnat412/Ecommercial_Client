@@ -52,7 +52,7 @@ export const Login = () => {
     return (
         <DismissKeyboardView>
             <ScrollView style={{ marginTop: 32 }}>
-                <View style={[style.centerContainer, style.body]}>
+                <View style={[style.centerContainer, style.contentBody]}>
                     <GoBack />
                     <View style={{ gap: 10, marginBottom: 32, justifyContent: "center", alignItems: "center" }}>
                         <Brand width={177} height={177} />

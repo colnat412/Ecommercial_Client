@@ -8,4 +8,7 @@ export const colors = {
      disable: "#000000",
      outline: "#ECECEC", // + underline
      placeholder: "#ABABAB",
+     dangerous: "#FF0000",
+     rateLine: "#CFD2DA",
+     rateStar: "#FFC107",
 };

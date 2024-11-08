@@ -18,7 +18,7 @@ export const Register = () => {
     return (
         <DismissKeyboardView>
             <ScrollView style={{marginTop: 32}}>
-                <View style={[style.centerContainer, style.body]}>
+                <View style={[style.centerContainer, style.contentBody]}>
                     <GoBack />
                     <View style={[style.columnCenter, { marginTop: 32 }]}>
                         <View style={{ gap: 10, marginBottom: 32, width: "100%", justifyContent: "flex-start", alignItems: "flex-start" }}>
