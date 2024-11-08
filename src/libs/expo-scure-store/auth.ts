@@ -1,4 +1,4 @@
-import { Account } from "@/types/account";
+import { Account } from "@/src/types/account";
 import * as SecureStore from "expo-secure-store";
 import { setAccessToken } from "../axios/axiosConfig";
 

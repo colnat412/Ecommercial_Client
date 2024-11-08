@@ -11,6 +11,7 @@ export type RootStackParamList = {
      TabScreenApp: undefined;
      Login: undefined;
      Register: undefined;
+     ProductDetail: undefined;
 };
 
 declare global {
