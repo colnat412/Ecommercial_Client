@@ -8,7 +8,7 @@ interface RecommendItemProps {
   product: Product | null;
 }
 
-const RecommendedItem = ({ product }: RecommendItemProps) => {
+export const RecommendedItem = ({ product }: RecommendItemProps) => {
   return (
     <View style={styles.container}>
       <View style={{ padding: 5 }}>
@@ -53,5 +53,3 @@ const styles = StyleSheet.create({
   },
   price: {},
 });
-
-export default RecommendedItem;

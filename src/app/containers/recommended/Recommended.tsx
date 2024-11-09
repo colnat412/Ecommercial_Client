@@ -1,8 +1,9 @@
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 import data from "@/dbTest.json";
-import RecommendedItem from "./RecommendedItem";
+import { RecommendedItem } from "./RecommendedItem";
 
-const Recommended = () => {
+
+export const Recommended = () => {
   return (
     <View
       style={{
@@ -26,5 +27,3 @@ const Recommended = () => {
     </View>
   );
 };
-
-export default Recommended;

@@ -1,13 +1,8 @@
-import {
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-} from "react-native";
+
 import data from "@/dbTest.json";
+import { FlatList, StyleSheet } from "react-native";
 import CategoryItem from "./CategoryItem";
-import { Search } from "../../containers";
+
 
 const Category = () => {
   return (

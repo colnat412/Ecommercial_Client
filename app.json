@@ -23,8 +23,6 @@
     "web": {
       "favicon": "./assets/image/favicon.png"
     },
-    "plugins": [
-      "expo-secure-store"
-    ]
+    "plugins": ["expo-secure-store"]
   }
 }
