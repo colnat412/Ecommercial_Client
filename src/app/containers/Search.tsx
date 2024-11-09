@@ -1,8 +1,9 @@
 import { style } from "@/src/constants";
 import { View } from "react-native";
 import { Text, TextInput } from "react-native-paper";
-import { DismissKeyboardView } from "../components";
+
 import { Search as SearchIcon } from "../../assets/";
+import { ReactNode } from "react";
 
 export const Search = () => {
   return (
@@ -10,9 +11,7 @@ export const Search = () => {
       <View style={[style.container]}>
         <TextInput
           left={
-            <View style={{ backgroundColor: "red", flex: 1 }}>
-              <SearchIcon width={20} color={"black"} />
-            </View>
+           <TextInput.Icon icon={SearchIcon} />
           }
           placeholder="Search"
           mode="outlined"
