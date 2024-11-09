@@ -1,5 +1,5 @@
 import { colors, style } from "@/src/constants";
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, Platform, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Modal, Portal, Surface, Text } from "react-native-paper";
 import { ProductDetailHeader } from "../../navigation/components";
 import { Cancel, Cart, Favorite, Go, HalfStar, Medal, Share, Star, StarProduct, Truck } from "@/src/assets";
@@ -26,7 +26,7 @@ export const ProductDetail = () => {
         setVisibleCart(!visibleCart);
     }
 
-    const [visibleReviews, setRisibleReviews] = useState<boolean>(true);
+    const [visibleReviews, setRisibleReviews] = useState<boolean>(false);
 
     const toggleModalReviews = () => {
         setRisibleReviews(!visibleReviews);
@@ -226,7 +226,7 @@ askjdlkqjwdlkjqwoidjhe`
 
 
 
-            <View style={[style.rowCenter, { paddingVertical: 4, paddingHorizontal: 16 }]}>
+            <View style={[style.rowCenter, { paddingVertical: Platform.OS === "ios" ? 20 : 4, paddingHorizontal: 16 }]}>
                 <Pressable onPress={toggleModalCart} style={[style.outline, { padding: 8, borderColor: colors.brand }]}>
                     <Cart width={20} height={20} />
                 </Pressable>
@@ -241,37 +241,13 @@ askjdlkqjwdlkjqwoidjhe`
                 </Button>
             </View>
 
-
-            <Portal >
-                <Modal
-                    visible={visibleCart}
-                    onDismiss={toggleModalCart}
-                    contentContainerStyle={styles.surface}
-                    style={[styles.modalContainer]}
-                >
-                    <Surface style={[styles.content, { gap: 12 }]}>
-                        <View style={[style.rowCenterBetween]}>
-                            <Text style={style.headerText}>Add to cart</Text>
-                            <TouchableOpacity onPress={toggleModalCart}>
-                                <Cancel color={colors.disable} />
-                            </TouchableOpacity>
-                        </View>
-                        <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-                            {Array.from({ length: 80 }).map((_, index) => (
-                                <Text key={index} >Item {index + 1}</Text>
-                            ))}
-                        </ScrollView>
-                    </Surface>
-                </Modal>
-            </Portal>
-
             <Portal >
                 <Modal
                     visible={visibleReviews}
                     onDismiss={toggleModalReviews}
                     style={{ paddingHorizontal: 12 }}
                 >
-                    <Surface style={{ height: "auto", maxHeight: "90%", padding: 12, borderRadius: 4, gap: 12 }} >
+                    <View style={{backgroundColor: colors.mainBackground, height: "auto", maxHeight: "90%", padding: 12, borderRadius: 4, gap: 12 }} >
                         <View style={[style.rowCenterBetween]}>
                             <Text style={style.headerText}>Reviews</Text>
                             <TouchableOpacity onPress={toggleModalReviews}>
@@ -302,15 +278,41 @@ askjdlkqjwdlkjqwoidjhe`
                                 )) : (<></>)}
                             </View>
                         </ScrollView>
+                    </View>
+                </Modal>
+            </Portal>
+
+            <Portal >
+                <Modal
+                    visible={visibleCart}
+                    onDismiss={toggleModalCart}
+                    contentContainerStyle={styles.surface}
+                    style={[styles.modalContainer]}
+                >
+                    <Surface style={[styles.content, { gap: 12 }]}>
+                        <View style={[style.rowCenterBetween]}>
+                            <Text style={style.headerText}>Add to cart</Text>
+                            <TouchableOpacity onPress={toggleModalCart}>
+                                <Cancel color={colors.disable} />
+                            </TouchableOpacity>
+                        </View>
+                        <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+                            {Array.from({ length: 80 }).map((_, index) => (
+                                <Text key={index} >Item {index + 1}</Text>
+                            ))}
+                        </ScrollView>
                     </Surface>
                 </Modal>
             </Portal>
+
+
 
         </View>
     );
 }
 
 const { height } = Dimensions.get('window');
+
 
 const styles = StyleSheet.create({
     container: {
