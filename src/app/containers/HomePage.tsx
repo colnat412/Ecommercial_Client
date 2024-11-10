@@ -13,8 +13,8 @@ export const HomePage = () => {
       <ScrollView>
         <Search />
         <Category />
-        <Banner />
-        <Banner />
+        <Banner title="Fashion" subTitle="World have many colors" />
+        <Banner title="Food" subTitle="World have many colors" />
         <Recommended />
       </ScrollView>
     </View>

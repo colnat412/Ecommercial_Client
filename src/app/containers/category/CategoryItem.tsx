@@ -31,11 +31,12 @@ const CategoryItem = ({ category }: CategoryItemProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 6,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
     gap: 16,
-    padding: 10,
+    padding: 8,
   },
   circularImage: {
     width: 80,

@@ -10,6 +10,7 @@ export const Search = () => {
     <DismissKeyboardView>
       <View style={[style.container]}>
         <TextInput
+          style={{ height:40}}
           left={<TextInput.Icon icon={SearchIcon} />}
           placeholder="Search"
           mode="outlined"

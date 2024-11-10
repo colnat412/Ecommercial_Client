@@ -19,12 +19,12 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
       </View>
       <Text style={{ width: "100%" }}>{product?.name}</Text>
       <View style={styles.info}>
+        <View>
+          <Text style={style.priceText}>${product?.price}</Text>
+        </View>
         <View style={styles.rating}>
           <Star width={18} height={18} />
           <Text>4.5</Text>
-        </View>
-        <View>
-          <Text style={style.priceText}>${product?.price}</Text>
         </View>
       </View>
     </View>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: "2%",
     borderRadius: 6,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFF",
   },
   info: {
     width: "100%",
