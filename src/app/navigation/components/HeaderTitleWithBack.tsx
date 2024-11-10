@@ -1,7 +1,6 @@
 import { Brand, Cart, GoBack, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import {
-	StackScreenAccountNavigationProp,
 	StackScreenNavigationProp,
 } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
@@ -12,21 +11,16 @@ interface HeaderTitleWithBackProps {
 	title: string;
 	showCart?: boolean;
 	showUser?: boolean;
-	navigation: StackScreenNavigationProp | StackScreenAccountNavigationProp;
 }
 
 export const HeaderTitleWithBack = ({
 	title,
-	navigation,
-	showCart = true,
-	showUser = true,
+	showCart = false,
+	showUser = false,
 }: HeaderTitleWithBackProps) => {
+	const navigation = useNavigation<StackScreenNavigationProp>();
 	const goLogin = () => {
-		// Check navigation type is StackScreenNavigationProp
-		if ((navigation as StackScreenNavigationProp).navigate) {
-			(navigation as StackScreenNavigationProp).navigate('Login');
-		} else {
-		}
+		navigation.navigate('Login');
 	};
 
 	const goBack = () => {

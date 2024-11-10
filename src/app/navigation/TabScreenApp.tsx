@@ -10,7 +10,6 @@ import {
 import { Text } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
 import { Account, Favorite, Search } from "../containers";
-import { StackScreenAccountApp } from "./StackScreenAccountApp";
 
 export const TabScreenApp = () => {
   return (
@@ -53,7 +52,7 @@ export const TabScreenApp = () => {
           alignItems: "center",
         },
       }}
-      initialRouteName="StackScreenAccountApp"
+      initialRouteName="HomePage"
     >
       <Tab.Screen
         name="HomePage"
@@ -86,8 +85,8 @@ export const TabScreenApp = () => {
         }}
       />
       <Tab.Screen
-        name="StackScreenAccountApp"
-        component={StackScreenAccountApp}
+        name="Account"
+        component={Account}
         options={{
           title: "Account",
           tabBarIcon: ({ focused }) => (
@@ -95,6 +94,7 @@ export const TabScreenApp = () => {
           ),
         }}
       />
+      
     </Tab.Navigator>
   );
 };

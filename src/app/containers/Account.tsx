@@ -4,13 +4,24 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, shadow, Text, TextInput } from 'react-native-paper';
 import { HeaderTitle } from '../navigation/components';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DismissKeyboardView } from '../components';
-import { StackScreenAccountNavigationProp } from '@/src/libs';
-import { useNavigation } from '@react-navigation/native';
+import {
+	useFocusEffect,
+	useIsFocused,
+	useNavigation,
+	useRoute,
+} from '@react-navigation/native';
+import {
+	ScreenTabNavigationProp,
+	StackScreenNavigationProp,
+	StackScreenRouteProp,
+} from '@/src/libs';
 
 export const Account = () => {
-	const navigation = useNavigation<StackScreenAccountNavigationProp>();
+	const navigation = useNavigation<StackScreenNavigationProp>();
+	const navigationTab = useNavigation<ScreenTabNavigationProp>();
+
 	const [editDetail, setEditDetail] = useState<boolean>(false);
 
 	const handleEditDetail = () => {
@@ -22,6 +33,16 @@ export const Account = () => {
 	const handleEditSecurity = () => {
 		setEditSecurity(!editSecurity);
 	};
+
+	// const isFocused = useIsFocused();
+
+	//   useEffect(() => {
+	// 		// if (isFocused) {
+	// 		// 	navigation.navigate('Login');
+
+	// 		// }
+	// 		console.log('isFocused', navigationTab.getId())
+	// 	}, [isFocused]);
 
 	return (
 		<DismissKeyboardView>
@@ -138,7 +159,8 @@ export const Account = () => {
 									<Package width={25} height={25} />
 									<Text>Order</Text>
 								</Pressable>
-								<View
+								<Pressable
+									onPress={() => navigation.navigate('Feedback')}
 									style={{
 										justifyContent: 'center',
 										alignItems: 'center',
@@ -147,7 +169,7 @@ export const Account = () => {
 								>
 									<StarProduct width={25} height={25} />
 									<Text>Feedback</Text>
-								</View>
+								</Pressable>
 							</View>
 						</View>
 

@@ -1,18 +1,12 @@
 import { colors, style } from '@/src/constants';
-import {
-	StackScreenAccountNavigationProp,
-	StackScreenNavigationProp,
-} from '@/src/libs';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { StackScreenNavigationProp } from '@/src/libs';
+import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import { GoBack as Back } from '@/src/assets';
 
-interface GoBackProps {
-	navigation: StackScreenNavigationProp | StackScreenAccountNavigationProp;
-}
-
-export const GoBack = ({ navigation }: GoBackProps) => {
+export const GoBack = () => {
+	const navigation = useNavigation<StackScreenNavigationProp>();
 	const goBack = () => {
 		navigation.goBack();
 	};
