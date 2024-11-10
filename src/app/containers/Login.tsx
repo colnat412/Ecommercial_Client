@@ -40,7 +40,7 @@ export const Login = () => {
   return (
 		<DismissKeyboardView>
 			<ScrollView
-				style={{ marginTop: 32, padding: 16 }}
+				style={{ marginTop: 32, padding: 16, backgroundColor: colors.background }}
 				showsHorizontalScrollIndicator={false}
 				showsVerticalScrollIndicator={false}
 			>
