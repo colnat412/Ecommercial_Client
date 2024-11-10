@@ -2,12 +2,17 @@ import { colors } from "@/src/constants";
 import { Image, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
-const Banner = () => {
+interface BannerProps {
+  title: string;
+  subTitle: string;
+}
+
+const Banner = ({ title, subTitle }: BannerProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.text}>
-        <Text style={styles.textStyle}>Fashion</Text>
-        <Text style={styles.textSecond}>World have many colors</Text>
+        <Text style={styles.textStyle}>{title}</Text>
+        <Text style={styles.textSecond}>{subTitle}</Text>
       </View>
       <Image
         style={{ width: 108, height: 108 }}
