@@ -1,4 +1,6 @@
+import { StackScreenNavigationProp } from "@/src/libs";
 import { Category } from "@/src/types/category";
+import { useNavigation } from "@react-navigation/native";
 import {
   Image,
   Pressable,
@@ -8,12 +10,20 @@ import {
 } from "react-native";
 import { Text } from "react-native-paper";
 
-const CategoryItem = ({ id, name, image }: Category) => {
+interface CategoryItemProps {
+  category: Category;
+}
+
+const CategoryItem = ({ category }: CategoryItemProps) => {
+  const navigation = useNavigation<StackScreenNavigationProp>();
+  const handleNavigation = () => {
+    navigation.navigate("SubCategory");
+  };
   return (
-    <Pressable style={styles.container}>
-      <Image style={styles.circularImage} source={{ uri: image }} />
+    <Pressable onPress={handleNavigation} style={styles.container}>
+      <Image style={styles.circularImage} source={{ uri: category.image }} />
       <Text numberOfLines={1} style={styles.textStyle}>
-        {name}
+        {category.name}
       </Text>
     </Pressable>
   );

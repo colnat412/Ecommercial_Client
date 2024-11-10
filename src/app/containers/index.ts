@@ -5,3 +5,6 @@ export * from "./Search";
 export * from "./Favorite";
 export * from "./productDetail";
 export * from "./category";
+export * from "./recommended";
+export * from "./Banner";
+export * from "./product";

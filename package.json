@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "screen": "scrcpy -m1968",
-    "database": "json-server --watch dbTest.json --port 4000 --host 192.168.100.126"
+    "database": "json-server --watch dbTest.json --port 4000 --host 192.168.100.126",
+    "prettier": "prettier . --write"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.6.1",

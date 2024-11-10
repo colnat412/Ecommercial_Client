@@ -4,15 +4,14 @@ import { Text, TextInput } from "react-native-paper";
 
 import { Search as SearchIcon } from "../../assets/";
 import { ReactNode } from "react";
+import { DismissKeyboardView } from "../components";
 
 export const Search = () => {
   return (
     <DismissKeyboardView>
       <View style={[style.container]}>
         <TextInput
-          left={
-           <TextInput.Icon icon={SearchIcon} />
-          }
+          left={<TextInput.Icon icon={SearchIcon} />}
           placeholder="Search"
           mode="outlined"
         />

@@ -13,21 +13,12 @@ const Category = () => {
   return (
     <FlatList
       data={data.categories}
-      renderItem={({ item }) => (
-        <CategoryItem id={item.id} name={item.name} image={item.image} />
-      )}
+      renderItem={({ item }) => <CategoryItem category={item} />}
       keyExtractor={(item) => item.id}
       horizontal
       showsHorizontalScrollIndicator={false}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 0,
-  },
-});
 
 export default Category;

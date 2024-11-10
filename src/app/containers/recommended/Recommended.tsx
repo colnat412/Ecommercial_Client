@@ -1,6 +1,8 @@
 import { FlatList, View } from "react-native";
 import data from "@/dbTest.json";
 import RecommendedItem from "./RecommendedItem";
+import { Text } from "react-native-paper";
+import { style } from "@/src/constants";
 
 const Recommended = () => {
   return (
@@ -9,6 +11,9 @@ const Recommended = () => {
         justifyContent: "flex-start",
       }}
     >
+      <Text style={[style.headerText, { fontSize: 16, padding: 12 }]}>
+        Recommended for you
+      </Text>
       <View
         style={{
           flex: 1,
