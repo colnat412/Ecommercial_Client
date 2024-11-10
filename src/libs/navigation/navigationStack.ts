@@ -1,27 +1,28 @@
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp } from '@react-navigation/native';
 import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+	createNativeStackNavigator,
+	NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 
 export const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export type RootStackParamList = {
-  TabScreenApp: undefined;
-  Login: undefined;
-  Register: undefined;
-  ProductDetail: undefined;
-  SubCategory: undefined;
-  PaymentOption: undefined;
+	TabScreenApp: undefined;
+	Login: undefined;
+	Register: undefined;
+	ProductDetail: undefined;
+	SubCategory: undefined;
+	PaymentOption: undefined;
+	PaymentResult: undefined;
 };
 
 declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
+	namespace ReactNavigation {
+		interface RootParamList extends RootStackParamList {}
+	}
 }
 
 export type StackScreenNavigationProp =
-  NativeStackNavigationProp<RootStackParamList>;
+	NativeStackNavigationProp<RootStackParamList>;
 
 export type StackScreenRouteProp = RouteProp<RootStackParamList>;
