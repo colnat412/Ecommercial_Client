@@ -8,3 +8,4 @@ export * from "./category";
 export * from "./recommended";
 export * from "./Banner";
 export * from "./product";
+export * from "./Line";
