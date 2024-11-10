@@ -1,2 +1,2 @@
-export * from "./ProductDetail"
-export * from "./handle"
+export * from "./ProductDetail";
+export * from "./handle";
