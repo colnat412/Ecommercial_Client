@@ -9,7 +9,7 @@ export const StackScreenApp = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="PaymentOption"
+        initialRouteName="TabScreenApp"
         screenOptions={{ headerShown: false, animation: "fade_from_bottom" }}
       >
         <Stack.Screen name="TabScreenApp" component={TabScreenApp} />

@@ -69,7 +69,6 @@ export const FavoriteList = ({ products }: FavoriteListProps) => {
       </Portal>
 
       <FlatList
-        style={{ paddingHorizontal: 16 }}
         keyExtractor={(item) => item.id}
         data={products}
         renderItem={({ item }) => (
@@ -99,9 +98,23 @@ const ProductCard = ({ product, handlePress, showModal }: ProductCardProps) => {
       style={[
         style.rowCenter,
         {
+          marginHorizontal: 16,
+          marginVertical: 4,
+          backgroundColor: colors.textBrand,
           paddingVertical: 8,
-          borderBottomWidth: 1,
-          borderBottomColor: colors.outline,
+          paddingHorizontal: 8,
+          borderRadius: 8,
+          borderWidth: 1,
+          borderColor: colors.outline,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+
+          elevation: 3,
         },
       ]}
     >

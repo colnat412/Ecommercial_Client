@@ -5,6 +5,7 @@ export type RootTabParamList = {
   HomePage: undefined;
   Search: undefined;
   Favorite: undefined;
+  StackScreenAccountApp: undefined;
 };
 
 export const Tab = createBottomTabNavigator<RootTabParamList>();
