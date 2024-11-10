@@ -11,7 +11,6 @@ export const HomePage = () => {
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />
 			<ScrollView>
-				<Search />
 				<Category />
 				<Banner title="Fashion" subTitle="World have many colors" />
 				<Banner title="Food" subTitle="World have many colors" />

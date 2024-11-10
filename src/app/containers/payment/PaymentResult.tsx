@@ -5,7 +5,7 @@ import Checked from '@/src/assets/svgs/Checked';
 import { colors, style } from '@/src/constants';
 import Warning from '@/src/assets/svgs/Warning';
 
-const PaymentResult = () => {
+export const PaymentResult = () => {
 	return (
 		<View style={styles.container}>
 			<Checked width={80} height={80} />
@@ -62,5 +62,3 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 });
-
-export default PaymentResult;

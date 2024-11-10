@@ -15,7 +15,6 @@ export type RootStackParamList = {
   PaymentOption: undefined;
   Order: undefined;
   Feedback: undefined;
-	PaymentOption: undefined;
 	PaymentResult: undefined;
 };
 

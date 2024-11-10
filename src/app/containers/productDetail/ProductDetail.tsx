@@ -74,7 +74,7 @@ export const ProductDetail = () => {
 				showsHorizontalScrollIndicator={false}
 				showsVerticalScrollIndicator={false}
 			>
-				<HeaderTitleWithBack navigation={navigation} title="abc" />
+				<HeaderTitleWithBack title="abc" />
 				<View style={[style.body]}>
 					<View style={[style.contentBody]}>
 						<View
@@ -791,7 +791,7 @@ askjdlkqjwdlkjqwoidjhe`}</Text>
 											},
 										]}
 									>
-										Buy Now
+										Add To Cart
 									</Text>
 								</Pressable>
 							</View>

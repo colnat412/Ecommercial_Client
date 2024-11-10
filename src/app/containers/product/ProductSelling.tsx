@@ -3,10 +3,13 @@ import data from "@/dbTest.json";
 import ProductItem from "./Product";
 import { Text } from "react-native-paper";
 import { colors, style } from "@/src/constants";
+import { useNavigation } from "@react-navigation/native";
+import { StackScreenNavigationProp } from "@/src/libs";
 
 const ProductSelling = () => {
+    const navigation = useNavigation<StackScreenNavigationProp>();
   return (
-    <View>
+    <Pressable onPress={() => {navigation.navigate("ProductDetail")}}>
       <View style={styles.sellingStyle}>
         <Text style={[style.headerText, { fontSize: 18, padding: 14 }]}>
           Top Selling
@@ -25,7 +28,7 @@ const ProductSelling = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
       />
-    </View>
+    </Pressable>
   );
 };
 

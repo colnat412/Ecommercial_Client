@@ -45,7 +45,7 @@ export const Login = () => {
 				showsVerticalScrollIndicator={false}
 			>
 				<View style={[style.centerContainer, style.body]}>
-					<GoBack navigation={navigation} />
+					<GoBack />
 					<View
 						style={{
 							gap: 10,

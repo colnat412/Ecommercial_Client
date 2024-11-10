@@ -6,7 +6,6 @@ import {
   View,
 } from "react-native";
 import { Text } from "react-native-paper";
-import { ProductDetailHeader } from "../../navigation/components";
 import { Search } from "../Search";
 import data from "@/dbTest.json";
 
@@ -15,13 +14,13 @@ import ProductItem from "../product/Product";
 import ProductSelling from "../product/ProductSelling";
 import ProductRecommended from "../product/ProductRecommended";
 import Products from "../product/Products";
+import { HeaderTitleWithBack } from "../../navigation/components";
 
-const SubCategory = () => {
+export const SubCategory = () => {
   return (
     <View style={styles.container}>
-      <ProductDetailHeader title="Category" />
+      <HeaderTitleWithBack title="Category" />
       <ScrollView>
-        <Search />
         <ProductSelling />
         <ProductRecommended />
         <Products />
@@ -36,5 +35,3 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
 });
-
-export default SubCategory;

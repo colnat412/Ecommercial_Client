@@ -9,11 +9,11 @@ import { useNavigation } from '@react-navigation/native';
 import { StackScreenNavigationProp } from '@/src/libs';
 import { HeaderTitleWithBack } from '../../navigation/components';
 
-const PaymentOption = () => {
+export const PaymentOption = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	return (
 		<View style={styles.container}>
-			<HeaderTitleWithBack navigation={navigation} title="Payment" />
+			<HeaderTitleWithBack title="Payment" />
 			<ScrollView>
 				<View style={styles.priceText}>
 					<Text style={{ fontSize: 26, letterSpacing: 3 }}>TOTAL</Text>
@@ -41,5 +41,3 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 });
-
-export default PaymentOption;
