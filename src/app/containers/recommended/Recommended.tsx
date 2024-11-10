@@ -1,10 +1,11 @@
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 import data from "@/dbTest.json";
-import RecommendedItem from "./RecommendedItem";
 import { Text } from "react-native-paper";
 import { style } from "@/src/constants";
+import { RecommendedItem } from "./RecommendedItem";
 
-const Recommended = () => {
+
+export const Recommended = () => {
   return (
     <View
       style={{
@@ -31,5 +32,3 @@ const Recommended = () => {
     </View>
   );
 };
-
-export default Recommended;
