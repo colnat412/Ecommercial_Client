@@ -9,7 +9,7 @@ export * from "./recommended";
 export * from "./Banner";
 export * from "./product";
 export * from "./Line";
-
 export * from "./Account"
 export * from "./Loading"
 export * from "./order"
+export * from "./Feedback"

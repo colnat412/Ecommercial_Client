@@ -1,63 +1,74 @@
-import { colors, style } from "@/src/constants";
+import { colors, style } from '@/src/constants';
 import {
-  Dimensions,
-  Image,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Button, Modal, Portal, Surface, Text } from "react-native-paper";
+	Dimensions,
+	Image,
+	Platform,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from 'react-native';
+import {
+	Button,
+	Modal,
+	Portal,
+	RadioButton,
+	Surface,
+	Text,
+} from 'react-native-paper';
 
 import {
-  Cancel,
-  Cart,
-  Favorite,
-  Go,
-  HalfStar,
-  Medal,
-  Share,
-  Star,
-  StarProduct,
-  Truck,
-} from "@/src/assets";
-import { useEffect, useState } from "react";
-import { Feedback, Product } from "@/src/types";
-import { getReviews } from "./handle";
-import { HeaderTitleWithBack } from "../../navigation/components";
-import { StackScreenApp } from "../../navigation";
-import { useNavigation } from "@react-navigation/native";
-import { StackScreenNavigationProp } from "@/src/libs";
+	Add,
+	Brand,
+	Cancel,
+	Cart,
+	Favorite,
+	Go,
+	HalfStar,
+	Medal,
+	Minus,
+	Share,
+	Star,
+	StarProduct,
+	Truck,
+} from '@/src/assets';
+import { useEffect, useState } from 'react';
+import { Feedback, Product } from '@/src/types';
+import { getReviews } from './handle';
+import { HeaderTitleWithBack } from '../../navigation/components';
+import { StackScreenApp } from '../../navigation';
+import { useNavigation } from '@react-navigation/native';
+import { StackScreenNavigationProp } from '@/src/libs';
+import { Line } from '../Line';
 
 interface ProductDetailProps {
-  product: Product;
+	product: Product;
 }
 
 export const ProductDetail = () => {
-  const navigation = useNavigation<StackScreenNavigationProp>();
-  const [visibleCart, setVisibleCart] = useState<boolean>(false);
+	const navigation = useNavigation<StackScreenNavigationProp>();
+	const [visibleCart, setVisibleCart] = useState<boolean>(false);
 
-  const [feedback, setFeedback] = useState<Feedback[] | undefined>([]);
+	const [feedback, setFeedback] = useState<Feedback[] | undefined>([]);
 
-  useEffect(() => {
-    getReviews("1").then((data) => {
-      setFeedback(data);
-    });
-  }, []);
+	useEffect(() => {
+		getReviews('1').then((data) => {
+			setFeedback(data);
+		});
+	}, []);
 
-  const toggleModalCart = () => {
-    setVisibleCart(!visibleCart);
-  };
+	const toggleModalCart = () => {
+		setVisibleCart(!visibleCart);
+	};
 
-  const [visibleReviews, setRisibleReviews] = useState<boolean>(false);
+	const [visibleReviews, setRisibleReviews] = useState<boolean>(false);
 
-  const toggleModalReviews = () => {
-    setRisibleReviews(!visibleReviews);
-  };
+	const toggleModalReviews = () => {
+		setRisibleReviews(!visibleReviews);
+	};
 
-  return (
+	return (
 		<View style={{ marginTop: 32, flex: 1 }}>
 			<ScrollView
 				showsHorizontalScrollIndicator={false}
@@ -84,7 +95,6 @@ export const ProductDetail = () => {
 								width={336}
 								height={216}
 								alt="product"
-								style={{ backgroundColor: 'red' }}
 							></Image>
 						</View>
 						<Text style={[style.headerText, { marginTop: 8 }]}>
@@ -92,7 +102,7 @@ export const ProductDetail = () => {
 						</Text>
 						<View style={[style.centerContainer, style.rowCenterBetween]}>
 							<Text style={[style.priceText, { marginTop: 8 }]}>
-								12300$
+								{`$ 12300`}
 							</Text>
 							<View style={[style.rowCenter]}>
 								<View style={{ flexDirection: 'row' }}>
@@ -576,7 +586,7 @@ askjdlkqjwdlkjqwoidjhe`}</Text>
 				<Modal
 					visible={visibleCart}
 					onDismiss={toggleModalCart}
-					contentContainerStyle={styles.surface}
+					contentContainerStyle={[styles.surface, { padding: 0 }]}
 					style={[styles.modalContainer]}
 				>
 					<Surface style={[styles.content, { gap: 12 }]}>
@@ -590,36 +600,227 @@ askjdlkqjwdlkjqwoidjhe`}</Text>
 							showsHorizontalScrollIndicator={false}
 							showsVerticalScrollIndicator={false}
 						>
-							{Array.from({ length: 80 }).map((_, index) => (
-								<Text key={index}>Item {index + 1}</Text>
-							))}
+							<View style={[style.rowCenterBetween, { flex: 1 }]}>
+								<Text style={[style.headerText, { fontSize: 16 }]}>
+									HeadPhone
+								</Text>
+								<View style={[style.rowCenter]}>
+									<View style={{ flexDirection: 'row' }}>
+										<Star width={20} height={20} />
+										<Text
+											style={{ fontWeight: 'bold', fontSize: 16 }}
+										>
+											4.5
+										</Text>
+									</View>
+									<Text
+										style={{
+											fontWeight: 'medium',
+											fontSize: 16,
+											color: colors.secondText,
+										}}
+									>
+										(99 reviews)
+									</Text>
+								</View>
+							</View>
+
+							<View style={{ flex: 1, marginVertical: 16 }}>
+								<Line />
+							</View>
+
+							<View>
+								<Text
+									style={{
+										fontSize: 16,
+										fontWeight: '700',
+										marginLeft: 8,
+									}}
+								>
+									Color
+								</Text>
+								<View
+									style={{
+										flex: 1,
+										flexWrap: 'wrap',
+										flexDirection: 'row',
+										gap: 12,
+									}}
+								>
+									<View style={[style.rowCenter]}>
+										<RadioButton
+											status="checked"
+											color={colors.brand}
+											value="first"
+										/>
+										<Text>Black</Text>
+									</View>
+									<View style={[style.rowCenter]}>
+										<RadioButton
+											status="unchecked"
+											color={colors.brand}
+											value="first"
+										/>
+										<Text>White</Text>
+									</View>
+									<View style={[style.rowCenter]}>
+										<RadioButton
+											status="unchecked"
+											color={colors.brand}
+											value="first"
+										/>
+										<Text>Pink</Text>
+									</View>
+								</View>
+							</View>
+
+							<View style={{ flex: 1, marginVertical: 16 }}>
+								<Line />
+							</View>
+
+							<View>
+								<Text
+									style={{
+										fontSize: 16,
+										fontWeight: '700',
+										marginLeft: 8,
+									}}
+								>
+									Option
+								</Text>
+								<View
+									style={{
+										flex: 1,
+										flexWrap: 'wrap',
+										flexDirection: 'row',
+										gap: 12,
+									}}
+								>
+									<View style={[style.rowCenter]}>
+										<RadioButton
+											status="checked"
+											color={colors.brand}
+											value="first"
+										/>
+										<Text>Black</Text>
+									</View>
+									<View style={[style.rowCenter]}>
+										<RadioButton
+											status="unchecked"
+											color={colors.brand}
+											value="first"
+										/>
+										<Text>White</Text>
+									</View>
+									<View style={[style.rowCenter]}>
+										<RadioButton
+											status="unchecked"
+											color={colors.brand}
+											value="first"
+										/>
+										<Text>Pink</Text>
+									</View>
+								</View>
+							</View>
+							<View style={{ flex: 1, marginVertical: 16 }}>
+								<Line />
+							</View>
+
+							<View>
+								<Text
+									style={{
+										fontSize: 16,
+										fontWeight: '700',
+										marginLeft: 8,
+									}}
+								>
+									Quantity
+								</Text>
+								<View
+									style={{
+										flex: 1,
+										flexWrap: 'wrap',
+										flexDirection: 'row',
+										gap: 12,
+									}}
+								>
+									<View style={[style.rowCenter, { gap: 20 }]}>
+										<Pressable
+											style={{
+												padding: 8,
+												borderRadius: 4,
+											}}
+										>
+											<Minus
+												width={20}
+												height={20}
+												color={colors.secondText}
+											/>
+										</Pressable>
+										<Text style={{ margin: 0 }}>1</Text>
+										<Pressable
+											style={{
+												padding: 8,
+												backgroundColor: colors.brand,
+												borderRadius: 4,
+											}}
+										>
+											<Add
+												width={20}
+												height={20}
+												color={colors.mainBackground}
+											/>
+										</Pressable>
+									</View>
+								</View>
+								<Pressable
+									style={{
+										flex: 1,
+										backgroundColor: colors.brand,
+										paddingVertical: 8,
+										borderRadius: 4,
+										marginTop: 16,
+									}}
+								>
+									<Text
+										style={[
+											style.headerText,
+											{
+												textAlign: 'center',
+												color: colors.textBrand,
+											},
+										]}
+									>
+										Buy Now
+									</Text>
+								</Pressable>
+							</View>
 						</ScrollView>
 					</Surface>
 				</Modal>
 			</Portal>
 		</View>
-  );
+	);
 };
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    justifyContent: "flex-end",
-  },
-  surface: {
-    padding: 10,
-    height: "50%",
-  },
-  content: {
-    backgroundColor: colors.mainBackground,
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	modalContainer: {
+		justifyContent: 'flex-end',
+	},
+	surface: {
+		padding: 10,
+	},
+	content: {
+		backgroundColor: colors.mainBackground,
+		padding: 20,
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+	},
 });

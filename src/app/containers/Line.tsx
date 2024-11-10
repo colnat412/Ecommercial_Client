@@ -5,10 +5,9 @@ export const Line = () => {
   return (
     <View
       style={{
-        marginLeft: "5%",
         opacity: 0.5,
         borderWidth: 0.5,
-        width: "90%",
+        width: "100%",
         height: 0.5,
         backgroundColor: colors.outline,
       }}
