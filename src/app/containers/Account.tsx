@@ -60,7 +60,7 @@ export const Account = () => {
 						>
 							<Image
 								source={{
-									uri: 'https://i.pinimg.com/736x/07/68/a2/0768a2ccff0074638d80647e666f286e.jpg',
+									uri: 'https://i.pinimg.com/736x/fa/f7/b4/faf7b4ad7ff3df8a25310829df2d54ab.jpg',
 								}}
 								width={95}
 								height={95}
@@ -127,7 +127,8 @@ export const Account = () => {
 								}}
 							/>
 							<View style={[style.rowCenterCenter, { gap: 120 }]}>
-								<Pressable onPress={() => navigation.navigate('Order')}
+								<Pressable
+									onPress={() => navigation.navigate('Order')}
 									style={{
 										justifyContent: 'center',
 										alignItems: 'center',
