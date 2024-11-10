@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderWidth: 0.5,
 		padding: 10,
-		borderRadius: 2,
+		borderRadius: 5,
 		borderColor: '#c2c2c2',
 	},
 	subMethod: {

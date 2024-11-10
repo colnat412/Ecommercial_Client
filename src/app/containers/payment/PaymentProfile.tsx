@@ -1,4 +1,5 @@
 import { Home, User } from '@/src/assets';
+import { Phone } from '@/src/assets/svgs/Phone';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
@@ -16,7 +17,7 @@ export const PaymentProfile = () => {
 				</Text>
 			</View>
 			<View style={styles.info}>
-				<User width={20} height={20} />
+				<Phone width={20} height={20} />
 				<Text style={{ letterSpacing: 1 }}>0123456789</Text>
 			</View>
 		</View>
