@@ -1,4 +1,4 @@
-import { style } from "@/src/constants";
+import { colors, style } from "@/src/constants";
 import { View } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 import { Search as SearchIcon } from "../../assets/";
@@ -13,6 +13,7 @@ export const Search = () => {
           left={<TextInput.Icon icon={SearchIcon} />}
           placeholder="Search"
           mode="outlined"
+          activeOutlineColor={colors.brand}
         />
       </View>
     </DismissKeyboardView>

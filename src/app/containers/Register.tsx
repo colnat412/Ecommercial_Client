@@ -15,9 +15,9 @@ export const Register = () => {
 
   return (
     <DismissKeyboardView>
-      <ScrollView style={{ marginTop: 32 }}>
+      <ScrollView style={{ marginTop: 32 }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <View style={[style.centerContainer, style.contentBody]}>
-          <GoBack />
+          <GoBack navigation={navigation} />
           <View style={[style.columnCenter, { marginTop: 32 }]}>
             <View
               style={{
@@ -46,6 +46,7 @@ export const Register = () => {
                   label="Fullname"
                   style={[style.textInput]}
                   mode="outlined"
+              activeOutlineColor={colors.brand}
                 />
               </View>
 
@@ -55,6 +56,7 @@ export const Register = () => {
                   label="Username"
                   style={[style.textInput]}
                   mode="outlined"
+              activeOutlineColor={colors.brand}
                 />
               </View>
 
@@ -64,6 +66,7 @@ export const Register = () => {
                   label="Email"
                   style={[style.textInput]}
                   mode="outlined"
+              activeOutlineColor={colors.brand}
                 />
               </View>
 
@@ -73,6 +76,7 @@ export const Register = () => {
                   label="Password"
                   style={[style.textInput]}
                   mode="outlined"
+              activeOutlineColor={colors.brand}
                   secureTextEntry={true}
                 />
               </View>
@@ -83,6 +87,7 @@ export const Register = () => {
                   label="Phone"
                   style={[style.textInput]}
                   mode="outlined"
+              activeOutlineColor={colors.brand}
                   keyboardType="phone-pad"
                 />
               </View>
@@ -93,6 +98,7 @@ export const Register = () => {
                   label="Address"
                   style={[style.textInput]}
                   mode="outlined"
+              activeOutlineColor={colors.brand}
                 />
               </View>
             </View>

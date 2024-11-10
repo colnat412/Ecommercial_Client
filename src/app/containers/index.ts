@@ -5,3 +5,5 @@ export * from "./Search";
 export * from "./Favorite";
 export * from "./productDetail";
 export * from "./category";
+export * from "./Account"
+export * from "./Loading"

@@ -14,3 +14,5 @@ export * from "./Share";
 export * from "./Medal";
 export * from "./Go";
 export * from "./Cancel";
+export * from "./Package";
+export * from "./Edit";

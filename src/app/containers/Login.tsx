@@ -38,84 +38,94 @@ export const Login = () => {
   };
 
   return (
-    <DismissKeyboardView>
-      <ScrollView style={{ marginTop: 32 }}>
-        <View style={[style.centerContainer, style.body]}>
-          <GoBack />
-          <View
-            style={{
-              gap: 10,
-              marginBottom: 32,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Brand width={177} height={177} />
-            <Text
-              style={{ color: colors.brand, fontSize: 24, fontWeight: "bold" }}
-            >
-              Login
-            </Text>
-          </View>
+		<DismissKeyboardView>
+			<ScrollView
+				style={{ marginTop: 32, padding: 16 }}
+				showsHorizontalScrollIndicator={false}
+				showsVerticalScrollIndicator={false}
+			>
+				<View style={[style.centerContainer, style.body]}>
+					<GoBack navigation={navigation} />
+					<View
+						style={{
+							gap: 10,
+							marginBottom: 32,
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<Brand width={177} height={177} />
+						<Text
+							style={{
+								color: colors.brand,
+								fontSize: 24,
+								fontWeight: 'bold',
+							}}
+						>
+							Login
+						</Text>
+					</View>
 
-          <View style={[style.columnCenter]}>
-            {error && <Text>{error}</Text>}
-            <TextInput
-              label="Username"
-              value={username}
-              onChangeText={setUsername}
-              style={[style.textInput]}
-              mode="outlined"
-            />
-            <TextInput
-              mode="outlined"
-              label={"Password"}
-              value={password}
-              onChangeText={setPassword}
-              style={[style.textInput]}
-              secureTextEntry={true}
-            />
-          </View>
+					<View style={[style.columnCenter]}>
+						{error && <Text>{error}</Text>}
+						<TextInput
+							label="Username"
+							value={username}
+							onChangeText={setUsername}
+							style={[style.textInput]}
+							activeOutlineColor={colors.brand}
+							mode="outlined"
+						/>
+						<TextInput
+							mode="outlined"
+							label={'Password'}
+							value={password}
+							onChangeText={setPassword}
+							style={[style.textInput]}
+							activeOutlineColor={colors.brand}
+							secureTextEntry={true}
+						/>
+					</View>
 
-          <Text
-            style={{
-              color: colors.secondText,
-              textAlign: "right",
-              paddingBottom: 32,
-              width: "100%",
-            }}
-          >
-            Forgot password?
-          </Text>
+					<Text
+						style={{
+							color: colors.secondText,
+							textAlign: 'right',
+							paddingBottom: 32,
+							width: '100%',
+						}}
+					>
+						Forgot password?
+					</Text>
 
-          <Button
-            onPress={() => {
-              handleLogin();
-            }}
-            style={[style.button]}
-            mode="contained"
-            textColor={colors.textBrand}
-          >
-            Login
-          </Button>
+					<Button
+						onPress={() => {
+							handleLogin();
+						}}
+						style={[style.button]}
+						mode="contained"
+						textColor={colors.textBrand}
+					>
+						Login
+					</Button>
 
-          <Text
-            style={{
-              color: colors.secondText,
-              textAlign: "center",
-              paddingTop: 16,
-            }}
-          >
-            Don't have an account?
-            <Text
-              onPress={() => navigation.navigate("Register")}
-              style={{ color: colors.brand }}
-            >
-              {" Register"}
-            </Text>
-          </Text>
-        </View>
-      </ScrollView>
-    </DismissKeyboardView>
+					<Text
+						style={{
+							color: colors.secondText,
+							textAlign: 'center',
+							paddingTop: 16,
+						}}
+					>
+						Don't have an account?
+						<Text
+							onPress={() => navigation.navigate('Register')}
+							style={{ color: colors.brand }}
+						>
+							{' Register'}
+						</Text>
+					</Text>
+				</View>
+			</ScrollView>
+		</DismissKeyboardView>
   );
 };

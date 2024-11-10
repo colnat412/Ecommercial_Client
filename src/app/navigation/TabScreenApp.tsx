@@ -5,10 +5,12 @@ import {
   Home,
   Search as SearchIcon,
   Favorite as FavoriteIcon,
+  User
 } from "@/src/assets";
 import { Text } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
-import { Favorite, Search } from "../containers";
+import { Account, Favorite, Search } from "../containers";
+import { StackScreenAccountApp } from "./StackScreenAccountApp";
 
 export const TabScreenApp = () => {
   return (
@@ -23,14 +25,27 @@ export const TabScreenApp = () => {
                 color: props.focused ? colors.brand : colors.disable,
                 fontSize: 10,
                 fontWeight: "700",
+
               }}
             >
               {props.children}
             </Text>
           );
         },
-        tabBarButton(props) {
-          return <TouchableOpacity {...props} />;
+        tabBarButton: (props) => {
+          return (
+            <TouchableOpacity
+              {...props}
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 5,
+              }}
+            >
+              {props.children}
+            </TouchableOpacity>
+          );
         },
         tabBarStyle: {
           minHeight: 40,
@@ -38,7 +53,7 @@ export const TabScreenApp = () => {
           alignItems: "center",
         },
       }}
-      initialRouteName="HomePage"
+      initialRouteName="StackScreenAccountApp"
     >
       <Tab.Screen
         name="HomePage"
@@ -46,7 +61,7 @@ export const TabScreenApp = () => {
         options={{
           title: "Home",
           tabBarIcon: ({ focused }) => (
-            <Home color={focused ? colors.brand : colors.disable} />
+            <Home width={20} height={20} color={focused ? colors.brand : colors.disable} />
           ),
         }}
       />
@@ -56,7 +71,7 @@ export const TabScreenApp = () => {
         options={{
           title: "Search",
           tabBarIcon: ({ focused }) => (
-            <SearchIcon color={focused ? colors.brand : colors.disable} />
+            <SearchIcon width={20} height={20} color={focused ? colors.brand : colors.disable} />
           ),
         }}
       />
@@ -66,7 +81,17 @@ export const TabScreenApp = () => {
         options={{
           title: "Favorite",
           tabBarIcon: ({ focused }) => (
-            <FavoriteIcon color={focused ? colors.brand : colors.disable} />
+            <FavoriteIcon width={20} height={20} color={focused ? colors.brand : colors.disable} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="StackScreenAccountApp"
+        component={StackScreenAccountApp}
+        options={{
+          title: "Account",
+          tabBarIcon: ({ focused }) => (
+            <User width={20} height={20} color={focused ? colors.brand : colors.disable} />
           ),
         }}
       />
