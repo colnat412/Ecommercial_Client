@@ -1,13 +1,13 @@
-import { Brand } from "@/src/assets";
-import { useEffect, useRef } from "react";
-import { Animated, Button, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Brand } from '@/src/assets';
+import { colors, style } from '@/src/constants';
+import { useEffect, useRef } from 'react';
+import { Animated, Button, Text, View } from 'react-native';
 
 interface Props {
-    size?: number;
+	size?: number;
 }
 
-export const Loading = ({size}: Props) => {
+export const Loading = ({ size }: Props) => {
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 
 	const fadeIn = () => {
@@ -26,18 +26,27 @@ export const Loading = ({size}: Props) => {
 		}).start();
 	};
 
-    useEffect(() => {
-        fadeIn();
-    }, [])
+	useEffect(() => {
+		fadeIn();
+	}, []);
 
 	return (
-		<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 			<Animated.View
 				style={{
 					opacity: fadeAnim,
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}
 			>
 				<Brand width={size} height={size}></Brand>
+				<Text
+					style={[
+						{ fontSize: 32, color: colors.brand, fontWeight: 'bold' },
+					]}
+				>
+					Loading...
+				</Text>
 			</Animated.View>
 		</View>
 	);

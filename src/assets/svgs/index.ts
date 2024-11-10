@@ -16,3 +16,5 @@ export * from "./Go";
 export * from "./Cancel";
 export * from "./Package";
 export * from "./Edit";
+export * from "./Add";
+export * from "./Minus";

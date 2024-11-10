@@ -7,12 +7,14 @@ import {
 export const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export type RootStackParamList = {
-	TabScreenApp: undefined;
-	Login: undefined;
-	Register: undefined;
-	ProductDetail: undefined;
-	SubCategory: undefined;
-	PaymentOption: undefined;
+  TabScreenApp: undefined;
+  Login: undefined;
+  Register: undefined;
+  ProductDetail: undefined;
+  SubCategory: undefined;
+  PaymentOption: undefined;
+  Order: undefined;
+  Feedback: undefined;
 	PaymentResult: undefined;
 };
 

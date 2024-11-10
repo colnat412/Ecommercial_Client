@@ -1,7 +1,9 @@
 import { Star } from "@/src/assets";
 import { style } from "@/src/constants";
+import { StackScreenNavigationProp } from "@/src/libs";
 import { Product } from "@/src/types";
-import { Image, StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
 interface RecommendItemProps {
@@ -9,8 +11,9 @@ interface RecommendItemProps {
 }
 
 export const RecommendedItem = ({ product }: RecommendItemProps) => {
+  const navigation = useNavigation<StackScreenNavigationProp>();
   return (
-    <View style={styles.container}>
+    <Pressable onPress={()=> {navigation.navigate("ProductDetail")}} style={styles.container}>
       <View style={{ padding: 5 }}>
         <Image
           style={{ width: 150, height: 150 }}
@@ -27,7 +30,7 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
           <Text>4.5</Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

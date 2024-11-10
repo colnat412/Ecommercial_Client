@@ -2,10 +2,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationProp, RouteProp } from "@react-navigation/native";
 
 export type RootTabParamList = {
-  HomePage: undefined;
-  Search: undefined;
-  Favorite: undefined;
-  StackScreenAccountApp: undefined;
+	HomePage: undefined;
+	Search: undefined;
+	Favorite: undefined;
+	Account: undefined;
 };
 
 export const Tab = createBottomTabNavigator<RootTabParamList>();
