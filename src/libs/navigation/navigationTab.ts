@@ -5,6 +5,7 @@ export type RootTabParamList = {
 	HomePage: undefined;
 	Search: undefined;
 	Favorite: undefined;
+	Chat: undefined;
 	Account: undefined;
 };
 

@@ -41,6 +41,8 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
 
 const styles = StyleSheet.create({
 	container: {
+		marginHorizontal: 5,
+		marginVertical: 5,
 		flexDirection: 'column',
 		gap: 10,
 		width: '45%',

@@ -86,7 +86,8 @@ export const FavoriteList = ({ products }: FavoriteListProps) => {
 				)}
 				showsVerticalScrollIndicator={false}
 				showsHorizontalScrollIndicator={false}
-			></FlatList>
+			>
+			</FlatList>
 		</View>
 	);
 };

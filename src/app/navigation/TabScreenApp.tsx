@@ -10,6 +10,7 @@ import {
 import { Text } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native';
 import { Account, Favorite, Search } from '../containers';
+import Chat from '../containers/Chat';
 
 export const TabScreenApp = () => {
 	return (
@@ -86,6 +87,20 @@ export const TabScreenApp = () => {
 				component={Favorite}
 				options={{
 					title: 'Favorite',
+					tabBarIcon: ({ focused }) => (
+						<FavoriteIcon
+							width={20}
+							height={20}
+							color={focused ? colors.brand : colors.disable}
+						/>
+					),
+				}}
+			/>
+			<Tab.Screen
+				name="Chat"
+				component={Chat}
+				options={{
+					title: 'Chat',
 					tabBarIcon: ({ focused }) => (
 						<FavoriteIcon
 							width={20}
