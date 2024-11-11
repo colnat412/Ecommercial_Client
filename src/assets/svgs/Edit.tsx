@@ -1,8 +1,12 @@
-import { colors } from "@/src/constants";
-import * as React from "react";
-import Svg, { SvgProps, Path } from "react-native-svg";
+import { colors } from '@/src/constants';
+import * as React from 'react';
+import Svg, { SvgProps, Path } from 'react-native-svg';
 
-export const Edit = ({ color = colors.brand, width = 25, height = 25 }: SvgProps) => (
+export const Edit = ({
+	color = colors.brand,
+	width = 25,
+	height = 25,
+}: SvgProps) => (
 	<Svg fill="none" viewBox="0 0 15 15" width={width} height={height}>
 		<Path
 			stroke={color}
@@ -22,5 +26,3 @@ export const Edit = ({ color = colors.brand, width = 25, height = 25 }: SvgProps
 		></Path>
 	</Svg>
 );
-
-

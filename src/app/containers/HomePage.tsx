@@ -1,10 +1,11 @@
 import { ScrollView, View } from 'react-native';
 
-import Category from './category/Category';
+
 import Banner from './Banner';
 import { Search } from './Search';
 import { Recommended } from './recommended';
 import { HomePageHeader } from '../navigation/components';
+import { Category } from './category';
 
 export const HomePage = () => {
 	return (

@@ -14,5 +14,5 @@ export * from './Loading';
 export * from './payment';
 export * from './cart';
 
-export * from "./Feedback"
-export * from "./order"
+export * from './Feedback';
+export * from './order';

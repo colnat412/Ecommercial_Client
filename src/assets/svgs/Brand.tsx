@@ -1,6 +1,6 @@
-import { colors } from "@/src/constants";
-import * as React from "react";
-import Svg, { SvgProps, Path } from "react-native-svg";
+import { colors } from '@/src/constants';
+import * as React from 'react';
+import Svg, { SvgProps, Path } from 'react-native-svg';
 
 export const Brand = ({
 	color = colors.brand,
@@ -30,5 +30,3 @@ export const Brand = ({
 		/>
 	</Svg>
 );
-
-
