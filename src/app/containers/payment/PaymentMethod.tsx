@@ -1,10 +1,21 @@
 import QrCode from '@/src/assets/Qr';
 import Momo from '@/src/assets/svgs/Momo';
 import { colors, style } from '@/src/constants';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, RadioButton, Text } from 'react-native-paper';
 
 export const PaymentMethod = () => {
+	const [momoChecked, setMomoChecked] = useState<boolean>(true);
+	const handleChooseMomo = () => {
+		setMomoChecked(true);
+		setQrChecked(false);
+	};
+	const [qrChecked, setQrChecked] = useState<boolean>(false);
+	const handleChooseQr = () => {
+		setQrChecked(true);
+		setMomoChecked(false);
+	};
 	return (
 		<View style={styles.container}>
 			<View style={styles.method}>
@@ -12,14 +23,24 @@ export const PaymentMethod = () => {
 					<Momo width={38} height={38} />
 					<Text style={styles.textMethod}>Momo</Text>
 				</View>
-				<RadioButton status="checked" color={colors.brand} value="momo" />
+				<RadioButton
+					onPress={handleChooseMomo}
+					status={momoChecked ? 'checked' : 'unchecked'}
+					color={colors.brand}
+					value="momo"
+				/>
 			</View>
 			<View style={styles.method}>
 				<View style={styles.subMethod}>
 					<QrCode width={38} height={38} />
 					<Text style={styles.textMethod}>QR Code</Text>
 				</View>
-				<RadioButton color={colors.brand} value="momo" />
+				<RadioButton
+					onPress={handleChooseQr}
+					color={colors.brand}
+					value="momo"
+					status={qrChecked ? 'checked' : 'unchecked'}
+				/>
 			</View>
 			<Button
 				style={[style.button]}

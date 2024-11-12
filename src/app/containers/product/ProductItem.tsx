@@ -3,17 +3,26 @@ import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { ProductItemHorizontal } from '../../components';
+import { useEffect, useState } from 'react';
+import { Product } from '@/src/types';
+import { getData } from '../handle';
 
-export const ProductRecommended = () => {
+export const ProductItem = ({ title }: { title: String }) => {
+	const [data, setData] = useState<Product[]>([]);
+	useEffect(() => {
+		getData({ urlApi: '/products' }).then((data) => {
+			setData(data);
+		});
+	}, []);
 	return (
 		<View>
 			<View style={styles.recommendedStyle}>
 				<Text style={[style.headerText, { fontSize: 18, padding: 14 }]}>
-					Recommend
+					{title}
 				</Text>
 			</View>
 			<FlatList
-				data={data.products.slice(0, 5)}
+				data={data.slice(0, 5)}
 				renderItem={({ item }) => <ProductItemHorizontal product={item} />}
 				keyExtractor={(item) => item.id}
 				horizontal
