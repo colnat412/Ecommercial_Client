@@ -40,7 +40,7 @@ import { HeaderTitleWithBack } from '../../navigation/components';
 import { StackScreenApp } from '../../navigation';
 import { useNavigation } from '@react-navigation/native';
 import { StackScreenNavigationProp } from '@/src/libs';
-import { Line } from '../Line';
+import { Line } from '../../components/Line';
 
 interface ProductDetailProps {
 	product: Product;
