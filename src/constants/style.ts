@@ -81,7 +81,7 @@ export const style = StyleSheet.create({
 		fontFamily: 'RobotoBold',
 	},
 	titleText: {
-		fontSize: 8,
+		fontSize: 12,
 		color: colors.secondText,
 	},
 	priceText: {

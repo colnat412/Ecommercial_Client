@@ -1,16 +1,15 @@
 import { Tab } from '@/src/libs';
-import { HomePage } from '../containers/HomePage';
 import { colors } from '@/src/constants';
 import {
 	Home,
 	Search as SearchIcon,
 	Favorite as FavoriteIcon,
 	User,
+	ChatBox,
 } from '@/src/assets';
 import { Text } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native';
-import { Account, Favorite, Search } from '../containers';
-import Chat from '../containers/Chat';
+import { Account, Chat, Favorite, HomePage, Search } from '../containers';
 
 export const TabScreenApp = () => {
 	return (
@@ -102,7 +101,7 @@ export const TabScreenApp = () => {
 				options={{
 					title: 'Chat',
 					tabBarIcon: ({ focused }) => (
-						<FavoriteIcon
+						<ChatBox
 							width={20}
 							height={20}
 							color={focused ? colors.brand : colors.disable}

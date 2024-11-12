@@ -18,3 +18,4 @@ export * from './Package';
 export * from './Edit';
 export * from './Add';
 export * from './Minus';
+export * from "./Chatbox"

@@ -36,7 +36,7 @@ export const HeaderTitleWithBack = ({
 				<TouchableOpacity onPress={goBack}>
 					<GoBack width={12} height={12} color={colors.mainText} />
 				</TouchableOpacity>
-				<Text style={{ fontSize: 16 }}>{title}</Text>
+				<Text style={{ fontSize: 16, fontWeight: "800" }}>{title}</Text>
 			</View>
 			<View style={[style.rowCenter, { gap: 16 }]}>
 				{showCart && (

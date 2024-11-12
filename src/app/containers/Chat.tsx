@@ -16,7 +16,7 @@ interface Message {
 	message: string;
 }
 
-const Chat: React.FC = () => {
+export const Chat: React.FC = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [message, setMessage] = useState<string>('');
@@ -96,5 +96,3 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 	},
 });
-
-export default Chat;
