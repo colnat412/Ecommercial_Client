@@ -1,4 +1,5 @@
 // src/Chat.tsx
+import { BE_URL } from '@/env';
 import React, { useState, useEffect } from 'react';
 import {
 	View,
@@ -22,7 +23,7 @@ const Chat: React.FC = () => {
 	const [sender, setSender] = useState<string>(""); // Có thể thay đổi thành tên người dùng thực tế
 
 	useEffect(() => {
-		const newSocket = io('http://192.168.100.126:3030'); // Địa chỉ server NestJS
+		const newSocket = io(BE_URL); // Địa chỉ server NestJS
 		setSocket(newSocket);
 
 		newSocket.on('newMessage', (data: Message) => {
