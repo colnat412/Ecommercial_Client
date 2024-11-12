@@ -1,13 +1,13 @@
 import { FlatList, ScrollView, View } from 'react-native';
 
 import Banner from './Banner';
-import { Search } from './Search';
-import { Recommended, RecommendedItem } from './recommended';
+
 import { HomePageHeader } from '../navigation/components';
 import { Category } from './category';
 import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
+import { ProductItem } from '../components/items/ProductItemVertical';
 
 export const HomePage = () => {
 	return (
@@ -16,7 +16,7 @@ export const HomePage = () => {
 			<FlatList
 				numColumns={2}
 				data={data.products}
-				renderItem={({ item }) => <RecommendedItem product={item} />}
+				renderItem={({ item }) => <ProductItem product={item} />}
 				keyExtractor={(item) => item.id.toString()}
 				ListHeaderComponent={() => (
 					<>

@@ -2,9 +2,13 @@ import { FlatList, View } from 'react-native';
 import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
-import { RecommendedItem } from './RecommendedItem';
+import { ProductItemVertical } from '../../components';
 
-export const Recommended = () => {
+interface RecommendedProps {
+	title: string;
+}
+
+export const Recommended = ({ title }: RecommendedProps) => {
 	return (
 		<View
 			style={{
@@ -13,14 +17,19 @@ export const Recommended = () => {
 			}}
 		>
 			<Text style={[style.headerText, { fontSize: 16, padding: 12 }]}>
-				Recommended for you
+				{title}
 			</Text>
-			<View style={{ width: "100%",justifyContent: "center", alignItems: "center"}}>
+			<View
+				style={{
+					width: '100%',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
 				<FlatList
-					style={{ backgroundColor: "red" }}
 					numColumns={2}
 					data={data.products}
-					renderItem={({ item }) => <RecommendedItem product={item} />}
+					renderItem={({ item }) => <ProductItemVertical product={item} />}
 				/>
 			</View>
 		</View>

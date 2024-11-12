@@ -1,18 +1,7 @@
-import {
-	FlatList,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	View,
-} from 'react-native';
-import { Text } from 'react-native-paper';
-import { Search } from '../Search';
-import data from '@/dbTest.json';
-
-import { colors, style } from '@/src/constants';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { HeaderTitleWithBack } from '../../navigation/components';
-import { ProductRecommended, Products, ProductSelling } from '../product';
+import { ProductRecommended, ProductSelling } from '../product';
 import { Recommended } from '../recommended';
 
 export const SubCategory = () => {
@@ -22,7 +11,7 @@ export const SubCategory = () => {
 			<ScrollView>
 				<ProductSelling />
 				<ProductRecommended />
-				<Recommended />
+				<Recommended title="All Products" />
 			</ScrollView>
 		</View>
 	);

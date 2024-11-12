@@ -11,8 +11,8 @@ const Banner = ({ title, subTitle }: BannerProps) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.text}>
-				<Text style={styles.textStyle}>{title}</Text>
-				<Text style={styles.textSecond}>{subTitle}</Text>
+				<Text style={styles.title}>{title}</Text>
+				<Text style={styles.subTitle}>{subTitle}</Text>
 			</View>
 			<Image
 				style={{ width: 108, height: 108 }}
@@ -37,13 +37,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		gap: 5,
 	},
-	textStyle: {
+	title: {
 		fontSize: 25,
 		fontWeight: 'bold',
+		color: '#e2e2e2',
 	},
-	textSecond: {
+	subTitle: {
 		opacity: 0.5,
 		fontSize: 12,
+		color: '#e2e2e2',
 	},
 });
 

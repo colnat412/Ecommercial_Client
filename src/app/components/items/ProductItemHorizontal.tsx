@@ -6,12 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-interface RecommendItemProps {
+interface ProductItemProps {
 	product: Product;
 }
 
-export const RecommendedItem = ({ product }: RecommendItemProps) => {
+export const ProductItem = ({ product }: ProductItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
+
 	return (
 		<Pressable
 			onPress={() => {
@@ -19,13 +20,15 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
 			}}
 			style={styles.container}
 		>
-			<View style={{ padding: 5 }}>
+			<View style={styles.imgContainer}>
 				<Image
-					style={{ width: 150, height: 150 }}
+					style={{ width: 140, height: 140 }}
 					source={{ uri: product?.images_url }}
 				/>
 			</View>
-			<Text style={{ width: '100%' }}>{product?.name}</Text>
+			<Text style={{ width: '100%', fontWeight: 'bold' }}>
+				{product?.name}
+			</Text>
 			<View style={styles.info}>
 				<View>
 					<Text style={style.priceText}>${product?.price}</Text>
@@ -41,28 +44,28 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
 
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: 5,
-		marginVertical: 5,
 		flexDirection: 'column',
 		gap: 10,
-		width: '45%',
-		justifyContent: 'center',
-		alignItems: 'center',
-		padding: '2%',
+		padding: 10,
+		marginLeft: 16,
 		borderRadius: 6,
-		backgroundColor: '#FFFFFF',
+		backgroundColor: '#FFF',
 		shadowColor: '#000',
 		shadowOffset: {
 			width: 0,
-			height: 1,
+			height: 2,
 		},
-		shadowOpacity: 0.22,
-		shadowRadius: 2.22,
-
-		elevation: 3,
+		shadowOpacity: 0.23,
+		shadowRadius: 2.62,
+		elevation: 4,
+	},
+	imgContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 150,
+		height: 150,
 	},
 	info: {
-		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},

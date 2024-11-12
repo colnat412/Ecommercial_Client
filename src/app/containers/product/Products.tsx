@@ -2,7 +2,7 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
-import { ProductItem } from './Product';
+import { ProductItem } from '../../components/items/ProductItemHorizontal';
 
 export const Products = () => {
 	return (
