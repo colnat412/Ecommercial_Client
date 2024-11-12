@@ -17,7 +17,7 @@ export const StackScreenApp = () => {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator
-				initialRouteName="TabScreenApp"
+				initialRouteName="Feedback"
 				screenOptions={{
 					headerShown: false,
 					animation: 'fade_from_bottom',

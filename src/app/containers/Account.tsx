@@ -360,7 +360,11 @@ const TextFields = ({
 						secureTextEntry={secureTextEntry && showPassword}
 						mode="outlined"
 						placeholderTextColor={colors.secondText}
-						style={{ flex: 1, height: 10 }}
+						style={{
+							flex: 1,
+							height: 10,
+							backgroundColor: colors.background,
+						}}
 						activeOutlineColor={colors.brand}
 						contentStyle={{ padding: 0 }}
 						underlineStyle={{ borderWidth: 0 }}
