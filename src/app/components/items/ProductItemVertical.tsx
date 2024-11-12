@@ -10,7 +10,7 @@ interface RecommendItemProps {
 	product: Product;
 }
 
-export const ProductItem = ({ product }: RecommendItemProps) => {
+export const ProductItemVertical = ({ product }: RecommendItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	return (
 		<Pressable

@@ -2,7 +2,7 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
-import { ProductItem } from '../../components/items/ProductItemHorizontal';
+import { ProductItemHorizontal } from '../../components';
 
 export const ProductSelling = () => {
 	return (
@@ -15,7 +15,7 @@ export const ProductSelling = () => {
 			<FlatList
 				style={{}}
 				data={data.products.slice(0, 5)}
-				renderItem={({ item }) => <ProductItem product={item} />}
+				renderItem={({ item }) => <ProductItemHorizontal product={item} />}
 				keyExtractor={(item) => item.id}
 				nestedScrollEnabled={true}
 				horizontal

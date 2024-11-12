@@ -1,26 +1,32 @@
 import { FlatList, ScrollView, View } from 'react-native';
-
 import Banner from './Banner';
-
 import { HomePageHeader } from '../navigation/components';
-import { Category } from './category';
-import data from '@/dbTest.json';
+import { Categories } from './category';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
-import { ProductItem } from '../components/items/ProductItemVertical';
+import { ProductItemVertical } from '../components';
+import { useEffect, useState } from 'react';
+import { Product } from '@/src/types';
+import { getData } from './handle';
 
 export const HomePage = () => {
+	const [data, setData] = useState<Product[]>([]);
+	useEffect(() => {
+		getData({ urlApi: '/products' }).then((data) => {
+			setData(data);
+		});
+	}, []);
 	return (
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />
 			<FlatList
 				numColumns={2}
-				data={data.products}
-				renderItem={({ item }) => <ProductItem product={item} />}
+				data={data}
+				renderItem={({ item }) => <ProductItemVertical product={item} />}
 				keyExtractor={(item) => item.id.toString()}
 				ListHeaderComponent={() => (
 					<>
-						<Category />
+						<Categories />
 						<Banner title="Fashion" subTitle="World have many colors" />
 						<Banner title="Food" subTitle="World have many colors" />
 						<Text

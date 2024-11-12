@@ -10,7 +10,7 @@ interface ProductItemProps {
 	product: Product;
 }
 
-export const ProductItem = ({ product }: ProductItemProps) => {
+export const ProductItemHorizontal = ({ product }: ProductItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 
 	return (
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
 		gap: 10,
 		padding: 10,
 		marginLeft: 16,
+		marginBottom: 3,
 		borderRadius: 6,
 		backgroundColor: '#FFF',
 		shadowColor: '#000',

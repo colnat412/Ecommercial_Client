@@ -8,7 +8,7 @@
 		"ios": "expo start --ios",
 		"web": "expo start --web",
 		"screen": "scrcpy -m1968",
-		"database": "json-server --watch dbTest.json --port 4000 --host 192.168.228.165",
+		"database": "json-server --watch dbTest.json --port 4000 --host 192.168.15.111",
 		"prettier": "prettier --write ."
 	},
 	"dependencies": {
