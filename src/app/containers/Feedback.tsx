@@ -17,7 +17,7 @@ import {
 	Surface,
 	Text,
 } from 'react-native-paper';
-import { Cancel, Star } from '@/src/assets';
+import { Cancel } from '@/src/assets';
 
 export const Feedback = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();

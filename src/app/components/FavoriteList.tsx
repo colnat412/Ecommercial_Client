@@ -21,7 +21,7 @@ import {
 	Portal,
 	Text,
 } from 'react-native-paper';
-import { ProductCard } from './ProductCard';
+import { ProductCard } from './product/ProductCard';
 import { useNavigation } from '@react-navigation/native';
 import { StackScreenNavigationProp } from '@/src/libs';
 
