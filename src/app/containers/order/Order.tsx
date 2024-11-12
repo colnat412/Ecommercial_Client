@@ -18,7 +18,6 @@ export const OrderComponent = () => {
 			setOrders(data);
 		});
 	}, []);
-	
 
 	return (
 		<View style={[style.container, style.body, { paddingHorizontal: 0 }]}>
@@ -29,23 +28,21 @@ export const OrderComponent = () => {
 				navigation={navigation}
 			/>
 			<FlatList
-			data={orders}
-			renderItem={({ item }) => <OrderItem order={item} />}
-				style={{ paddingHorizontal: 8, paddingVertical:5 }}
+				data={orders}
+				renderItem={({ item }) => <OrderItem order={item} />}
+				style={{ paddingHorizontal: 8, paddingVertical: 5 }}
 				showsHorizontalScrollIndicator={false}
 				showsVerticalScrollIndicator={false}
-			>
-
-			</FlatList>
+			></FlatList>
 		</View>
 	);
 };
 
 interface OrderItemProps {
-    order: Order;
+	order: Order;
 }
 
-const OrderItem = ({order}: OrderItemProps) => {
+const OrderItem = ({ order }: OrderItemProps) => {
 	return (
 		<View
 			style={[

@@ -3,7 +3,7 @@ import { colors, style } from '@/src/constants';
 import { Product } from '@/src/types';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { Line } from '../Line';
+import { Line } from '../../components/Line';
 
 interface CartItemProps {
 	product: Product;

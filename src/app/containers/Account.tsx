@@ -36,13 +36,9 @@ export const Account = () => {
 
 	// const isFocused = useIsFocused();
 
-	//   useEffect(() => {
-	// 		// if (isFocused) {
-	// 		// 	navigation.navigate('Login');
-
-	// 		// }
-	// 		console.log('isFocused', navigationTab.getId())
-	// 	}, [isFocused]);
+	// useEffect(() => {
+	// 	navigation.navigate('Login');
+	// }, [isFocused]);
 
 	return (
 		<DismissKeyboardView>
@@ -317,6 +313,13 @@ export const Account = () => {
 								</View>
 							)}
 						</View>
+						<Button
+							mode="contained"
+							style={{ borderRadius: 8 }}
+							buttonColor={colors.brand}
+						>
+							Log out
+						</Button>
 					</View>
 				</ScrollView>
 			</View>

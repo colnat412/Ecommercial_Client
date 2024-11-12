@@ -1,2 +1,2 @@
-export * from "./Recommended";
-export * from "./RecommendedItem";
+export * from './Recommended';
+export * from './RecommendedItem';

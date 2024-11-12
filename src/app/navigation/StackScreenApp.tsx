@@ -1,6 +1,6 @@
 import { Stack } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
-import { TabScreenApp } from './TabScreenApp';
+
 import {
 	Feedback,
 	Login,
@@ -11,6 +11,7 @@ import {
 	Register,
 	SubCategory,
 } from '../containers';
+import { TabScreenApp } from './TabScreenApp';
 
 export const StackScreenApp = () => {
 	return (

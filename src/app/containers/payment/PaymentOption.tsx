@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { PaymentProfile } from './PaymentProfile';
 import { PaymentMethod } from './PaymentMethod';
-import { Line } from '../Line';
+import { Line } from '../../components/Line';
 import { Cart } from '../cart';
 
 import { useNavigation } from '@react-navigation/native';
