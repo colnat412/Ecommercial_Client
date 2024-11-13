@@ -9,7 +9,8 @@ import {
 } from '@/src/assets';
 import { Text } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native';
-import { Account, Chat, Favorite, HomePage, Search } from '../containers';
+import { Account, Chat, Favorite, HomePage } from '../containers';
+import { SearchInput, SearchPage } from '../containers/searchComponent';
 
 export const TabScreenApp = () => {
 	return (
@@ -51,7 +52,7 @@ export const TabScreenApp = () => {
 					alignItems: 'center',
 				},
 			}}
-			initialRouteName="HomePage"
+			initialRouteName="Search"
 		>
 			<Tab.Screen
 				name="HomePage"
@@ -69,7 +70,7 @@ export const TabScreenApp = () => {
 			/>
 			<Tab.Screen
 				name="Search"
-				component={Search}
+				component={SearchPage}
 				options={{
 					title: 'Search',
 					tabBarIcon: ({ focused }) => (

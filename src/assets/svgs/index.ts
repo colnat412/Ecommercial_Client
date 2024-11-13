@@ -18,4 +18,8 @@ export * from './Package';
 export * from './Edit';
 export * from './Add';
 export * from './Minus';
-export * from "./Chatbox"
+export * from './Chatbox';
+export * from './Return';
+export * from './Protect';
+export * from './BestDeal';
+export * from './Location';
