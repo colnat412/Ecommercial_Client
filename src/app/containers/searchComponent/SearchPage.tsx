@@ -22,6 +22,10 @@ export const SearchPage = () => {
 		setIsVisible(!isVisible);
 	};
 
+	const handleConfirmModal = () => {
+		setIsVisible(false);
+	};
+
 	return (
 		<View style={styles.container}>
 			<SearchInput handleShowFilter={handleVisible} />
@@ -47,9 +51,12 @@ export const SearchPage = () => {
 								FILTER
 							</Text>
 						</View>
-						<View style={{ flex: 1, alignItems: 'flex-end' }}>
+						<Pressable
+							onPress={() => setIsVisible(false)}
+							style={{ flex: 1, alignItems: 'flex-end' }}
+						>
 							<Cancel color={'black'} />
-						</View>
+						</Pressable>
 					</View>
 					<View style={styles.shippingOptionsContainer}>
 						<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
@@ -190,7 +197,10 @@ export const SearchPage = () => {
 							</View>
 						</View>
 					</View>
-					<Pressable style={[style.button, { padding: 10 }]}>
+					<Pressable
+						onPress={handleConfirmModal}
+						style={[style.button, { padding: 10 }]}
+					>
 						<Text style={{ color: 'white', fontWeight: 'bold' }}>
 							Confirm
 						</Text>
