@@ -1,20 +1,40 @@
 import { colors, style } from '@/src/constants';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import { Search as SearchIcon } from '../../../assets';
+import { Filter, Search as SearchIcon } from '../../../assets';
 import { DismissKeyboardView } from '../../components';
 
-export const SearchInput = () => {
+interface SearchInputProps {
+	handleShowFilter?: () => void;
+}
+
+export const SearchInput = ({ handleShowFilter }: SearchInputProps) => {
 	return (
 		<DismissKeyboardView>
-			<View style={[style.container]}>
+			<View
+				style={[
+					{
+						backgroundColor: colors.mainBackground,
+						marginTop: 32,
+						paddingHorizontal: 16,
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+					},
+				]}
+			>
 				<TextInput
-					style={{ height: 40 }}
+					style={{ height: 40, width: '90%' }}
 					left={<TextInput.Icon icon={SearchIcon} />}
 					placeholder="Search"
 					mode="outlined"
 					activeOutlineColor={colors.brand}
 				/>
+				<Pressable
+					onPress={handleShowFilter}
+					style={{ justifyContent: 'center', alignItems: 'center' }}
+				>
+					<Filter />
+				</Pressable>
 			</View>
 		</DismissKeyboardView>
 	);

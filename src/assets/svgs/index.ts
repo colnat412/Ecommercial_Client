@@ -23,3 +23,4 @@ export * from './Return';
 export * from './Protect';
 export * from './BestDeal';
 export * from './Location';
+export * from './Filter';
