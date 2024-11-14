@@ -12,12 +12,19 @@ import {
 	Return,
 	Star,
 } from '@/src/assets';
-import { style } from '@/src/constants';
+import { colors, style } from '@/src/constants';
 
 interface shippingOptionsProps {
 	instant: boolean;
 	express: boolean;
 	standard: boolean;
+}
+
+interface OthersOptionsProps {
+	return: boolean;
+	protect: boolean;
+	bestDeal: boolean;
+	shipToStore: boolean;
 }
 
 export const SearchPage = () => {
@@ -30,6 +37,12 @@ export const SearchPage = () => {
 			standard: true,
 		},
 	);
+	const [othersOptions, setOthersOptions] = useState<OthersOptionsProps>({
+		return: true,
+		protect: false,
+		bestDeal: false,
+		shipToStore: false,
+	});
 
 	const handleVisible = () => {
 		setIsVisible(!isVisible);
@@ -40,6 +53,15 @@ export const SearchPage = () => {
 			instant: option === 1,
 			express: option === 2,
 			standard: option === 3,
+		});
+	};
+
+	const handleOthersOption = (option: number) => {
+		setOthersOptions({
+			return: option === 1,
+			protect: option === 2,
+			bestDeal: option === 3,
+			shipToStore: option === 4,
 		});
 	};
 
@@ -210,13 +232,59 @@ export const SearchPage = () => {
 									justifyContent: 'space-around',
 								}}
 							>
-								<Pressable style={styles.others}>
-									<Return width={40} height={40} />
-									<Text>30-day Free Return</Text>
+								<Pressable
+									onPress={() => handleOthersOption(1)}
+									style={[
+										styles.others,
+										othersOptions.return && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<Return
+										color={
+											othersOptions.return ? colors.brand : undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.return
+												? colors.brand
+												: undefined,
+										}}
+									>
+										30-day Free Return
+									</Text>
 								</Pressable>
-								<Pressable style={styles.others}>
-									<Protect width={40} height={40} />
-									<Text>Buyer Protection</Text>
+								<Pressable
+									onPress={() => handleOthersOption(2)}
+									style={[
+										styles.others,
+										othersOptions.protect && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<Protect
+										color={
+											othersOptions.protect
+												? colors.brand
+												: undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.protect
+												? colors.brand
+												: undefined,
+										}}
+									>
+										Buyer Protection
+									</Text>
 								</Pressable>
 							</View>
 							<View
@@ -225,13 +293,61 @@ export const SearchPage = () => {
 									justifyContent: 'space-around',
 								}}
 							>
-								<Pressable style={styles.others}>
-									<BestDeal width={40} height={40} />
-									<Text>Best Deal</Text>
+								<Pressable
+									onPress={() => handleOthersOption(3)}
+									style={[
+										styles.others,
+										othersOptions.bestDeal && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<BestDeal
+										color={
+											othersOptions.bestDeal
+												? colors.brand
+												: undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.bestDeal
+												? colors.brand
+												: undefined,
+										}}
+									>
+										Best Deal
+									</Text>
 								</Pressable>
-								<Pressable style={styles.others}>
-									<Location width={40} height={40} />
-									<Text>Ship to store</Text>
+								<Pressable
+									onPress={() => handleOthersOption(4)}
+									style={[
+										styles.others,
+										othersOptions.shipToStore && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<Location
+										color={
+											othersOptions.shipToStore
+												? colors.brand
+												: undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.shipToStore
+												? colors.brand
+												: undefined,
+										}}
+									>
+										Ship to store
+									</Text>
 								</Pressable>
 							</View>
 						</View>
