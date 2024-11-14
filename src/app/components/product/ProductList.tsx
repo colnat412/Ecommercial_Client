@@ -20,7 +20,7 @@ export const ProductList = ({
 	typeRight = 'remove',
 	onPressButtonRight = () => {},
 	descrtipion = '',
-	price = 0,	
+	price = 0,
 }: ProductListProps) => {
 	return (
 		<FlatList

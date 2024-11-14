@@ -10,13 +10,16 @@ interface ProductItemProps {
 	product: Product;
 }
 
-export const ProductItem = ({ product }: ProductItemProps) => {
-		const navigation = useNavigation<StackScreenNavigationProp>();
+export const ProductItemHorizontal = ({ product }: ProductItemProps) => {
+	const navigation = useNavigation<StackScreenNavigationProp>();
 
 	return (
-		<Pressable 			onPress={() => {
+		<Pressable
+			onPress={() => {
 				navigation.navigate('ProductDetail');
-			}} style={styles.container}>
+			}}
+			style={styles.container}
+		>
 			<View style={styles.imgContainer}>
 				<Image
 					style={{ width: 140, height: 140 }}
@@ -45,6 +48,7 @@ const styles = StyleSheet.create({
 		gap: 10,
 		padding: 10,
 		marginLeft: 16,
+		marginBottom: 3,
 		borderRadius: 6,
 		backgroundColor: '#FFF',
 		shadowColor: '#000',

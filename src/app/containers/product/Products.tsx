@@ -2,25 +2,32 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
-import { ProductItem } from './Product';
+import { ProductItemVertical } from '../../components';
+import { Product } from '@/src/types';
 
-export const Products = () => {
+interface ProductProps {
+	product: Product[];
+}
+
+export const Products = ({ product }: ProductProps) => {
 	return (
-		<View>
+		<>
 			<View style={styles.recommendedStyle}>
-				<Text style={[style.headerText, { fontSize: 18, padding: 14 }]}>
+				<Text
+					style={[
+						style.headerText,
+						{ fontSize: 18, paddingHorizontal: 14, paddingVertical: 9 },
+					]}
+				>
 					All Products
 				</Text>
 			</View>
 			<FlatList
-				style={{}}
-				data={data.products}
-				renderItem={({ item }) => <ProductItem product={item} />}
-				keyExtractor={(item) => item.id}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-			/>
-		</View>
+				numColumns={2}
+				data={product}
+				renderItem={({ item }) => <ProductItemVertical product={item} />}
+			></FlatList>
+		</>
 	);
 };
 

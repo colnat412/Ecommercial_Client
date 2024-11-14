@@ -5,3 +5,4 @@ export * from './product/ProductCard';
 export * from './ImageInput'
 
 export * from './product';
+export * from './items';

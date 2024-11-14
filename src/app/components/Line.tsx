@@ -10,6 +10,8 @@ export const Line = () => {
 				width: '100%',
 				height: 0.5,
 				backgroundColor: colors.outline,
+				justifyContent: 'center',
+				alignItems: 'center',
 			}}
 		/>
 	);

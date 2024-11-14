@@ -1,4 +1,4 @@
-import { Star } from '@/src/assets';
+import { Cart, Star } from '@/src/assets';
 import { style } from '@/src/constants';
 import { StackScreenNavigationProp } from '@/src/libs';
 import { Product } from '@/src/types';
@@ -10,7 +10,7 @@ interface RecommendItemProps {
 	product: Product;
 }
 
-export const RecommendedItem = ({ product }: RecommendItemProps) => {
+export const ProductItemVertical = ({ product }: RecommendItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	return (
 		<Pressable
@@ -25,14 +25,24 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
 					source={{ uri: product?.images_url }}
 				/>
 			</View>
-			<Text style={{ width: '100%' }}>{product?.name}</Text>
+			<View style={styles.info}>
+				<View>
+					<Text style={{ width: '100%' }}>{product?.name}</Text>
+				</View>
+
+				<View style={styles.rating}>
+					<Star width={18} height={18} />
+					<Text>4.5</Text>
+				</View>
+			</View>
 			<View style={styles.info}>
 				<View>
 					<Text style={style.priceText}>${product?.price}</Text>
 				</View>
+
 				<View style={styles.rating}>
-					<Star width={18} height={18} />
-					<Text>4.5</Text>
+					<Cart width={18} height={18} />
+					<Text>12.5k</Text>
 				</View>
 			</View>
 		</Pressable>
@@ -41,8 +51,8 @@ export const RecommendedItem = ({ product }: RecommendItemProps) => {
 
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: 5,
-		marginVertical: 5,
+		marginHorizontal: 10,
+		marginVertical: 10,
 		flexDirection: 'column',
 		gap: 10,
 		width: '45%',
