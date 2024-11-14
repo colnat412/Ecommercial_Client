@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import { Checkbox, Modal, Portal, Text } from 'react-native-paper';
+import { Checkbox, Modal, Portal, RadioButton, Text } from 'react-native-paper';
 import { SearchInput } from './SearchInput';
 import { Line } from '../../components';
 import { useState } from 'react';
@@ -14,12 +14,33 @@ import {
 } from '@/src/assets';
 import { style } from '@/src/constants';
 
+interface shippingOptionsProps {
+	instant: boolean;
+	express: boolean;
+	standard: boolean;
+}
+
 export const SearchPage = () => {
 	const [priceRange, setPriceRange] = useState<number[]>([200, 800]);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
+		{
+			instant: false,
+			express: false,
+			standard: true,
+		},
+	);
 
 	const handleVisible = () => {
 		setIsVisible(!isVisible);
+	};
+
+	const handleShippingOptions = (option: number) => {
+		setShippingOptions({
+			instant: option === 1,
+			express: option === 2,
+			standard: option === 3,
+		});
 	};
 
 	const handleConfirmModal = () => {
@@ -63,16 +84,34 @@ export const SearchPage = () => {
 							Shipping options
 						</Text>
 						<View style={styles.option}>
-							<Checkbox status="checked" />
-							<Text>Instant(2 hours delivery)</Text>
+							<RadioButton
+								onPress={() => handleShippingOptions(1)}
+								status={
+									shippingOptions.instant ? 'checked' : 'unchecked'
+								}
+								value="instant"
+							/>
+							<Text>Instant (2 hours delivery)</Text>
 						</View>
 						<View style={styles.option}>
-							<Checkbox status="checked" />
-							<Text>Express(2 days delivery)</Text>
+							<RadioButton
+								onPress={() => handleShippingOptions(2)}
+								status={
+									shippingOptions.express ? 'checked' : 'unchecked'
+								}
+								value="express"
+							/>
+							<Text>Express (2 days delivery)</Text>
 						</View>
 						<View style={styles.option}>
-							<Checkbox status="checked" />
-							<Text>Standard(7-10 days delivery)</Text>
+							<RadioButton
+								onPress={() => handleShippingOptions(3)}
+								status={
+									shippingOptions.standard ? 'checked' : 'unchecked'
+								}
+								value="standard"
+							/>
+							<Text>Standard (7-10 days delivery)</Text>
 						</View>
 					</View>
 					<Line />
