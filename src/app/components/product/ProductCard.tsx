@@ -2,29 +2,32 @@ import { Edit, Remove } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import { Product } from '@/src/types';
 import { formatCurrency } from '@/src/utils';
+import React from 'react';
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 
 interface ProductCardProps {
 	product: Product;
 	onPressCard: () => void;
 	haveRight: boolean;
-    typeRight : "edit" | "remove";
-	onPressButtonRight: () => void;
+	typeRight: 'edit' | 'remove';
+	onPressButtonRight?: {
+		remove?: (id: string) => void;
+	};
 	descrtipion: string;
 	price: number;
 }
 
-export const ProductCard = ({
-	product,
-	onPressCard,
-	haveRight,
-    typeRight,
-	onPressButtonRight,
-	descrtipion,
-	price,
-}: ProductCardProps) => {
-	return (
-
+export const ProductCard = React.memo(
+	({
+		product,
+		onPressCard,
+		haveRight,
+		typeRight,
+		onPressButtonRight,
+		descrtipion,
+		price,
+	}: ProductCardProps) => {
+		return (
 			<Pressable
 				onPress={onPressCard}
 				style={[
@@ -72,31 +75,41 @@ export const ProductCard = ({
 					</Text>
 				</View>
 				{haveRight === true ? (
-                     typeRight === 'remove' ? (
-					<TouchableOpacity
-						onPress={onPressButtonRight}
-						style={{
-							backgroundColor: colors.textBrand,
-							borderRadius: 8,
-							padding: 8,
-						}}
-					>
-						<Remove />
-					</TouchableOpacity>
+					typeRight === 'remove' ? (
+						<TouchableOpacity
+							onPress={() =>
+								onPressButtonRight?.remove
+									? onPressButtonRight.remove(product.id)
+									: () => {}
+							}
+							style={{
+								backgroundColor: colors.textBrand,
+								borderRadius: 8,
+								padding: 8,
+							}}
+						>
+							<Remove />
+						</TouchableOpacity>
+					) : (
+						<TouchableOpacity
+							onPress={() =>
+								onPressButtonRight?.remove
+									? onPressButtonRight.remove(product.id)
+									: () => {}
+							}
+							style={{
+								backgroundColor: colors.textBrand,
+								borderRadius: 8,
+								padding: 8,
+							}}
+						>
+							<Edit color={colors.secondText} />
+						</TouchableOpacity>
+					)
 				) : (
-					<TouchableOpacity
-						onPress={onPressButtonRight}
-						style={{
-							backgroundColor: colors.textBrand,
-							borderRadius: 8,
-							padding: 8,
-						}}
-					>
-						<Edit color={colors.secondText}/>
-					</TouchableOpacity>
-				)) : (
-                    <></>
-                )}
+					<></>
+				)}
 			</Pressable>
-	);
-};
+		);
+	},
+);

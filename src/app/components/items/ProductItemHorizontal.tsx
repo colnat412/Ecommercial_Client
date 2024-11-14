@@ -3,6 +3,7 @@ import { style } from '@/src/constants';
 import { StackScreenNavigationProp } from '@/src/libs';
 import { Product } from '@/src/types';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
@@ -10,7 +11,7 @@ interface ProductItemProps {
 	product: Product;
 }
 
-export const ProductItemHorizontal = ({ product }: ProductItemProps) => {
+export const ProductItemHorizontal = React.memo(({ product }: ProductItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 
 	return (
@@ -40,7 +41,7 @@ export const ProductItemHorizontal = ({ product }: ProductItemProps) => {
 			</View>
 		</Pressable>
 	);
-};
+});
 
 const styles = StyleSheet.create({
 	container: {

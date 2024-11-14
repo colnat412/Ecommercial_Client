@@ -8,7 +8,9 @@ interface ProductListProps {
 	onPressCard: () => void;
 	haveRight?: boolean;
 	typeRight?: 'edit' | 'remove';
-	onPressButtonRight?: () => void;
+	onPressButtonRight?: {
+		remove?: (id: string) => void;
+	};
 	descrtipion?: string;
 	price?: number;
 }
@@ -18,12 +20,15 @@ export const ProductList = ({
 	onPressCard,
 	haveRight = false,
 	typeRight = 'remove',
-	onPressButtonRight = () => {},
+	onPressButtonRight,
 	descrtipion = '',
 	price = 0,
 }: ProductListProps) => {
 	return (
 		<FlatList
+		style={{paddingVertical: 4}}
+		showsHorizontalScrollIndicator={false}
+		showsVerticalScrollIndicator={false}
 			data={products}
 			renderItem={({ item }) => (
 				<ProductCard
@@ -31,7 +36,7 @@ export const ProductList = ({
 					onPressCard={onPressCard}
 					haveRight={haveRight}
 					typeRight={typeRight}
-					onPressButtonRight={onPressButtonRight}
+					onPressButtonRight={{remove: onPressButtonRight?.remove}}
 					descrtipion={descrtipion}
 					price={price}
 				/>

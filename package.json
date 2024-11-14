@@ -8,11 +8,14 @@
 		"ios": "expo start --ios",
 		"web": "expo start --web",
 		"screen": "scrcpy -m1968",
-		"database": "json-server --watch dbTest.json --port 4000 --host 192.168.228.165",
+		"database": "json-server --watch dbTest.json --port 4000 --host 192.168.100.126",
+		"database2": "json-server --watch dbTest.json --port 4000 --host 192.168.228.165",
 		"prettier": "prettier --write ."
 	},
 	"dependencies": {
 		"@expo/metro-runtime": "~3.2.3",
+		"@ptomasroos/react-native-multi-slider": "^2.2.2",
+		"@react-native-community/slider": "4.5.2",
 		"@react-navigation/bottom-tabs": "^6.6.1",
 		"@react-navigation/native": "^6.1.18",
 		"@react-navigation/native-stack": "^6.11.0",
@@ -37,6 +40,7 @@
 		"react-native-screens": "3.31.1",
 		"react-native-svg": "^15.8.0",
 		"react-native-web": "~0.19.10",
+		"react-redux": "^9.1.2",
 		"socket.io-client": "^4.8.1"
 	},
 	"devDependencies": {

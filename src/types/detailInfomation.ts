@@ -1,6 +1,6 @@
 export interface DetailInfomation {
-	phone: string;
 	fullName: string;
 	address: string;
+	phone: string;
 	avatarUrl: string;
 }

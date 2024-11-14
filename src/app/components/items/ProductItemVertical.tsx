@@ -3,6 +3,7 @@ import { style } from '@/src/constants';
 import { StackScreenNavigationProp } from '@/src/libs';
 import { Product } from '@/src/types';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
@@ -10,7 +11,7 @@ interface RecommendItemProps {
 	product: Product;
 }
 
-export const ProductItemVertical = ({ product }: RecommendItemProps) => {
+export const ProductItemVertical = React.memo(({ product }: RecommendItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	return (
 		<Pressable
@@ -47,7 +48,7 @@ export const ProductItemVertical = ({ product }: RecommendItemProps) => {
 			</View>
 		</Pressable>
 	);
-};
+});
 
 const styles = StyleSheet.create({
 	container: {
