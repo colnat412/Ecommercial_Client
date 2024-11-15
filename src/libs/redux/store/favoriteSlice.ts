@@ -13,7 +13,7 @@ const favoriteSlice = createSlice({
 	name: "favorite",
 	initialState,
 	reducers: {
-		setFavorite: (state, action: PayloadAction<Product[]>) => {
+		setFavorite: (state, action: PayloadAction<Product[] | null>) => {
 			state.favorite = action.payload;
 		},
 		addFavorite: (state, action: PayloadAction<Product>) => {

@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 interface ProductListProps {
 	products: Product[];
-	onPressCard: () => void;
+	onPressCard: (id: string) => void;
 	haveRight?: boolean;
 	typeRight?: 'edit' | 'remove';
 	onPressButtonRight?: {

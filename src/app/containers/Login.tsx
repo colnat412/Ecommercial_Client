@@ -1,4 +1,4 @@
-import { StackScreenNavigationProp } from '@/src/libs';
+import { api, setAccessToken, StackScreenNavigationProp } from '@/src/libs';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { DismissKeyboardView } from '../components';
@@ -20,21 +20,21 @@ export const Login = () => {
 		// use AuthSecureStore.login to set account + accessToken
 		// Redux -> Action: load cart, favorite
 		// ========================================
-		// try {
-		//     const response = await api.post('api/auth/login', {
-		//         "identifier": username,
-		//         "password": password
-		//     });
-		//     const { accessToken } = response.data.data;
-		//     setAccessToken(accessToken);
-		//     // console.log(accessToken);
-		//     setError('');
-		//     // Redirect or perform other actions after successful login
-		//     const response2 = await api.get('api/favorite/1');
-		//     console.log(JSON.stringify(response2.data));
-		// } catch (err) {
-		//     setError('Invalid username or password');
-		// }
+		try {
+		    const response = await api.post('api/auth/login', {
+		        "identifier": username,
+		        "password": password
+		    });
+		    const { accessToken } = response.data.data;
+		    setAccessToken(accessToken);
+		    // console.log(accessToken);
+		    setError('');
+		    // Redirect or perform other actions after successful login
+		    const response2 = await api.get('api/favorite/1');
+		    console.log(JSON.stringify(response2.data));
+		} catch (err) {
+		    setError('Invalid username or password');
+		}
 	};
 
 	return (

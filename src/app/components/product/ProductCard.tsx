@@ -7,7 +7,7 @@ import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 
 interface ProductCardProps {
 	product: Product;
-	onPressCard: () => void;
+	onPressCard: (id: string) => void;
 	haveRight: boolean;
 	typeRight: 'edit' | 'remove';
 	onPressButtonRight?: {
@@ -29,7 +29,7 @@ export const ProductCard = React.memo(
 	}: ProductCardProps) => {
 		return (
 			<Pressable
-				onPress={onPressCard}
+				onPress={() => onPressCard(product.id)}
 				style={[
 					style.rowCenter,
 					{

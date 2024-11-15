@@ -54,8 +54,8 @@ export const Favorite = () => {
 		}
 	};
 
-	const handlePressCard = () => {
-		navigate.navigate('ProductDetail');
+	const handlePressCard = (productId: string) => {
+		navigate.navigate('ProductDetail', { productId: productId });
 	};
 
 	useEffect(() => {

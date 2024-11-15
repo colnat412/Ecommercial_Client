@@ -26,7 +26,13 @@ export const HomePage = () => {
 		const fetchHomePage = async () => {
 			const responseDetailInfomation = await fetchDetailInformation();
 			if (responseDetailInfomation.status === 200) {
-				dispatch(setDetailInfomation(responseDetailInfomation.data));
+				dispatch(
+					setDetailInfomation(
+						responseDetailInfomation.data
+							? responseDetailInfomation.data
+							: null,
+					),
+				);
 			} else if (responseDetailInfomation.status === 500) {
 				console.log('Error');
 			}

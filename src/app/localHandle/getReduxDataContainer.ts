@@ -3,7 +3,9 @@ import { api } from "@/src/libs";
 import { DetailInfomation, Product } from "@/src/types";
 export const fetchDetailInformation = async () => {
     try{
-        const response = await api.get(`${BE_URL}/accounts/3a3a`);
+        const response = await api.get(
+				`${BE_URL}/detailInfomations/6ef1a79a-ba34-4ff2-8b53-d0fe813eae45`,
+			);
         const data: DetailInfomation = await response.data;
         return {
             data: data,
