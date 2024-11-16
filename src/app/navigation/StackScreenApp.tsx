@@ -2,6 +2,7 @@ import { Stack } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
 
 import {
+	Cart,
 	Feedback,
 	Login,
 	OrderComponent,
@@ -17,7 +18,7 @@ export const StackScreenApp = () => {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator
-				initialRouteName="TabScreenApp"
+				initialRouteName="Cart"
 				screenOptions={{
 					headerShown: false,
 					animation: 'fade_from_bottom',
@@ -32,6 +33,7 @@ export const StackScreenApp = () => {
 				<Stack.Screen name="PaymentResult" component={PaymentResult} />
 				<Stack.Screen name="Order" component={OrderComponent} />
 				<Stack.Screen name="Feedback" component={Feedback} />
+				<Stack.Screen name="Cart" component={Cart} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

@@ -1,9 +1,9 @@
-import { Star } from '@/src/assets';
+import { Add, Minus, Star, Trash, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import { Product } from '@/src/types';
-import { Image, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
-import { Line } from '../../components/Line';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Checkbox, Text } from 'react-native-paper';
+import { Line } from '../../components';
 
 interface CartItemProps {
 	product: Product;
@@ -11,29 +11,31 @@ interface CartItemProps {
 
 export const CartItem = ({ product }: CartItemProps) => {
 	return (
-		<View style={styles.container}>
-			<View style={styles.item}>
+		<View style={{ gap: 2 }}>
+			<View style={styles.container}>
+				<Checkbox status="checked" />
 				<Image
 					width={100}
 					height={100}
 					source={{ uri: product.images_url }}
 				/>
-				<View style={{ gap: 5 }}>
-					<Text style={styles.textName}>{product.name}</Text>
-					<Text style={{ fontSize: 12, opacity: 0.5 }}>
-						Black, Headphone + Wire
+				<View style={styles.info}>
+					<Text style={styles.nameText}>{product.name}</Text>
+					<Text numberOfLines={2} style={styles.descriptionText}>
+						{product.description}
 					</Text>
+					<Text style={styles.priceText}>${product.price}</Text>
+					<View style={styles.qtyContainer}>
+						<Pressable>
+							<Minus />
+						</Pressable>
+						<Text>5</Text>
+						<Pressable>
+							<Add />
+						</Pressable>
+					</View>
 				</View>
-				<View
-					style={{
-						flexDirection: 'column',
-						alignItems: 'flex-end',
-						gap: 5,
-					}}
-				>
-					<Text style={styles.textPrice}>${product.price}</Text>
-					<Text style={styles.textQty}>x1</Text>
-				</View>
+				<Trash color={'red'} width={30} height={30} />
 			</View>
 			<Line />
 		</View>
@@ -42,25 +44,33 @@ export const CartItem = ({ product }: CartItemProps) => {
 
 const styles = StyleSheet.create({
 	container: {
+		flexDirection: 'row',
+		gap: 8,
+		margin: 8,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	info: {
+		justifyContent: 'center',
 		gap: 5,
 	},
-	item: {
+	nameText: {
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	descriptionText: {
+		fontSize: 13,
+		opacity: 0.5,
+		maxWidth: 200,
+	},
+	priceText: {
+		color: colors.brand,
+		fontWeight: 'bold',
+		fontSize: 16,
+	},
+	qtyContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'space-around',
-		padding: 8,
-	},
-	textName: {
-		fontSize: 16,
-		fontWeight: 'bold',
-	},
-	textPrice: {
-		fontSize: 16,
-		fontWeight: 'bold',
-		color: colors.brand,
-	},
-	textQty: {
-		fontSize: 12,
-		opacity: 0.5,
+		gap: 16,
 	},
 });

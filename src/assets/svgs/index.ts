@@ -24,3 +24,5 @@ export * from './Protect';
 export * from './BestDeal';
 export * from './Location';
 export * from './Filter';
+export * from './Trash';
+export * from './Arrow';
