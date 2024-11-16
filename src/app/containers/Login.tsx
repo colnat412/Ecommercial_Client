@@ -1,46 +1,50 @@
-import { StackScreenNavigationProp } from "@/src/libs";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
-import { DismissKeyboardView } from "../components";
-import { ScrollView, View } from "react-native";
-import { colors, style } from "@/src/constants";
-import { Brand } from "@/src/assets";
-import { Button, Text, TextInput } from "react-native-paper";
-import { GoBack } from "../navigation/components";
+import { api, setAccessToken, StackScreenNavigationProp } from '@/src/libs';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useState } from 'react';
+import { DismissKeyboardView } from '../components';
+import { ScrollView, View } from 'react-native';
+import { colors, style } from '@/src/constants';
+import { Brand } from '@/src/assets';
+import { Button, Text, TextInput } from 'react-native-paper';
+import { GoBack } from '../navigation/components';
 
 export const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
 
-  const navigation = useNavigation<StackScreenNavigationProp>();
+	const navigation = useNavigation<StackScreenNavigationProp>();
 
-  const handleLogin = async () => {
-    // Login -> return account
-    // use AuthSecureStore.login to set account + accessToken
-    // Redux -> Action: load cart, favorite
-    // ========================================
-    // try {
-    //     const response = await api.post('api/auth/login', {
-    //         "identifier": username,
-    //         "password": password
-    //     });
-    //     const { accessToken } = response.data.data;
-    //     setAccessToken(accessToken);
-    //     // console.log(accessToken);
-    //     setError('');
-    //     // Redirect or perform other actions after successful login
-    //     const response2 = await api.get('api/favorite/1');
-    //     console.log(JSON.stringify(response2.data));
-    // } catch (err) {
-    //     setError('Invalid username or password');
-    // }
-  };
+	const handleLogin = async () => {
+		// Login -> return account
+		// use AuthSecureStore.login to set account + accessToken
+		// Redux -> Action: load cart, favorite
+		// ========================================
+		try {
+		    const response = await api.post('api/auth/login', {
+		        "identifier": username,
+		        "password": password
+		    });
+		    const { accessToken } = response.data.data;
+		    setAccessToken(accessToken);
+		    // console.log(accessToken);
+		    setError('');
+		    // Redirect or perform other actions after successful login
+		    const response2 = await api.get('api/favorite/1');
+		    console.log(JSON.stringify(response2.data));
+		} catch (err) {
+		    setError('Invalid username or password');
+		}
+	};
 
-  return (
+	return (
 		<DismissKeyboardView>
 			<ScrollView
-				style={{ marginTop: 32, padding: 16, backgroundColor: colors.background }}
+				style={{
+					marginTop: 32,
+					padding: 16,
+					backgroundColor: colors.background,
+				}}
 				showsHorizontalScrollIndicator={false}
 				showsVerticalScrollIndicator={false}
 			>
@@ -127,5 +131,5 @@ export const Login = () => {
 				</View>
 			</ScrollView>
 		</DismissKeyboardView>
-  );
+	);
 };

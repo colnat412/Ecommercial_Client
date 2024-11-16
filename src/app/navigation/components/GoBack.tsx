@@ -1,5 +1,5 @@
 import { colors, style } from '@/src/constants';
-import { StackScreenNavigationProp } from '@/src/libs';
+import { ScreenTabNavigationProp, StackScreenNavigationProp } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
@@ -7,8 +7,13 @@ import { GoBack as Back } from '@/src/assets';
 
 export const GoBack = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
+	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 	const goBack = () => {
-		navigation.goBack();
+		if (navigationTab.getState().index === 1) {
+			navigationTab.navigate('HomePage');
+		} else {
+			navigation.goBack();
+		}
 	};
 
 	return (

@@ -1,25 +1,35 @@
+import { Product } from "@/src/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface UserState {
-  id: number;
-  name: string;
+interface FavoriteState {
+	favorite: Product[] | null;
 }
 
-const initialState: UserState = {
-  id: 0,
-  name: "",
+const initialState: FavoriteState = {
+	favorite: null
 };
 
-const userSlice = createSlice({
-  name: "user",
-  initialState,
-  reducers: {
-    setUser(state, action: PayloadAction<UserState>) {
-      state.id = action.payload.id;
-      state.name = action.payload.name;
-    },
-  },
+const favoriteSlice = createSlice({
+	name: "favorite",
+	initialState,
+	reducers: {
+		setFavorite: (state, action: PayloadAction<Product[] | null>) => {
+			state.favorite = action.payload;
+		},
+		addFavorite: (state, action: PayloadAction<Product>) => {
+			if (!state.favorite) {
+				state.favorite = [action.payload];
+			} else {
+				state.favorite.push(action.payload);
+			}
+		},
+		removeFavorite: (state, action: PayloadAction<string>) => {
+			if (state.favorite) {
+				state.favorite = state.favorite.filter((item) => item.id !== action.payload);
+			}
+		}
+	}
 });
 
-export const { setUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { setFavorite, addFavorite, removeFavorite } = favoriteSlice.actions;
+export const favoriteReducer = favoriteSlice.reducer;

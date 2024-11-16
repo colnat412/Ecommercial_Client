@@ -1,8 +1,6 @@
 import { Brand, Cart, GoBack, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import {
-	StackScreenNavigationProp,
-} from '@/src/libs';
+import { StackScreenNavigationProp } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
@@ -25,7 +23,7 @@ export const HeaderTitleWithBack = ({
 
 	const goBack = () => {
 		navigation.goBack();
-	}
+	};
 
 	return (
 		<View
@@ -35,16 +33,16 @@ export const HeaderTitleWithBack = ({
 			]}
 		>
 			<View style={[style.rowCenter]}>
-				<TouchableOpacity onPress={goBack}>
+				<TouchableOpacity onPress={goBack} style={{padding: 8}}>
 					<GoBack width={12} height={12} color={colors.mainText} />
 				</TouchableOpacity>
-				<Text style={{ fontSize: 16 }}>{title}</Text>
+				<Text style={{ fontSize: 16, fontWeight: "800" }}>{title}</Text>
 			</View>
 			<View style={[style.rowCenter, { gap: 16 }]}>
 				{showCart && (
-									<TouchableOpacity >
-					<Cart width={25} height={25} color={'black'} />
-				</TouchableOpacity>
+					<TouchableOpacity>
+						<Cart width={25} height={25} color={'black'} />
+					</TouchableOpacity>
 				)}
 				{showUser && (
 					<TouchableOpacity onPress={goLogin}>

@@ -16,11 +16,14 @@ import {
 	ScreenTabNavigationProp,
 	StackScreenNavigationProp,
 	StackScreenRouteProp,
+	useAppSelector,
 } from '@/src/libs';
 
 export const Account = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
+
+	const detailsInformation = useAppSelector(state => state.detailInfomation);
 
 	const [editDetail, setEditDetail] = useState<boolean>(false);
 
@@ -36,13 +39,9 @@ export const Account = () => {
 
 	// const isFocused = useIsFocused();
 
-	//   useEffect(() => {
-	// 		// if (isFocused) {
-	// 		// 	navigation.navigate('Login');
-
-	// 		// }
-	// 		console.log('isFocused', navigationTab.getId())
-	// 	}, [isFocused]);
+	// useEffect(() => {
+	// 	navigation.navigate('Login');
+	// }, [isFocused]);
 
 	return (
 		<DismissKeyboardView>
@@ -81,7 +80,7 @@ export const Account = () => {
 						>
 							<Image
 								source={{
-									uri: 'https://i.pinimg.com/736x/fa/f7/b4/faf7b4ad7ff3df8a25310829df2d54ab.jpg',
+									uri: detailsInformation.detailInfomation?.avatarUrl,
 								}}
 								width={95}
 								height={95}
@@ -104,7 +103,7 @@ export const Account = () => {
 										{ color: colors.textBrand },
 									]}
 								>
-									Phùng Anh Minh
+									Welcome back!
 								</Text>
 								<Text
 									style={[
@@ -118,7 +117,7 @@ export const Account = () => {
 										},
 									]}
 								>
-									dieglevel
+									{detailsInformation.detailInfomation?.fullName}
 								</Text>
 							</View>
 						</LinearGradient>
@@ -210,17 +209,17 @@ export const Account = () => {
 								<TextFields
 									edit={editDetail}
 									label="Fullname"
-									value="Phùng Anh Minh"
+									value={detailsInformation.detailInfomation?.fullName}
 								/>
 								<TextFields
 									edit={editDetail}
 									label="Address"
-									value="100 Sơn Hòa, Phú Yên"
+									value={detailsInformation.detailInfomation?.address}
 								/>
 								<TextFields
 									edit={editDetail}
 									label="Phone"
-									value="0123456789"
+									value={detailsInformation.detailInfomation?.phone}
 								/>
 								<TextFields
 									edit={editDetail}
@@ -317,6 +316,13 @@ export const Account = () => {
 								</View>
 							)}
 						</View>
+						<Button
+							mode="contained"
+							style={{ borderRadius: 8 }}
+							buttonColor={colors.brand}
+						>
+							Log out
+						</Button>
 					</View>
 				</ScrollView>
 			</View>
@@ -357,7 +363,11 @@ const TextFields = ({
 						secureTextEntry={secureTextEntry && showPassword}
 						mode="outlined"
 						placeholderTextColor={colors.secondText}
-						style={{ flex: 1, height: 10 }}
+						style={{
+							flex: 1,
+							height: 10,
+							backgroundColor: colors.background,
+						}}
 						activeOutlineColor={colors.brand}
 						contentStyle={{ padding: 0 }}
 						underlineStyle={{ borderWidth: 0 }}

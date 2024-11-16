@@ -1,2 +1,3 @@
-export * from "./Product";
-export * from "./ProductSelling";
+export * from '../../components/items/ProductItemHorizontal';
+export * from './ProductItem';
+export * from './Products';

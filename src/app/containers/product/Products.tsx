@@ -1,35 +1,40 @@
-import { FlatList, Pressable, StyleSheet, View } from "react-native";
-import data from "@/dbTest.json";
-import ProductItem from "./Product";
-import { Text } from "react-native-paper";
-import { colors, style } from "@/src/constants";
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import data from '@/dbTest.json';
+import { Text } from 'react-native-paper';
+import { colors, style } from '@/src/constants';
+import { ProductItemVertical } from '../../components';
+import { Product } from '@/src/types';
 
-const Products = () => {
-  return (
-    <View>
-      <View style={styles.recommendedStyle}>
-        <Text style={[style.headerText, { fontSize: 18, padding: 14 }]}>
-          All Products
-        </Text>
-      </View>
-      <FlatList
-        style={{}}
-        data={data.products}
-        renderItem={({ item }) => <ProductItem product={item} />}
-        keyExtractor={(item) => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    </View>
-  );
+interface ProductProps {
+	product: Product[];
+}
+
+export const Products = ({ product }: ProductProps) => {
+	return (
+		<>
+			<View style={styles.recommendedStyle}>
+				<Text
+					style={[
+						style.headerText,
+						{ fontSize: 18, paddingHorizontal: 14, paddingVertical: 9 },
+					]}
+				>
+					All Products
+				</Text>
+			</View>
+			<FlatList
+				numColumns={2}
+				data={product}
+				renderItem={({ item }) => <ProductItemVertical product={item} />}
+			></FlatList>
+		</>
+	);
 };
 
 const styles = StyleSheet.create({
-  recommendedStyle: {
-    flexDirection: "row",
-    gap: 226,
-    alignItems: "center",
-  },
+	recommendedStyle: {
+		flexDirection: 'row',
+		gap: 226,
+		alignItems: 'center',
+	},
 });
-
-export default Products;
