@@ -20,7 +20,6 @@ import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
 
-
 export const StackScreenApp = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isConnect, setIsConnect] = useState<boolean>(false);
@@ -31,13 +30,13 @@ export const StackScreenApp = () => {
 			if (response.status === 500) {
 				setIsConnect(false);
 				setIsLoading(false);
-			}else {
+			} else {
 				setIsConnect(true);
 				setIsLoading(false);
 			}
-		}
+		};
 		connect();
-	}, [])
+	}, []);
 
 	return (
 		<View style={[style.body]}>
@@ -85,6 +84,7 @@ export const StackScreenApp = () => {
 								/>
 								<Stack.Screen name="Order" component={OrderComponent} />
 								<Stack.Screen name="Feedback" component={Feedback} />
+								<Stack.Screen name="Cart" component={Cart} />
 							</Stack.Navigator>
 						</NavigationContainer>
 					) : (
@@ -100,6 +100,5 @@ export const StackScreenApp = () => {
 				</>
 			)}
 		</View>
-				<Stack.Screen name="Cart" component={Cart} />
 	);
 };
