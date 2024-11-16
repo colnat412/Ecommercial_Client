@@ -21,8 +21,8 @@ export const CartItem = ({ product }: CartItemProps) => {
 				/>
 				<View style={styles.info}>
 					<Text style={styles.nameText}>{product.name}</Text>
-					<Text numberOfLines={2} style={styles.descriptionText}>
-						{product.description}
+					<Text numberOfLines={2} style={styles.listOptionText}>
+						Black, Headphone + Wire
 					</Text>
 					<Text style={styles.priceText}>${product.price}</Text>
 					<View style={styles.qtyContainer}>
@@ -45,7 +45,7 @@ export const CartItem = ({ product }: CartItemProps) => {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		gap: 8,
+		gap: 24,
 		margin: 8,
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 'bold',
 	},
-	descriptionText: {
+	listOptionText: {
 		fontSize: 13,
 		opacity: 0.5,
 		maxWidth: 200,
