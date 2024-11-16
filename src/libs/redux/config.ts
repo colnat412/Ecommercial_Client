@@ -1,18 +1,20 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import { userSlice } from "./store/favoriteSlice";
+import { configureStore } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { detailInfomationReducer, favoriteReducer } from "./store";
 
-// export const store = configureStore({
-//      reducer: {
-//           // posts: postsReducer,
-//           // comments: commentsReducer,
-//           // users: usersReducer,
-//           user: user
-//      },
-// });
 
-// // Infer the `RootState` and `AppDispatch` types from the store itself
-// export type RootState = ReturnType<
-//      typeof store.getState
-// >;
-// // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-// export type AppDispatch = typeof store.dispatch;
+export const store = configureStore({
+	reducer: {
+		detailInfomation: detailInfomationReducer,
+		favorite: favoriteReducer,
+	},
+});
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();

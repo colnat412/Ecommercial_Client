@@ -33,7 +33,7 @@ export const HeaderTitleWithBack = ({
 			]}
 		>
 			<View style={[style.rowCenter]}>
-				<TouchableOpacity onPress={goBack}>
+				<TouchableOpacity onPress={goBack} style={{padding: 8}}>
 					<GoBack width={12} height={12} color={colors.mainText} />
 				</TouchableOpacity>
 				<Text style={{ fontSize: 16, fontWeight: "800" }}>{title}</Text>

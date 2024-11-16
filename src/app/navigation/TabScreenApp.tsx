@@ -52,7 +52,7 @@ export const TabScreenApp = () => {
 					alignItems: 'center',
 				},
 			}}
-			initialRouteName="Search"
+			initialRouteName="HomePage"
 		>
 			<Tab.Screen
 				name="HomePage"

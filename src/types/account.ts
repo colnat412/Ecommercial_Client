@@ -6,3 +6,6 @@ export interface Account {
 	refreshToken: string;
 	accessToken: string;
 }
+
+// SECURITY: this is a fake token, replace this with your own token
+// SECRET INTERFACE

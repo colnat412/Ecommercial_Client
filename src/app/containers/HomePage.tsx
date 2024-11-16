@@ -8,6 +8,9 @@ import { ProductItemVertical } from '../components';
 import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';
 import { getData } from './handle';
+import { useAppDispatch } from '@/src/libs';
+import { fetchDetailInformation } from '../localHandle/getReduxDataContainer';
+import { setDetailInfomation } from '@/src/libs/redux/store';
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
@@ -16,6 +19,27 @@ export const HomePage = () => {
 			setData(data);
 		});
 	}, []);
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		const fetchHomePage = async () => {
+			const responseDetailInfomation = await fetchDetailInformation();
+			if (responseDetailInfomation.status === 200) {
+				dispatch(
+					setDetailInfomation(
+						responseDetailInfomation.data
+							? responseDetailInfomation.data
+							: null,
+					),
+				);
+			} else if (responseDetailInfomation.status === 500) {
+				console.log('Error');
+			}
+		};
+		fetchHomePage();
+	}, []);
+
 	return (
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />

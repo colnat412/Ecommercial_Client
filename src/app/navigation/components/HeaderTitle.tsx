@@ -18,7 +18,7 @@ export const HeaderTitle = ({ title }: HeaderTitleProps) => {
 			<Text
 				style={{
 					textAlign: 'center',
-					fontSize: 16,
+					fontSize: 20,
 					width: '100%',
 					fontWeight: 'bold',
 				}}

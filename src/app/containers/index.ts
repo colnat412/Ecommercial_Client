@@ -8,7 +8,7 @@ export * from './productDetail';
 export * from './Account';
 export * from './Banner';
 export * from './Chat';
-export * from './Favorite';
+export * from './favorite/Favorite';
 export * from './Feedback';
 export * from './HomePage';
 export * from './handle';

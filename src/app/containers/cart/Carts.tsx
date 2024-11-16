@@ -5,7 +5,7 @@ import { CartItem } from './CartItem';
 import { Product } from '@/src/types';
 import { useEffect, useState } from 'react';
 import { getData } from '../handle';
-import { HeaderTitleWithBack } from '../../navigation';
+import { HeaderTitleWithBack } from '../../navigation/components';
 import { Line } from '../../components';
 import { style } from '@/src/constants';
 import { Arrow } from '@/src/assets';

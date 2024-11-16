@@ -10,7 +10,7 @@ export type RootStackParamList = {
 	TabScreenApp: undefined;
 	Login: undefined;
 	Register: undefined;
-	ProductDetail: undefined;
+	ProductDetail: {productId: string};
 	SubCategory: undefined;
 	PaymentOption: undefined;
 	Order: undefined;

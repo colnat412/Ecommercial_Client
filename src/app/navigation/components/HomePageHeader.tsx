@@ -1,15 +1,26 @@
 import { Brand, Cart, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import { StackScreenNavigationProp } from '@/src/libs';
+import {
+	ScreenTabNavigationProp,
+	StackScreenNavigationProp,
+	useAppSelector,
+} from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
+	const navigationTab = useNavigation<ScreenTabNavigationProp>();
+
+	const detailsInformation = useAppSelector((state) => state.detailInfomation);
 
 	const goLogin = () => {
-		navigation.navigate('Login');
+		if (detailsInformation.detailInfomation) {
+			navigationTab.navigate('Account');
+		} else {
+			navigation.navigate('Login');
+		}
 	};
 
 	return (
@@ -29,7 +40,18 @@ export const HomePageHeader = () => {
 			<View style={[style.rowCenter, { gap: 16 }]}>
 				<Cart width={20} height={20} color={colors.cart} />
 				<TouchableOpacity onPress={goLogin}>
-					<User width={25} height={25} color={'black'} />
+					{detailsInformation.detailInfomation ? (
+						<Image
+							source={{
+								uri: detailsInformation.detailInfomation.avatarUrl,
+							}}
+							width={30}
+							height={30}
+							style={{borderWidth: 2, borderColor: colors.brand, borderRadius: 300 }}
+						/>
+					) : (
+						<User width={20} height={20} color={'black'} />
+					)}
 				</TouchableOpacity>
 			</View>
 		</View>
