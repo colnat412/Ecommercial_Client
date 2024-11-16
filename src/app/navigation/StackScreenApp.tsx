@@ -2,6 +2,7 @@ import { Stack, useAppDispatch } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
 
 import {
+	Cart,
 	Feedback,
 	Login,
 	OrderComponent,
@@ -99,5 +100,6 @@ export const StackScreenApp = () => {
 				</>
 			)}
 		</View>
+				<Stack.Screen name="Cart" component={Cart} />
 	);
 };

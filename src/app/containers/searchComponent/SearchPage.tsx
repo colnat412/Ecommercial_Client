@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import { Checkbox, Modal, Portal, Text } from 'react-native-paper';
+import { Checkbox, Modal, Portal, RadioButton, Text } from 'react-native-paper';
 import { SearchInput } from './SearchInput';
 import { Line } from '../../components';
 import { useState } from 'react';
@@ -12,14 +12,57 @@ import {
 	Return,
 	Star,
 } from '@/src/assets';
-import { style } from '@/src/constants';
+import { colors, style } from '@/src/constants';
+
+interface shippingOptionsProps {
+	instant: boolean;
+	express: boolean;
+	standard: boolean;
+}
+
+interface OthersOptionsProps {
+	return: boolean;
+	protect: boolean;
+	bestDeal: boolean;
+	shipToStore: boolean;
+}
 
 export const SearchPage = () => {
 	const [priceRange, setPriceRange] = useState<number[]>([200, 800]);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
+		{
+			instant: false,
+			express: false,
+			standard: true,
+		},
+	);
+	const [othersOptions, setOthersOptions] = useState<OthersOptionsProps>({
+		return: true,
+		protect: false,
+		bestDeal: false,
+		shipToStore: false,
+	});
 
 	const handleVisible = () => {
 		setIsVisible(!isVisible);
+	};
+
+	const handleShippingOptions = (option: number) => {
+		setShippingOptions({
+			instant: option === 1,
+			express: option === 2,
+			standard: option === 3,
+		});
+	};
+
+	const handleOthersOption = (option: number) => {
+		setOthersOptions({
+			return: option === 1,
+			protect: option === 2,
+			bestDeal: option === 3,
+			shipToStore: option === 4,
+		});
 	};
 
 	const handleConfirmModal = () => {
@@ -63,16 +106,34 @@ export const SearchPage = () => {
 							Shipping options
 						</Text>
 						<View style={styles.option}>
-							<Checkbox status="checked" />
-							<Text>Instant(2 hours delivery)</Text>
+							<RadioButton
+								onPress={() => handleShippingOptions(1)}
+								status={
+									shippingOptions.instant ? 'checked' : 'unchecked'
+								}
+								value="instant"
+							/>
+							<Text>Instant (2 hours delivery)</Text>
 						</View>
 						<View style={styles.option}>
-							<Checkbox status="checked" />
-							<Text>Express(2 days delivery)</Text>
+							<RadioButton
+								onPress={() => handleShippingOptions(2)}
+								status={
+									shippingOptions.express ? 'checked' : 'unchecked'
+								}
+								value="express"
+							/>
+							<Text>Express (2 days delivery)</Text>
 						</View>
 						<View style={styles.option}>
-							<Checkbox status="checked" />
-							<Text>Standard(7-10 days delivery)</Text>
+							<RadioButton
+								onPress={() => handleShippingOptions(3)}
+								status={
+									shippingOptions.standard ? 'checked' : 'unchecked'
+								}
+								value="standard"
+							/>
+							<Text>Standard (7-10 days delivery)</Text>
 						</View>
 					</View>
 					<Line />
@@ -171,13 +232,59 @@ export const SearchPage = () => {
 									justifyContent: 'space-around',
 								}}
 							>
-								<Pressable style={styles.others}>
-									<Return width={40} height={40} />
-									<Text>30-day Free Return</Text>
+								<Pressable
+									onPress={() => handleOthersOption(1)}
+									style={[
+										styles.others,
+										othersOptions.return && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<Return
+										color={
+											othersOptions.return ? colors.brand : undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.return
+												? colors.brand
+												: undefined,
+										}}
+									>
+										30-day Free Return
+									</Text>
 								</Pressable>
-								<Pressable style={styles.others}>
-									<Protect width={40} height={40} />
-									<Text>Buyer Protection</Text>
+								<Pressable
+									onPress={() => handleOthersOption(2)}
+									style={[
+										styles.others,
+										othersOptions.protect && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<Protect
+										color={
+											othersOptions.protect
+												? colors.brand
+												: undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.protect
+												? colors.brand
+												: undefined,
+										}}
+									>
+										Buyer Protection
+									</Text>
 								</Pressable>
 							</View>
 							<View
@@ -186,13 +293,61 @@ export const SearchPage = () => {
 									justifyContent: 'space-around',
 								}}
 							>
-								<Pressable style={styles.others}>
-									<BestDeal width={40} height={40} />
-									<Text>Best Deal</Text>
+								<Pressable
+									onPress={() => handleOthersOption(3)}
+									style={[
+										styles.others,
+										othersOptions.bestDeal && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<BestDeal
+										color={
+											othersOptions.bestDeal
+												? colors.brand
+												: undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.bestDeal
+												? colors.brand
+												: undefined,
+										}}
+									>
+										Best Deal
+									</Text>
 								</Pressable>
-								<Pressable style={styles.others}>
-									<Location width={40} height={40} />
-									<Text>Ship to store</Text>
+								<Pressable
+									onPress={() => handleOthersOption(4)}
+									style={[
+										styles.others,
+										othersOptions.shipToStore && {
+											borderColor: colors.brand,
+										},
+									]}
+								>
+									<Location
+										color={
+											othersOptions.shipToStore
+												? colors.brand
+												: undefined
+										}
+										width={40}
+										height={40}
+									/>
+									<Text
+										style={{
+											color: othersOptions.shipToStore
+												? colors.brand
+												: undefined,
+										}}
+									>
+										Ship to store
+									</Text>
 								</Pressable>
 							</View>
 						</View>
