@@ -8,13 +8,20 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import { getData } from '../../containers';
+import { useState } from 'react';
 
 export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
+	const [lengthCart, setLengthCart] = useState<number>(0);
+
 	const detailsInformation = useAppSelector((state) => state.detailInfomation);
 
+	getData({ urlApi: '/carts' }).then((data) => {
+		setLengthCart(data.length);
+	});
 	const goLogin = () => {
 		if (detailsInformation.detailInfomation) {
 			navigationTab.navigate('Account');
@@ -23,8 +30,11 @@ export const HomePageHeader = () => {
 		}
 	};
 
-	const goCart = () => {
-		navigation.navigate('Cart');
+	const goCart = async () => {
+		const cartData = await getData({ urlApi: '/carts' });
+		navigation.navigate('Cart', {
+			productId: cartData.productId,
+		});
 	};
 
 	return (
@@ -43,7 +53,32 @@ export const HomePageHeader = () => {
 			</View>
 			<View style={[style.rowCenter, { gap: 16 }]}>
 				<Pressable onPress={goCart}>
-					<Cart width={20} height={20} color={colors.cart} />
+					<View style={{ position: 'relative', top: 12 }}>
+						<Cart width={25} height={25} color={colors.cart} />
+						<View
+							style={{
+								position: 'relative',
+								top: -30,
+								right: -15,
+								backgroundColor: colors.brand,
+								borderRadius: 10,
+								width: 15,
+								height: 15,
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Text
+								style={{
+									color: 'white',
+									fontSize: 10,
+									fontWeight: 'bold',
+								}}
+							>
+								{lengthCart}
+							</Text>
+						</View>
+					</View>
 				</Pressable>
 				<TouchableOpacity onPress={goLogin}>
 					{detailsInformation.detailInfomation ? (

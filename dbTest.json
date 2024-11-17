@@ -1213,6 +1213,13 @@
       "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
       "images_url": "https://picsum.photos/seed/4t0nqJ6m/640/480",
       "price": 70
+    },
+    {
+      "id": "ab2d12dc-8006-4538-94c6-37a225e824d6",
+      "name": "Pants",
+      "description": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
+      "images_url": "https://picsum.photos/seed/7UAVhS/640/480",
+      "price": 142
     }
   ]
 }

@@ -17,10 +17,12 @@ import { getProduct } from '../productDetail';
 export const Cart = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const route = useRoute<StackScreenRouteProp>();
+
+	const [data, setData] = useState<Product[]>([]);
+
 	const handleNavigation = () => {
 		navigation.navigate('PaymentOption');
 	};
-	const [data, setData] = useState<Product[]>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
