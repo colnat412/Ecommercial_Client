@@ -25,15 +25,18 @@ export const Cart = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const productId = route.params?.productId;
+
 			const response = await getProduct(productId ? productId : '');
-			if (response && response.data) {
-				await saveProductToCart(response.data);
+			if (productId) {
+				if (response && response.data) {
+					await saveProductToCart(response.data);
+				}
 			}
 			const cartData = await getData({ urlApi: '/carts' });
 			setData(cartData);
 		};
 		fetchData();
-	}, [route.params?.productId]);
+	}, []);
 
 	return (
 		<View style={{ flex: 1, marginTop: 30, padding: 5 }}>

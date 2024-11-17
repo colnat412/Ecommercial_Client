@@ -13,8 +13,6 @@ interface CartItemProps {
 }
 
 export const CartItem = ({ product }: CartItemProps) => {
-	const [data, setData] = useState<Product[]>([]);
-
 	const [qty, setQty] = useState<number>(0);
 	const handleAddQty = () => {
 		let newQty = qty + 1;
