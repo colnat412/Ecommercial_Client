@@ -6,6 +6,7 @@ import {
 	Feedback,
 	Login,
 	OrderComponent,
+	OrderDetail,
 	PaymentOption,
 	PaymentResult,
 	ProductDetail,
@@ -83,6 +84,10 @@ export const StackScreenApp = () => {
 									component={PaymentResult}
 								/>
 								<Stack.Screen name="Order" component={OrderComponent} />
+								<Stack.Screen
+									name="OrderDetail"
+									component={OrderDetail}
+								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
 								<Stack.Screen name="Cart" component={Cart} />
 							</Stack.Navigator>

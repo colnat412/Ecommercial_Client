@@ -35,7 +35,11 @@ import {
 	Truck,
 } from '@/src/assets';
 import { useEffect, useState } from 'react';
-import { Feedback, Product, ProductDetail as IProductDetail} from '@/src/types';
+import {
+	Feedback,
+	Product,
+	ProductDetail as IProductDetail,
+} from '@/src/types';
 import { getProduct, getReviews } from './handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { StackScreenApp } from '../../navigation';
@@ -47,7 +51,6 @@ export const ProductDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const route = useRoute<StackScreenRouteProp>();
 
-
 	const [loading, setLoading] = useState<boolean>(true);
 	const [product, setProduct] = useState<IProductDetail>();
 	const [visibleCart, setVisibleCart] = useState<boolean>(false);
@@ -55,17 +58,21 @@ export const ProductDetail = () => {
 
 	useEffect(() => {
 		const getContainer = async () => {
-			const productResult = await getProduct(route.params?.productId ? route.params.productId : '');
+			const productResult = await getProduct(
+				route.params?.productId ? route.params.productId : '',
+			);
 			if (productResult) {
 				setProduct(productResult.data ? productResult.data : undefined);
 			}
 
-			const feedbackResult = await getReviews(route.params?.productId ? route.params.productId : '');
+			const feedbackResult = await getReviews(
+				route.params?.productId ? route.params.productId : '',
+			);
 			if (feedbackResult) {
 				setFeedback(feedbackResult.data ? feedbackResult.data : []);
 			}
 			setLoading(false);
-		}
+		};
 		getContainer();
 	}, []);
 
@@ -80,18 +87,18 @@ export const ProductDetail = () => {
 	};
 
 	return (
-		<View style={{ marginTop: 32, flex: 1, justifyContent:"center", }}>
+		<View style={{ marginTop: 32, flex: 1, justifyContent: 'center' }}>
 			{loading ? (
 				<ActivityIndicator size={'large'} color={colors.brand} />
 			) : (
 				<>
+					<HeaderTitleWithBack
+						title={product?.name ? product?.name : ''}
+					/>
 					<ScrollView
 						showsHorizontalScrollIndicator={false}
 						showsVerticalScrollIndicator={false}
 					>
-						<HeaderTitleWithBack
-							title={product?.name ? product?.name : ''}
-						/>
 						<View style={[style.body]}>
 							<View style={[style.contentBody]}>
 								<View

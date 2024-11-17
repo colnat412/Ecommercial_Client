@@ -25,6 +25,7 @@ import {
 import { removeFavorite, setFavorite } from '@/src/libs/redux/store';
 import { fetchFavorite } from '../../localHandle';
 import { favoriteDelete } from './handle';
+import { Remove } from '@/src/assets';
 
 export const Favorite = () => {
 	const favoriteData = useAppSelector((state) => state.favorite);
@@ -116,10 +117,14 @@ export const Favorite = () => {
 					<>
 						{favoriteData.favorite ? (
 							<ProductList
+							style={{ paddingHorizontal: 8 }}
 								products={favoriteData.favorite}
 								onPressCard={handlePressCard}
-								haveRight={true}
-								onPressButtonRight={{ remove: showModal }}
+								componentRight={
+									<Remove />
+								}
+								onPressButtonRight={showModal}
+
 							/>
 						) : (
 							<NoData />

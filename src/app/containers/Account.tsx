@@ -37,6 +37,10 @@ export const Account = () => {
 		setEditSecurity(!editSecurity);
 	};
 
+	const handleLogout = () => {
+		
+	}
+
 	// const isFocused = useIsFocused();
 
 	// useEffect(() => {

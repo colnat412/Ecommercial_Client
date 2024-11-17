@@ -17,13 +17,11 @@ import {
 	ImageInput,
 	Line,
 	ProductList,
-} from '../components';
-import { HeaderTitleWithBack } from '../navigation/components';
+} from '../../components';
+import { HeaderTitleWithBack } from '../../navigation/components';
 import {
 	Button,
-	Dialog,
 	Modal,
-	Paragraph,
 	Portal,
 	Surface,
 	Text,
@@ -32,10 +30,8 @@ import {
 import { Cancel, Star } from '@/src/assets';
 
 export const Feedback = () => {
-	const navigation = useNavigation<StackScreenNavigationProp>();
-
 	const [productData, setProductData] = useState<Product[]>([]);
-	const [visibleCart, setVisibleCart] = useState<boolean>(true);
+	const [visibleFeedback, setVisibleFeedback] = useState<boolean>(false);
 	const [rating, setRating] = useState<number>(5);
 
 	useEffect(() => {
@@ -55,18 +51,18 @@ export const Feedback = () => {
 	};
 
 	const handlePressCard = () => {
-		setVisibleCart(!visibleCart);
+		setVisibleFeedback(!visibleFeedback);
 	};
 
 	const toggleModalCart = () => {
-		setVisibleCart(!visibleCart);
+		setVisibleFeedback(!visibleFeedback);
 	};
 
 	return (
 		<View style={[style.body, { marginTop: 32 }]}>
 			<Portal>
 				<Modal
-					visible={visibleCart}
+					visible={visibleFeedback}
 					onDismiss={toggleModalCart}
 					contentContainerStyle={[styles.surface, { padding: 0 }]}
 					style={[styles.modalContainer]}
@@ -101,6 +97,7 @@ export const Feedback = () => {
 											style={{
 												flex: 1,
 												backgroundColor: colors.background,
+												paddingVertical: 8,
 											}}
 											activeOutlineColor={colors.brand}
 										/>
@@ -191,7 +188,7 @@ export const Feedback = () => {
 								</View>
 								<Button
 									mode="contained"
-									style={{ borderRadius: 8,marginTop: 16 }}
+									style={{ borderRadius: 8, marginTop: 16 }}
 									buttonColor={colors.brand}
 								>
 									Submit
