@@ -2,7 +2,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 
 import { CartItem } from './CartItem';
-import { Product } from '@/src/types';
+import { Cart, Product } from '@/src/types';
 import { useEffect, useState } from 'react';
 import { getData } from '../handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
@@ -11,14 +11,14 @@ import { style } from '@/src/constants';
 import { Arrow } from '@/src/assets';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
-import { saveProductToCart } from './handle';
+import { saveProductToCart, updateProductInCart } from './handle';
 import { getProduct } from '../productDetail';
 
-export const Cart = () => {
+export const Carts = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const route = useRoute<StackScreenRouteProp>();
 
-	const [data, setData] = useState<Product[]>([]);
+	const [data, setData] = useState<Cart[]>([]);
 
 	const handleNavigation = () => {
 		navigation.navigate('PaymentOption');
@@ -28,14 +28,38 @@ export const Cart = () => {
 		const fetchData = async () => {
 			const productId = route.params?.productId;
 
-			const response = await getProduct(productId ? productId : '');
-			if (productId) {
-				if (response && response.data) {
-					await saveProductToCart(response.data);
+			try {
+				const response = await getProduct(productId ? productId : '');
+				if (productId && response && response.data) {
+					const cartData = await getData({ urlApi: '/carts' });
+					const productExists = cartData.some(
+						(item: Product) => item.id === productId,
+					);
+					if (productExists) {
+						const updatedCartData = cartData.map((item: Cart) => {
+							if (item.id === productId) {
+								return { ...item, quantity: item.quantity + 1 };
+							}
+							return item;
+						});
+						console.log(
+							'Updating cart with new quantities:',
+							updatedCartData,
+						);
+						await updateProductInCart(updatedCartData);
+					} else {
+						console.log('Saving new product to cart:', response.data);
+						await saveProductToCart(response.data);
+					}
+					const updatedCartData = await getData({ urlApi: '/carts' });
+					setData(updatedCartData);
+				} else {
+					const cartData = await getData({ urlApi: '/carts' });
+					setData(cartData);
 				}
+			} catch (error) {
+				console.error('Error fetching data:', error);
 			}
-			const cartData = await getData({ urlApi: '/carts' });
-			setData(cartData);
 		};
 		fetchData();
 	}, []);
@@ -53,7 +77,7 @@ export const Cart = () => {
 			<View style={{ flex: 1 }}>
 				<FlatList
 					data={data}
-					renderItem={({ item }) => <CartItem product={item} />}
+					renderItem={({ item }) => <CartItem cartItem={item} />}
 					keyExtractor={(item) => item.id}
 				/>
 			</View>

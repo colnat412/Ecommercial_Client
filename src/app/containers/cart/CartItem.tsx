@@ -1,6 +1,6 @@
 import { Add, Minus, Star, Trash, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import { Product } from '@/src/types';
+import { Cart, Product } from '@/src/types';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
@@ -9,10 +9,10 @@ import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 interface CartItemProps {
-	product: Product;
+	cartItem: Cart;
 }
 
-export const CartItem = ({ product }: CartItemProps) => {
+export const CartItem = ({ cartItem }: CartItemProps) => {
 	const [qty, setQty] = useState<number>(0);
 	const handleAddQty = () => {
 		let newQty = qty + 1;
@@ -30,22 +30,18 @@ export const CartItem = ({ product }: CartItemProps) => {
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
 				<Checkbox status="checked" />
-				<Image
-					width={100}
-					height={100}
-					source={{ uri: product.images_url }}
-				/>
+				<Image width={100} height={100} source={{ uri: cartItem.image }} />
 				<View style={styles.info}>
-					<Text style={styles.nameText}>{product.name}</Text>
+					<Text style={styles.nameText}>{cartItem.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
 						Black, Headphone + Wire
 					</Text>
-					<Text style={styles.priceText}>${product.price}</Text>
+					<Text style={styles.priceText}>${cartItem.price}</Text>
 					<View style={styles.qtyContainer}>
 						<Pressable onPress={handleMinusQty}>
 							<Minus />
 						</Pressable>
-						<Text>{qty}</Text>
+						<Text>{cartItem.quantity}</Text>
 						<Pressable onPress={handleAddQty}>
 							<Add />
 						</Pressable>

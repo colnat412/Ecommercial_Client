@@ -1203,23 +1203,23 @@
     {
       "id": "cfc33a35-6b5d-4a78-828b-4cae944ac98b",
       "name": "Salad",
-      "description": "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality",
-      "images_url": "https://loremflickr.com/640/480?lock=6365946044219392",
-      "price": 196
+      "price": 196,
+      "image": "https://loremflickr.com/640/480?lock=6365946044219392",
+      "quantity": 1
     },
     {
       "id": "cdf57c0e-330b-4c8e-b434-4841832abda8",
       "name": "Car",
-      "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
-      "images_url": "https://picsum.photos/seed/4t0nqJ6m/640/480",
-      "price": 70
+      "price": 70,
+      "image": "https://picsum.photos/seed/4t0nqJ6m/640/480",
+      "quantity": 1
     },
     {
-      "id": "ab2d12dc-8006-4538-94c6-37a225e824d6",
-      "name": "Pants",
-      "description": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
-      "images_url": "https://picsum.photos/seed/7UAVhS/640/480",
-      "price": 142
+      "id": "4fea315d-7216-42a8-a953-706149d50c1e",
+      "name": "Sausages",
+      "price": 461,
+      "image": "https://picsum.photos/seed/v2x0Sb/640/480",
+      "quantity": 1
     }
   ]
 }
