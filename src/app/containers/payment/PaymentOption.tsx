@@ -26,7 +26,7 @@ export const PaymentOption = () => {
 				<Line />
 				<PaymentProfile />
 				<Line />
-				<Cart />
+				{/* <Cart /> */}
 				<PaymentMethod />
 			</ScrollView>
 		</View>

@@ -6,7 +6,7 @@ import {
 	useAppSelector,
 } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 export const HomePageHeader = () => {
@@ -21,6 +21,10 @@ export const HomePageHeader = () => {
 		} else {
 			navigation.navigate('Login');
 		}
+	};
+
+	const goCart = () => {
+		navigation.navigate('Cart');
 	};
 
 	return (
@@ -38,7 +42,9 @@ export const HomePageHeader = () => {
 				</Text>
 			</View>
 			<View style={[style.rowCenter, { gap: 16 }]}>
-				<Cart width={20} height={20} color={colors.cart} />
+				<Pressable onPress={goCart}>
+					<Cart width={20} height={20} color={colors.cart} />
+				</Pressable>
 				<TouchableOpacity onPress={goLogin}>
 					{detailsInformation.detailInfomation ? (
 						<Image
@@ -47,7 +53,11 @@ export const HomePageHeader = () => {
 							}}
 							width={30}
 							height={30}
-							style={{borderWidth: 2, borderColor: colors.brand, borderRadius: 300 }}
+							style={{
+								borderWidth: 2,
+								borderColor: colors.brand,
+								borderRadius: 300,
+							}}
 						/>
 					) : (
 						<User width={20} height={20} color={'black'} />

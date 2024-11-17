@@ -11,44 +11,45 @@ interface RecommendItemProps {
 	product: Product;
 }
 
-export const ProductItemVertical = React.memo(({ product }: RecommendItemProps) => {
-	const navigation = useNavigation<StackScreenNavigationProp>();
-	return (
-		<Pressable
-			onPress={() => {
-				navigation.navigate('ProductDetail');
-			}}
-			style={styles.container}
-		>
-			<View style={{ padding: 5 }}>
-				<Image
-					style={{ width: 150, height: 150 }}
-					source={{ uri: product?.images_url }}
-				/>
-			</View>
-			<View style={styles.info}>
-				<View>
-					<Text style={{ width: '100%' }}>{product?.name}</Text>
-				</View>
+export const ProductItemVertical = React.memo(
+	({ product }: RecommendItemProps) => {
+		const navigation = useNavigation<StackScreenNavigationProp>();
+		const goProductDetail = () => {
+			navigation.navigate('ProductDetail', { productId: product.id });
+		};
 
-				<View style={styles.rating}>
-					<Star width={18} height={18} />
-					<Text>4.5</Text>
+		return (
+			<Pressable onPress={goProductDetail} style={styles.container}>
+				<View style={{ padding: 5 }}>
+					<Image
+						style={{ width: 150, height: 150 }}
+						source={{ uri: product?.images_url }}
+					/>
 				</View>
-			</View>
-			<View style={styles.info}>
-				<View>
-					<Text style={style.priceText}>${product?.price}</Text>
-				</View>
+				<View style={styles.info}>
+					<View>
+						<Text style={{ width: '100%' }}>{product?.name}</Text>
+					</View>
 
-				<View style={styles.rating}>
-					<Cart width={18} height={18} />
-					<Text>12.5k</Text>
+					<View style={styles.rating}>
+						<Star width={18} height={18} />
+						<Text>4.5</Text>
+					</View>
 				</View>
-			</View>
-		</Pressable>
-	);
-});
+				<View style={styles.info}>
+					<View>
+						<Text style={style.priceText}>${product?.price}</Text>
+					</View>
+
+					<View style={styles.rating}>
+						<Cart width={18} height={18} />
+						<Text>12.5k</Text>
+					</View>
+				</View>
+			</Pressable>
+		);
+	},
+);
 
 const styles = StyleSheet.create({
 	container: {

@@ -4,12 +4,30 @@ import { Product } from '@/src/types';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
+import { useState } from 'react';
+import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 interface CartItemProps {
 	product: Product;
 }
 
 export const CartItem = ({ product }: CartItemProps) => {
+	const [data, setData] = useState<Product[]>([]);
+
+	const [qty, setQty] = useState<number>(0);
+	const handleAddQty = () => {
+		let newQty = qty + 1;
+		setQty(newQty);
+	};
+
+	const handleMinusQty = () => {
+		if (qty > 0) {
+			let newQty = qty - 1;
+			setQty(newQty);
+		}
+	};
+
 	return (
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
@@ -26,11 +44,11 @@ export const CartItem = ({ product }: CartItemProps) => {
 					</Text>
 					<Text style={styles.priceText}>${product.price}</Text>
 					<View style={styles.qtyContainer}>
-						<Pressable>
+						<Pressable onPress={handleMinusQty}>
 							<Minus />
 						</Pressable>
-						<Text>5</Text>
-						<Pressable>
+						<Text>{qty}</Text>
+						<Pressable onPress={handleAddQty}>
 							<Add />
 						</Pressable>
 					</View>

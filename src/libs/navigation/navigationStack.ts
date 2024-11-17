@@ -10,13 +10,13 @@ export type RootStackParamList = {
 	TabScreenApp: undefined;
 	Login: undefined;
 	Register: undefined;
-	ProductDetail: {productId: string};
+	ProductDetail: { productId: string };
 	SubCategory: undefined;
 	PaymentOption: undefined;
 	Order: undefined;
 	Feedback: undefined;
 	PaymentResult: undefined;
-	Cart: undefined;
+	Cart: { productId: string };
 };
 
 declare global {

@@ -35,7 +35,11 @@ import {
 	Truck,
 } from '@/src/assets';
 import { useEffect, useState } from 'react';
-import { Feedback, Product, ProductDetail as IProductDetail} from '@/src/types';
+import {
+	Feedback,
+	Product,
+	ProductDetail as IProductDetail,
+} from '@/src/types';
 import { getProduct, getReviews } from './handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { StackScreenApp } from '../../navigation';
@@ -47,7 +51,6 @@ export const ProductDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const route = useRoute<StackScreenRouteProp>();
 
-
 	const [loading, setLoading] = useState<boolean>(true);
 	const [product, setProduct] = useState<IProductDetail>();
 	const [visibleCart, setVisibleCart] = useState<boolean>(false);
@@ -55,17 +58,21 @@ export const ProductDetail = () => {
 
 	useEffect(() => {
 		const getContainer = async () => {
-			const productResult = await getProduct(route.params?.productId ? route.params.productId : '');
+			const productResult = await getProduct(
+				route.params?.productId ? route.params.productId : '',
+			);
 			if (productResult) {
 				setProduct(productResult.data ? productResult.data : undefined);
 			}
 
-			const feedbackResult = await getReviews(route.params?.productId ? route.params.productId : '');
+			const feedbackResult = await getReviews(
+				route.params?.productId ? route.params.productId : '',
+			);
 			if (feedbackResult) {
 				setFeedback(feedbackResult.data ? feedbackResult.data : []);
 			}
 			setLoading(false);
-		}
+		};
 		getContainer();
 	}, []);
 
@@ -79,8 +86,15 @@ export const ProductDetail = () => {
 		setRisibleReviews(!visibleReviews);
 	};
 
+	const goPayment = () => {
+		if (product?.id) {
+			navigation.navigate('Cart', { productId: product.id });
+		}
+		setVisibleCart(!visibleCart);
+	};
+
 	return (
-		<View style={{ marginTop: 32, flex: 1, justifyContent:"center", }}>
+		<View style={{ marginTop: 32, flex: 1, justifyContent: 'center' }}>
 			{loading ? (
 				<ActivityIndicator size={'large'} color={colors.brand} />
 			) : (
@@ -534,6 +548,7 @@ export const ProductDetail = () => {
 							<Favorite width={20} height={20} />
 						</Pressable>
 						<Button
+							onPress={() => navigation.navigate('PaymentOption')}
 							style={[
 								style.outline,
 								{ borderColor: colors.brand, flex: 1 },
@@ -831,6 +846,7 @@ export const ProductDetail = () => {
 											</View>
 										</View>
 										<Pressable
+											onPress={goPayment}
 											style={{
 												flex: 1,
 												backgroundColor: colors.brand,

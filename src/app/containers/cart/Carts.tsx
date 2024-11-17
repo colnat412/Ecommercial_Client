@@ -9,14 +9,32 @@ import { HeaderTitleWithBack } from '../../navigation/components';
 import { Line } from '../../components';
 import { style } from '@/src/constants';
 import { Arrow } from '@/src/assets';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
+import { saveProductToCart } from './handle';
+import { getProduct } from '../productDetail';
 
 export const Cart = () => {
+	const navigation = useNavigation<StackScreenNavigationProp>();
+	const route = useRoute<StackScreenRouteProp>();
+	const handleNavigation = () => {
+		navigation.navigate('PaymentOption');
+	};
 	const [data, setData] = useState<Product[]>([]);
+
 	useEffect(() => {
-		getData({ urlApi: '/products' }).then((data) => {
-			setData(data);
-		});
-	}, []);
+		const fetchData = async () => {
+			const productId = route.params?.productId;
+			const response = await getProduct(productId ? productId : '');
+			if (response && response.data) {
+				await saveProductToCart(response.data);
+			}
+			const cartData = await getData({ urlApi: '/carts' });
+			setData(cartData);
+		};
+		fetchData();
+	}, [route.params?.productId]);
+
 	return (
 		<View style={{ flex: 1, marginTop: 30, padding: 5 }}>
 			<HeaderTitleWithBack title="Carts" />
@@ -35,6 +53,7 @@ export const Cart = () => {
 				/>
 			</View>
 			<Pressable
+				onPress={handleNavigation}
 				style={[
 					style.button,
 					{
