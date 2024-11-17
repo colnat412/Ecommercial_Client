@@ -19,6 +19,7 @@ export const Carts = () => {
 	const route = useRoute<StackScreenRouteProp>();
 
 	const [data, setData] = useState<Cart[]>([]);
+	const [dataChanged, setDataChanged] = useState<boolean>(false);
 
 	const handleNavigation = () => {
 		navigation.navigate('PaymentOption');
@@ -27,7 +28,6 @@ export const Carts = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const productId = route.params?.productId;
-
 			try {
 				const response = await getProduct(productId ? productId : '');
 				if (productId && response && response.data) {
@@ -35,28 +35,32 @@ export const Carts = () => {
 					const productExists = cartData.some(
 						(item: Product) => item.id === productId,
 					);
-					if (productExists) {
-						const updatedCartData = cartData.map((item: Cart) => {
-							if (item.id === productId) {
-								return { ...item, quantity: item.quantity + 1 };
-							}
-							return item;
-						});
-						console.log(
-							'Updating cart with new quantities:',
-							updatedCartData,
-						);
-						await updateProductInCart(updatedCartData);
-					} else {
-						console.log('Saving new product to cart:', response.data);
-						await saveProductToCart(response.data);
-					}
+					// if (productExists) {
+					// 	const updatedCartData = cartData.map((item: Cart) => {
+					// 		if (item.id === productId) {
+					// 			return { ...item, quantity: item.quantity + 1 };
+					// 		}
+					// 		return item;
+					// 	});
+					// 	console.log(
+					// 		'Updating cart with new quantities:',
+					// 		updatedCartData,
+					// 	);
+					// 	await updateProductInCart(updatedCartData);
+					// } else {
+					// 	console.log('Saving new product to cart:', response.data);
+					// 	await saveProductToCart(response.data);
+					// }
+					console.log('Saving new product to cart:', response.data);
+					await saveProductToCart(response.data);
 					const updatedCartData = await getData({ urlApi: '/carts' });
 					setData(updatedCartData);
 				} else {
 					const cartData = await getData({ urlApi: '/carts' });
 					setData(cartData);
 				}
+				// const updatedCartData = await getData({ urlApi: '/carts' });
+				// setData(updatedCartData);
 			} catch (error) {
 				console.error('Error fetching data:', error);
 			}

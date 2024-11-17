@@ -43,3 +43,21 @@ export const updateProductInCart = async (cartData: Cart[]) => {
 		};
 	}
 };
+
+export const deleteProductInCart = async (id: string) => {
+	try {
+		const response = await api.delete(`${BE_URL}/carts/${id}`);
+		return {
+			data: response.data,
+			status: response.status,
+			message: response.statusText,
+		};
+	} catch (error) {
+		console.error(error);
+		return {
+			data: null,
+			status: 500,
+			message: 'Internal Server Error',
+		};
+	}
+}

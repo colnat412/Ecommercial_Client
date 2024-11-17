@@ -1,19 +1,21 @@
 import { Add, Minus, Star, Trash, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import { Cart, Product } from '@/src/types';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
 import { useState } from 'react';
 import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { getProduct } from '../productDetail';
+import { deleteProductInCart } from './handle';
 
 interface CartItemProps {
 	cartItem: Cart;
 }
 
 export const CartItem = ({ cartItem }: CartItemProps) => {
-	const [qty, setQty] = useState<number>(0);
+	const [qty, setQty] = useState<number>(cartItem.quantity);
 	const handleAddQty = () => {
 		let newQty = qty + 1;
 		setQty(newQty);
@@ -23,6 +25,16 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 		if (qty > 0) {
 			let newQty = qty - 1;
 			setQty(newQty);
+		}
+	};
+
+	const deleteCartItem = async (id: string) => {
+		const cartItemDelete = await getProduct(id);
+		console.log('cartItemDelete:', cartItemDelete);
+
+		if (cartItemDelete && cartItemDelete.data) {
+			await deleteProductInCart(cartItemDelete.data.id);
+			Alert.alert('Success', 'Delete Success');
 		}
 	};
 
@@ -41,13 +53,15 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 						<Pressable onPress={handleMinusQty}>
 							<Minus />
 						</Pressable>
-						<Text>{cartItem.quantity}</Text>
+						<Text>{qty}</Text>
 						<Pressable onPress={handleAddQty}>
 							<Add />
 						</Pressable>
 					</View>
 				</View>
-				<Trash color={'red'} width={30} height={30} />
+				<Pressable onPress={() => deleteCartItem(cartItem.id)}>
+					<Trash color={'red'} width={30} height={30} />
+				</Pressable>
 			</View>
 			<Line />
 		</View>

@@ -9,19 +9,26 @@ import { useNavigation } from '@react-navigation/native';
 import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { getData } from '../../containers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
 	const [lengthCart, setLengthCart] = useState<number>(0);
+	const [cardChange, setCardChange] = useState<boolean>(false);
 
 	const detailsInformation = useAppSelector((state) => state.detailInfomation);
 
-	getData({ urlApi: '/carts' }).then((data) => {
-		setLengthCart(data.length);
-	});
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await getData({ urlApi: '/carts' });
+			setLengthCart(data.length);
+			setCardChange(!cardChange);
+		};
+		fetchData();
+	}, [cardChange]);
+
 	const goLogin = () => {
 		if (detailsInformation.detailInfomation) {
 			navigationTab.navigate('Account');
@@ -62,8 +69,8 @@ export const HomePageHeader = () => {
 								right: -15,
 								backgroundColor: colors.brand,
 								borderRadius: 10,
-								width: 15,
-								height: 15,
+								width: 18,
+								height: 18,
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}
@@ -75,7 +82,7 @@ export const HomePageHeader = () => {
 									fontWeight: 'bold',
 								}}
 							>
-								{lengthCart}
+								{lengthCart > 5 ? '5+' : lengthCart}
 							</Text>
 						</View>
 					</View>

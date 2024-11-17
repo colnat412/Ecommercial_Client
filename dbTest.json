@@ -1201,24 +1201,31 @@
   ],
   "carts": [
     {
-      "id": "cfc33a35-6b5d-4a78-828b-4cae944ac98b",
-      "name": "Salad",
-      "price": 196,
-      "image": "https://loremflickr.com/640/480?lock=6365946044219392",
-      "quantity": 1
-    },
-    {
-      "id": "cdf57c0e-330b-4c8e-b434-4841832abda8",
-      "name": "Car",
-      "price": 70,
-      "image": "https://picsum.photos/seed/4t0nqJ6m/640/480",
-      "quantity": 1
-    },
-    {
       "id": "4fea315d-7216-42a8-a953-706149d50c1e",
       "name": "Sausages",
       "price": 461,
       "image": "https://picsum.photos/seed/v2x0Sb/640/480",
+      "quantity": 1
+    },
+    {
+      "id": "412ec056-9f01-439c-bae1-d2b24b4c1593",
+      "name": "Chair",
+      "price": 229,
+      "image": "https://picsum.photos/seed/9dueUn/640/480",
+      "quantity": 1
+    },
+    {
+      "id": "3c683474-1a09-4b2e-9e25-e5cccc49987b",
+      "name": "Chicken",
+      "price": 432,
+      "image": "https://picsum.photos/seed/wgy1JrIfM/640/480",
+      "quantity": 1
+    },
+    {
+      "id": "7bca30ce-8dcb-4188-b7ba-6290d265ee2d",
+      "name": "Car",
+      "price": 35,
+      "image": "https://loremflickr.com/640/480?lock=5213847308730368",
       "quantity": 1
     }
   ]
