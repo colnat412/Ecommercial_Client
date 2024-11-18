@@ -26,3 +26,4 @@ export * from './Location';
 export * from './Filter';
 export * from './Trash';
 export * from './Arrow';
+export * from './Send'

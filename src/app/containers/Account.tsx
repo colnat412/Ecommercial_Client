@@ -15,7 +15,6 @@ import {
 import {
 	ScreenTabNavigationProp,
 	StackScreenNavigationProp,
-	StackScreenRouteProp,
 	useAppSelector,
 } from '@/src/libs';
 

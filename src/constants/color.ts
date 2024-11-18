@@ -12,5 +12,5 @@ export const colors = {
 	dangerous: '#FF0000',
 	rateLine: '#CFD2DA',
 	rateStar: '#FFC107',
-	linear: '#003CFF',
+	linear: '#003CFF',  
 };
