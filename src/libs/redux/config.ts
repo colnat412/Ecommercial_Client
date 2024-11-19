@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { detailInfomationReducer, favoriteReducer } from "./store";
+import { authReducer, detailInfomationReducer, favoriteReducer } from "./store";
 
 
 export const store = configureStore({
 	reducer: {
 		detailInfomation: detailInfomationReducer,
 		favorite: favoriteReducer,
+		auth: authReducer,
 	},
 });
 

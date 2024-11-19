@@ -1,13 +1,15 @@
 // src/Chat.tsx
-import { BE_URL } from '@/env';
+import { BE_URL, BE_URL_CHAT } from '@/env';
 import React, { useState, useEffect } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Pressable } from 'react-native';
 import { io, Socket } from 'socket.io-client';
 import { ChatComponent, DismissKeyboardView } from '../components';
 import { colors, style } from '@/src/constants';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { Send } from '@/src/assets';
 import { HeaderTitle } from '../navigation/components';
+import {  useAppSelector } from '@/src/libs';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Message {
 	sender: 'sending' | 'receiving';
@@ -18,124 +20,117 @@ interface Message {
 export const Chat: React.FC = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [messages, setMessages] = useState<Message[]>([
-		{
-			sender: 'sending',
-			message: 'Iphone 5 nhiêu anh',
-			image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-		},
-		{
-			sender: 'sending',
-			message: 'bền hông anh ?',
-			image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-		},
-		{
-			sender: 'receiving',
-			image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-
-			message: 'Ok em',
-		},
-		{
-			sender: 'receiving',
-			image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-
-			message: `xịnsa;dlk;laskdl;saas;dk
-				<address>asd
-				asd
-				asd
-				a
-				sd
-				<aside><data value="asdas
-				dataas
-				dataasd
-				a
-				sendMessaged
-				as
-				dataasdasd
-				
-				asdd
-				asda
-				sda
-				sdas
-				d
-				asdd
-				asd
-				asd
-				asd
-				asdas
-				dataas
-				dataasdasdasd
-				
-				asda
-				sdaasd
-				
-				asdas
-				dataasdasdasd
-				asdas
-				dataas
-				dataasd
-				asdd
-				asdasd
-				a
-				sd
-				asdasdas
-				d
-				as
-				d
-				asdas
-				dataasd
-				asda
-				"></data></aside></address> nha`,
-		},
+		// {
+		// 	sender: 'sending',
+		// 	message: 'Iphone 5 nhiêu anh',
+		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
+		// },
+		// {
+		// 	sender: 'sending',
+		// 	message: 'bền hông anh ?',
+		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
+		// },
+		// {
+		// 	sender: 'receiving',
+		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
+		// 	message: 'Ok em',
+		// },
+		// {
+		// 	sender: 'receiving',
+		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
+		// 	message: `xịnsa;dlk;laskdl;saas;dk
+		// 		<address>asd
+		// 		asd
+		// 		asd
+		// 		a
+		// 		sd
+		// 		<aside><data value="asdas
+		// 		dataas
+		// 		dataasd
+		// 		a
+		// 		sendMessaged
+		// 		as
+		// 		dataasdasd
+		// 		asdd
+		// 		asda
+		// 		sda
+		// 		sdas
+		// 		d
+		// 		asdd
+		// 		asd
+		// 		asd
+		// 		asd
+		// 		asdas
+		// 		dataas
+		// 		dataasdasdasd
+		// 		asda
+		// 		sdaasd
+		// 		asdas
+		// 		dataasdasdasd
+		// 		asdas
+		// 		dataas
+		// 		dataasd
+		// 		asdd
+		// 		asdasd
+		// 		a
+		// 		sd
+		// 		asdasdas
+		// 		d
+		// 		as
+		// 		d
+		// 		asdas
+		// 		dataasd
+		// 		asda
+		// 		"></data></aside></address> nha`,
+		// },
 	]);
+	// const {accountId, accessToken} = useAppSelector((state) => state.auth);
+
 	const [message, setMessage] = useState<string>('');
-	const [sender, setSender] = useState<string>(''); // Có thể thay đổi thành tên người dùng thực tế
-	const [room, setRoom] = useState<string>('default-room');
+	const [sender, setSender] = useState<string>('AnhMinh'); // Có thể thay đổi thành tên người dùng thực tế
+
+	const accessToken: string | null = useAppSelector((state) =>
+		state.auth.account?.accessToken ? state.auth.account?.accessToken : null,
+	);
 	useEffect(() => {
-		const newSocket = io(`http://192.168.100.126:6996`, {
-			transports: ['websocket'],
-		}); // Địa chỉ server NestJS
-		setSocket(newSocket);
+		const token = async () => {
 
-		newSocket.on('connect', () => {
-			console.log('Connected to WebSocket server!');
-		});
+			console.log('Token:' +accessToken + "|")
 
-		newSocket.on('disconnect', () => {
-			console.log('Disconnected from WebSocket server!');
-		});
+			const newSocket = io(`${BE_URL_CHAT}`, {
+				transports: ['websocket'],
+				extraHeaders: {
+					authorization: accessToken ? `${accessToken}` : '',
+				},
+			});
 
-		console.log('Connected to server');
+			setSocket(newSocket);
 
-		newSocket.on('message', (message: Message) => {
-			setMessages((prevMessages) => [...prevMessages, message]);
-		});
-
-		newSocket.emit(
-			'joinRoom',
-			{ userIdOrder: '123', room },
-			(response: any) => {
-				console.log(response);
-			},
-		);
-
-		// Tham gia room
-		newSocket.emit(
-			'joinRoom',
-			{ userIdOrder: '123', room },
-			(response: any) => {
-				console.log(response);
-			},
-		);
-
-		return () => {
-			newSocket.disconnect();
+			const join = () =>
+				newSocket.emit('joinRoom', {
+					userIdOrder: '0652aabc-69f7-44a2-bfa1-dd51135c1e5a',
+					content: 'Helo',
+				});
+			join();
 		};
+
+		if (accessToken) {
+			token();
+		}
 	}, []);
 
 	const handleSendMessage = () => {
 		if (socket && message) {
-			const newMessage = { sender, message };
-			socket.emit('sendMessage', newMessage);
+			socket.emit(
+				'message',
+				{
+					userIdOrder: '0652aabc-69f7-44a2-bfa1-dd51135c1e5a',
+					content: message,
+				},
+				(data: any) => {
+					console.log(data);
+				},
+			);
 			setMessage('');
 		}
 	};
@@ -186,8 +181,11 @@ export const Chat: React.FC = () => {
 						mode="outlined"
 						contentStyle={{ paddingVertical: 2 }}
 						activeOutlineColor={colors.brand}
+						value={message}
+						onChangeText={(text) => setMessage(text)}
 					/>
-					<View
+					<Pressable
+						onPress={handleSendMessage}
 						style={{
 							backgroundColor: colors.brand,
 							borderRadius: 4,
@@ -195,7 +193,7 @@ export const Chat: React.FC = () => {
 						}}
 					>
 						<Send color={colors.background} />
-					</View>
+					</Pressable>
 				</View>
 			</View>
 		</View>

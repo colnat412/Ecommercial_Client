@@ -13,6 +13,6 @@ export * from './Chat';
 export * from './HomePage';
 export * from './handle';
 export * from './Loading';
-export * from './Login';
+export * from './login/Login';
 export * from './Register';
 export * from './Search';

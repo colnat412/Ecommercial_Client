@@ -1,10 +1,10 @@
 import { BE_URL } from "@/env";
 import { api } from "@/src/libs";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const checkConnect = async () => {
     try{
-        const response: AxiosResponse = await api.get(`${BE_URL}`)
+        const response: AxiosResponse = await axios.get(`${BE_URL}/api`)
         return {
             status: response.status,
             message: response.statusText
