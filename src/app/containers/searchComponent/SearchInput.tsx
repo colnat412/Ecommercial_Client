@@ -3,12 +3,21 @@ import { Pressable, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { Filter, Search as SearchIcon } from '../../../assets';
 import { DismissKeyboardView } from '../../components';
+import { useState } from 'react';
+import { Product } from '@/src/types';
+import { searchProduct } from './handle';
+import { useRoute } from '@react-navigation/native';
+import { StackScreenRouteProp } from '@/src/libs';
 
 interface SearchInputProps {
 	handleShowFilter?: () => void;
+	handleSearch?: (text: string) => void;
 }
 
-export const SearchInput = ({ handleShowFilter }: SearchInputProps) => {
+export const SearchInput = ({
+	handleShowFilter,
+	handleSearch,
+}: SearchInputProps) => {
 	return (
 		<DismissKeyboardView>
 			<View
@@ -28,6 +37,7 @@ export const SearchInput = ({ handleShowFilter }: SearchInputProps) => {
 					placeholder="Search"
 					mode="outlined"
 					activeOutlineColor={colors.brand}
+					onChangeText={handleSearch}
 				/>
 				<Pressable
 					onPress={handleShowFilter}

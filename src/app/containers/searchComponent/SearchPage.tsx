@@ -1,8 +1,8 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { Checkbox, Modal, Portal, RadioButton, Text } from 'react-native-paper';
 import { SearchInput } from './SearchInput';
-import { Line } from '../../components';
+import { Line, ProductItemVertical } from '../../components';
 import { useState } from 'react';
 import {
 	BestDeal,
@@ -13,6 +13,8 @@ import {
 	Star,
 } from '@/src/assets';
 import { colors, style } from '@/src/constants';
+import { searchProduct } from './handle';
+import { Product } from '@/src/types';
 
 interface shippingOptionsProps {
 	instant: boolean;
@@ -28,6 +30,7 @@ interface OthersOptionsProps {
 }
 
 export const SearchPage = () => {
+	const [data, setData] = useState<Product[]>([]);
 	const [priceRange, setPriceRange] = useState<number[]>([200, 800]);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
@@ -69,9 +72,18 @@ export const SearchPage = () => {
 		setIsVisible(false);
 	};
 
+	const handleSearch = (text: string) => {
+		searchProduct(text).then((data) => {
+			setData(data);
+		});
+	};
+
 	return (
 		<View style={styles.container}>
-			<SearchInput handleShowFilter={handleVisible} />
+			<SearchInput
+				handleSearch={handleSearch}
+				handleShowFilter={handleVisible}
+			/>
 			<Portal>
 				<Modal
 					visible={isVisible}
@@ -362,6 +374,13 @@ export const SearchPage = () => {
 					</Pressable>
 				</Modal>
 			</Portal>
+			{data && (
+				<FlatList
+					data={data}
+					renderItem={({ item }) => <ProductItemVertical product={item} />}
+					numColumns={2}
+				/>
+			)}
 		</View>
 	);
 };
