@@ -13,7 +13,7 @@ import {
 	Star,
 } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import { searchProduct } from './handle';
+import { searchProduct, searchProductByPriceRange } from './handle';
 import { Product } from '@/src/types';
 
 interface shippingOptionsProps {
@@ -31,7 +31,7 @@ interface OthersOptionsProps {
 
 export const SearchPage = () => {
 	const [data, setData] = useState<Product[]>([]);
-	const [priceRange, setPriceRange] = useState<number[]>([200, 800]);
+	const [priceRange, setPriceRange] = useState<number[]>([0, 800]);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
 		{
@@ -69,6 +69,9 @@ export const SearchPage = () => {
 	};
 
 	const handleConfirmModal = () => {
+		searchProductByPriceRange(priceRange[0], priceRange[1]).then((data) => {
+			setData(data);
+		});
 		setIsVisible(false);
 	};
 
@@ -192,7 +195,7 @@ export const SearchPage = () => {
 								alignItems: 'center',
 							}}
 							sliderLength={360}
-							values={[200, 800]}
+							values={[priceRange[0], priceRange[1]]}
 							min={0}
 							max={1000}
 							onValuesChange={(value) => setPriceRange(value)}

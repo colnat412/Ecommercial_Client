@@ -7,3 +7,13 @@ export const searchProduct = async (searchText: string) => {
 	);
 	return response.data.data;
 };
+
+export const searchProductByPriceRange = async (
+	minPrice: number,
+	maxPrice: number,
+) => {
+	const response = await axios.get(
+		`${BE_RURL}/api/products/searchProductByPriceRange/${minPrice}/${maxPrice}`,
+	);
+	return response.data.data;
+};
