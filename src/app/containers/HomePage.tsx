@@ -7,7 +7,7 @@ import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
 import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';
-import { getData } from './handle';
+import { getData, getDataFromDBS } from './handle';
 import { useAppDispatch } from '@/src/libs';
 import { fetchDetailInformation } from '../localHandle/getReduxDataContainer';
 import { setDetailInfomation } from '@/src/libs/redux/store';
@@ -15,8 +15,8 @@ import { setDetailInfomation } from '@/src/libs/redux/store';
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
 	useEffect(() => {
-		getData({ urlApi: '/products' }).then((data) => {
-			setData(data);
+		getDataFromDBS({ urlApi: '/api/products' }).then((data) => {
+			setData(data.data);
 		});
 	}, []);
 

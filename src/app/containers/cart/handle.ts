@@ -26,9 +26,9 @@ export const saveProductToCart = async (product: Product) => {
 	}
 };
 
-export const updateProductInCart = async (cartData: Cart[]) => {
+export const updateProductInCart = async (id: string) => {
 	try {
-		const response = await api.put(`${BE_URL}/carts`, cartData);
+		const response = await api.put(`${BE_URL}/carts/${id}`);
 		return {
 			data: response.data,
 			status: response.status,
@@ -60,4 +60,4 @@ export const deleteProductInCart = async (id: string) => {
 			message: 'Internal Server Error',
 		};
 	}
-}
+};

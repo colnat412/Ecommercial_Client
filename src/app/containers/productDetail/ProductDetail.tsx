@@ -1,5 +1,6 @@
 import { colors, style } from '@/src/constants';
 import {
+	Alert,
 	Dimensions,
 	Image,
 	Platform,
@@ -90,6 +91,9 @@ export const ProductDetail = () => {
 		if (product?.id) {
 			navigation.navigate('Cart', { productId: product.id });
 		}
+		setTimeout(() => {
+			Alert.alert('Success', 'Add to cart success'); // set timeout for 2s
+		}, 500);
 		setVisibleCart(!visibleCart);
 	};
 
@@ -121,7 +125,7 @@ export const ProductDetail = () => {
 								>
 									<Image
 										source={{
-											uri: product?.images_url,
+											uri: product?.image_url,
 										}}
 										width={336}
 										height={216}

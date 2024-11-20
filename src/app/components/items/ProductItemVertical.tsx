@@ -23,12 +23,17 @@ export const ProductItemVertical = React.memo(
 				<View style={{ padding: 5 }}>
 					<Image
 						style={{ width: 150, height: 150 }}
-						source={{ uri: product?.images_url }}
+						source={{ uri: product?.image_url }}
 					/>
 				</View>
 				<View style={styles.info}>
 					<View>
-						<Text style={{ width: '100%' }}>{product?.name}</Text>
+						<Text
+							style={{ width: '100%', maxWidth: 100 }}
+							numberOfLines={1}
+						>
+							{product?.name}
+						</Text>
 					</View>
 
 					<View style={styles.rating}>
