@@ -1,30 +1,24 @@
-import { Edit, Remove } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import { Product } from '@/src/types';
-import { formatCurrency } from '@/src/utils';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 
-interface ProductCardProps {
+export interface ProductCardProps {
 	product: Product;
 	onPressCard: (id: string) => void;
-	haveRight: boolean;
-	typeRight: 'edit' | 'remove';
-	onPressButtonRight?: {
-		remove?: (id: string) => void;
-	};
-	descrtipion: string;
-	price: number;
+	componentRight?: ReactNode | null;
+	onPressButtonRight?: (id: string) => void;
+	description?: string;
+	price?: number;
 }
 
 export const ProductCard = React.memo(
 	({
 		product,
 		onPressCard,
-		haveRight,
-		typeRight,
-		onPressButtonRight,
-		descrtipion,
+		componentRight,
+		onPressButtonRight = () => {},
+		description,
 		price,
 	}: ProductCardProps) => {
 		return (
@@ -33,7 +27,6 @@ export const ProductCard = React.memo(
 				style={[
 					style.rowCenter,
 					{
-						marginHorizontal: 16,
 						marginVertical: 4,
 						backgroundColor: colors.textBrand,
 						paddingVertical: 8,
@@ -55,7 +48,7 @@ export const ProductCard = React.memo(
 				]}
 			>
 				<Image
-					source={{ uri: product.images_url }}
+					source={{ uri: product.image_url }}
 					style={{
 						width: 100,
 						height: 100,
@@ -67,45 +60,21 @@ export const ProductCard = React.memo(
 					<View>
 						<Text style={[style.headerText]}>{product.name}</Text>
 						<Text numberOfLines={3} style={[style.titleText]}>
-							{descrtipion ? descrtipion : product.description}
+							{description ? description : product.description}
 						</Text>
 					</View>
 					<Text style={[style.priceText]}>
 						{'$ '} {price ? price : product.price}
 					</Text>
 				</View>
-				{haveRight === true ? (
-					typeRight === 'remove' ? (
-						<TouchableOpacity
-							onPress={() =>
-								onPressButtonRight?.remove
-									? onPressButtonRight.remove(product.id)
-									: () => {}
-							}
-							style={{
-								backgroundColor: colors.textBrand,
-								borderRadius: 8,
-								padding: 8,
-							}}
-						>
-							<Remove />
-						</TouchableOpacity>
-					) : (
-						<TouchableOpacity
-							onPress={() =>
-								onPressButtonRight?.remove
-									? onPressButtonRight.remove(product.id)
-									: () => {}
-							}
-							style={{
-								backgroundColor: colors.textBrand,
-								borderRadius: 8,
-								padding: 8,
-							}}
-						>
-							<Edit color={colors.secondText} />
-						</TouchableOpacity>
-					)
+				{componentRight ? (
+					<TouchableOpacity
+						onPress={() => {
+							onPressButtonRight(product.id);
+						}}
+					>
+						{componentRight}
+					</TouchableOpacity>
 				) : (
 					<></>
 				)}

@@ -7,7 +7,7 @@ export const api = axios.create({
 });
 
 // Function to set the access token
-export const setAccessToken = (token: string) => {
+export const setAccessToken = (token: string | null) => {
 	api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
@@ -18,10 +18,15 @@ api.interceptors.request.use(
 		if (token) {
 			config.headers['Authorization'] = token;
 		}
-		console.log(config.headers);
 		return config;
 	},
 	(error) => {
+		if (error.response.status === 401) {
+					console.log(
+			'\x1b[41m Axios\x1b[0m \x1b[31m \x1b[0m',
+		);
+		}
+
 		return Promise.reject(error);
 	},
 );

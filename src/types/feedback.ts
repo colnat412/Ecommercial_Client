@@ -5,7 +5,6 @@ export interface Feedback {
 	id: string;
 	productId: string;
 	imageUrl: string;
-	feed: string;
 	rating: number;
 	comment: string;
 	detailInfomation: DetailInfomation;

@@ -15,7 +15,6 @@ import {
 import {
 	ScreenTabNavigationProp,
 	StackScreenNavigationProp,
-	StackScreenRouteProp,
 	useAppSelector,
 } from '@/src/libs';
 
@@ -36,6 +35,10 @@ export const Account = () => {
 	const handleEditSecurity = () => {
 		setEditSecurity(!editSecurity);
 	};
+
+	const handleLogout = () => {
+		
+	}
 
 	// const isFocused = useIsFocused();
 

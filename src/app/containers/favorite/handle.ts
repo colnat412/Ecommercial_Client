@@ -1,5 +1,4 @@
-import { api, AppDispatch } from '@/src/libs';
-import { removeFavorite } from '@/src/libs/redux/store';
+import { api} from '@/src/libs';
 
 export const favoriteDelete = async (
 	id: string

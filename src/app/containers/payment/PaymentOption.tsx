@@ -5,8 +5,6 @@ import { PaymentMethod } from './PaymentMethod';
 import { PaymentCartItem } from './PaymentCartItem';
 
 import { Line } from '../../components/Line';
-import { useNavigation } from '@react-navigation/native';
-import { StackScreenNavigationProp } from '@/src/libs';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { useEffect, useState } from 'react';
 import { Cart } from '@/src/types';

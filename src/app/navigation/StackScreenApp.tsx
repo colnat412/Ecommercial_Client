@@ -1,11 +1,11 @@
-import { Stack, useAppDispatch } from '@/src/libs';
+import { api, AppDispatch, getAccessTokenSecure, setAccessToken, Stack, useAppDispatch } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
-
 import {
 	Carts,
 	Feedback,
 	Login,
 	OrderComponent,
+	OrderDetail,
 	PaymentOption,
 	PaymentResult,
 	ProductDetail,
@@ -14,26 +14,73 @@ import {
 } from '../containers';
 import { TabScreenApp } from './TabScreenApp';
 import { useEffect, useState } from 'react';
-import { checkConnect } from '../localHandle';
+
 import { ErroContainter } from '../components';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
+import { checkConnect } from '../localHandle';
+import axios from 'axios';
+import { Account } from '@/src/types';
+import { setAuth } from '@/src/libs/redux/store';
+
 
 export const StackScreenApp = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isConnect, setIsConnect] = useState<boolean>(false);
 
+	const dispatch = useAppDispatch<AppDispatch>();
+
 	useEffect(() => {
 		const connect = async () => {
-			const response = await checkConnect();
-			if (response.status === 500) {
-				setIsConnect(false);
-				setIsLoading(false);
-			} else {
-				setIsConnect(true);
-				setIsLoading(false);
+			try {
+				const response = await checkConnect();
+				if (response.status === 500) {
+					setIsConnect(false);
+					setIsLoading(false);
+					console.log('Stack Screen: Connect failed');
+				} else {
+					setIsConnect(true);
+					setIsLoading(false);
+					console.log('Stack Screen: Connect success');
+				}
+			} catch (e) {
+				console.log(e);
 			}
+
+			const tokenSecure = await getAccessTokenSecure();
+
+			setAccessToken(tokenSecure ? tokenSecure : '');
+
+			try {
+				const request = await api.get('/api/auth/my-account');
+				if (request.status === 200) {
+					const account: Account = request.data.data;
+					dispatch(setAuth({account}));
+					// console.log('Stack Screen:' + account.accessToken);
+					console.log('Stack Screen: AccessToken success');
+				}
+				else {
+					console.log('Stack Screen: AccessToken failed');
+				}
+
+			} catch (error) {
+				console.log('Stack Screen: AccessToken failed');
+			}
+
+			// try {
+			// 	const autoLogin = await axios.post(`${BE_URL}/api/auth/login`, {
+			// 		identifier: 'user2',
+			// 		password: '123',
+			// 	});
+
+			// 	const { id, accessToken } = autoLogin.data.data;
+
+			// 	login(id, accessToken);
+			// 	console.log('Stack Sreen: AccessToken success');
+			// } catch (error) {
+			// 	console.log('Stack Sreen: AccessToken failed');
+			// }
 		};
 		connect();
 	}, []);
@@ -83,6 +130,10 @@ export const StackScreenApp = () => {
 									component={PaymentResult}
 								/>
 								<Stack.Screen name="Order" component={OrderComponent} />
+								<Stack.Screen
+									name="OrderDetail"
+									component={OrderDetail}
+								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
 								<Stack.Screen name="Cart" component={Carts} />
 							</Stack.Navigator>

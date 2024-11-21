@@ -1,6 +1,6 @@
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import { Checkbox, Modal, Portal, RadioButton, Text } from 'react-native-paper';
+import {  Modal, Portal, RadioButton, Text } from 'react-native-paper';
 import { SearchInput } from './SearchInput';
 import { Line, ProductItemVertical } from '../../components';
 import { useState } from 'react';

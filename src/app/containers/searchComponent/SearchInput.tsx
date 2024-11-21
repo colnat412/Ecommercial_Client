@@ -1,13 +1,9 @@
-import { colors, style } from '@/src/constants';
+import { colors } from '@/src/constants';
 import { Pressable, View } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import {  TextInput } from 'react-native-paper';
 import { Filter, Search as SearchIcon } from '../../../assets';
 import { DismissKeyboardView } from '../../components';
-import { useState } from 'react';
-import { Product } from '@/src/types';
-import { searchProduct } from './handle';
-import { useRoute } from '@react-navigation/native';
-import { StackScreenRouteProp } from '@/src/libs';
+
 
 interface SearchInputProps {
 	handleShowFilter?: () => void;

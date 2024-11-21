@@ -1,7 +1,7 @@
 import { Brand } from '@/src/assets';
-import { colors, style } from '@/src/constants';
+import { colors } from '@/src/constants';
 import { useEffect, useRef } from 'react';
-import { Animated, Button, Text, View } from 'react-native';
+import { Animated, Text, View } from 'react-native';
 
 interface Props {
 	size?: number;

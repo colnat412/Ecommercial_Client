@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { Product } from '@/src/types';

@@ -1,6 +1,6 @@
 import { BE_URL } from '@/env';
 import { api } from '@/src/libs';
-import { Cart, Product } from '@/src/types';
+import { Product } from '@/src/types';
 
 export const saveProductToCart = async (product: Product) => {
 	try {
@@ -8,7 +8,7 @@ export const saveProductToCart = async (product: Product) => {
 			id: product.id,
 			name: product.name,
 			price: product.price,
-			image: product.images_url,
+			image: product.image_url,
 			quantity: 1,
 		});
 		return {
