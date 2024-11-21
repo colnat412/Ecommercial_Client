@@ -1,7 +1,7 @@
 import { api, AppDispatch, getAccessTokenSecure, setAccessToken, Stack, useAppDispatch } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
 import {
-	Cart,
+	Carts,
 	Feedback,
 	Login,
 	OrderComponent,
@@ -135,7 +135,7 @@ export const StackScreenApp = () => {
 									component={OrderDetail}
 								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
-								<Stack.Screen name="Cart" component={Cart} />
+								<Stack.Screen name="Cart" component={Carts} />
 							</Stack.Navigator>
 						</NavigationContainer>
 					) : (

@@ -1,5 +1,6 @@
 import { colors, style } from '@/src/constants';
 import {
+	Alert,
 	Dimensions,
 	Image,
 	Platform,
@@ -86,6 +87,16 @@ export const ProductDetail = () => {
 		setRisibleReviews(!visibleReviews);
 	};
 
+	const goPayment = () => {
+		if (product?.id) {
+			navigation.navigate('Cart', { productId: product.id });
+		}
+		setTimeout(() => {
+			Alert.alert('Success', 'Add to cart success'); // set timeout for 2s
+		}, 500);
+		setVisibleCart(!visibleCart);
+	};
+
 	return (
 		<View style={{ marginTop: 32, flex: 1, justifyContent: 'center' }}>
 			{loading ? (
@@ -114,7 +125,7 @@ export const ProductDetail = () => {
 								>
 									<Image
 										source={{
-											uri: product?.images_url,
+											uri: product?.image_url,
 										}}
 										width={336}
 										height={216}
@@ -541,6 +552,7 @@ export const ProductDetail = () => {
 							<Favorite width={20} height={20} />
 						</Pressable>
 						<Button
+							onPress={() => navigation.navigate('PaymentOption')}
 							style={[
 								style.outline,
 								{ borderColor: colors.brand, flex: 1 },
@@ -838,6 +850,7 @@ export const ProductDetail = () => {
 											</View>
 										</View>
 										<Pressable
+											onPress={goPayment}
 											style={{
 												flex: 1,
 												backgroundColor: colors.brand,

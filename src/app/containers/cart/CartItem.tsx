@@ -1,41 +1,67 @@
 import { Add, Minus, Star, Trash, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import { Product } from '@/src/types';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Cart, Product } from '@/src/types';
+import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
+import { useState } from 'react';
+import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getProduct } from '../productDetail';
+import { deleteProductInCart } from './handle';
 
 interface CartItemProps {
-	product: Product;
+	cartItem: Cart;
 }
 
-export const CartItem = ({ product }: CartItemProps) => {
+export const CartItem = ({ cartItem }: CartItemProps) => {
+	const [qty, setQty] = useState<number>(cartItem.quantity);
+	const handleAddQty = () => {
+		let newQty = qty + 1;
+		setQty(newQty);
+	};
+
+	const handleMinusQty = () => {
+		if (qty > 0) {
+			let newQty = qty - 1;
+			setQty(newQty);
+		}
+	};
+
+	const deleteCartItem = async (id: string) => {
+		const cartItemDelete = await getProduct(id);
+		console.log('cartItemDelete:', cartItemDelete);
+
+		if (cartItemDelete && cartItemDelete.data) {
+			await deleteProductInCart(cartItemDelete.data.id);
+			Alert.alert('Success', 'Delete Success');
+		}
+	};
+
 	return (
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
 				<Checkbox status="checked" />
-				<Image
-					width={100}
-					height={100}
-					source={{ uri: product.images_url }}
-				/>
+				<Image width={100} height={100} source={{ uri: cartItem.image }} />
 				<View style={styles.info}>
-					<Text style={styles.nameText}>{product.name}</Text>
+					<Text style={styles.nameText}>{cartItem.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
 						Black, Headphone + Wire
 					</Text>
-					<Text style={styles.priceText}>${product.price}</Text>
+					<Text style={styles.priceText}>${cartItem.price}</Text>
 					<View style={styles.qtyContainer}>
-						<Pressable>
+						<Pressable onPress={handleMinusQty}>
 							<Minus />
 						</Pressable>
-						<Text>5</Text>
-						<Pressable>
+						<Text>{qty}</Text>
+						<Pressable onPress={handleAddQty}>
 							<Add />
 						</Pressable>
 					</View>
 				</View>
-				<Trash color={'red'} width={30} height={30} />
+				<Pressable onPress={() => deleteCartItem(cartItem.id)}>
+					<Trash color={'red'} width={30} height={30} />
+				</Pressable>
 			</View>
 			<Line />
 		</View>

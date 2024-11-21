@@ -18,7 +18,7 @@ export type RootStackParamList = {
 	OrderDetail: { order: Order };
 	Feedback: undefined;
 	PaymentResult: undefined;
-	Cart: undefined;
+	Cart: { productId: string };
 };
 
 declare global {

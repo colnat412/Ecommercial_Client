@@ -23,7 +23,7 @@ export const CategoryItem = ({ category }: CategoryItemProps) => {
 		<Pressable onPress={handleNavigation} style={styles.container}>
 			<Image style={styles.circularImage} source={{ uri: category.image }} />
 			<Text numberOfLines={1} style={styles.textStyle}>
-				{category.name}
+				{category.title}
 			</Text>
 		</Pressable>
 	);
