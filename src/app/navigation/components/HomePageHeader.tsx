@@ -1,14 +1,18 @@
 import { Brand, Cart, User } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import {
+	AppDispatch,
 	ScreenTabNavigationProp,
 	StackScreenNavigationProp,
+	useAppDispatch,
 	useAppSelector,
 } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
 import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useEffect, useState } from 'react';
+import { fetchDetailInformation } from '../../localHandle';
+import { setDetailInfomation } from '@/src/libs/redux/store';
 
 export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
@@ -18,15 +22,20 @@ export const HomePageHeader = () => {
 	const [cardChange, setCardChange] = useState<boolean>(false);
 
 	const detailsInformation = useAppSelector((state) => state.detailInfomation);
+	const dispatch = useAppDispatch<AppDispatch>();
 
 	useEffect(() => {
 		const fetchData = async () => {
-			// const data = await getData({ urlApi: '/carts' });
-			// setLengthCart(data.length);
-			// setCardChange(!cardChange);
+
+			
+			const getDetailInformation = await fetchDetailInformation();
+			if (getDetailInformation.statusCode === 200) {
+				dispatch(setDetailInfomation(getDetailInformation.data));
+			}
+
 		};
 		fetchData();
-	}, [cardChange]);
+	}, [dispatch]);
 
 	const goLogin = () => {
 		if (detailsInformation.detailInfomation) {
@@ -86,7 +95,7 @@ export const HomePageHeader = () => {
 					{detailsInformation.detailInfomation ? (
 						<Image
 							source={{
-								uri: detailsInformation.detailInfomation.avatarUrl,
+								uri: detailsInformation.detailInfomation.avatar_url,
 							}}
 							width={30}
 							height={30}

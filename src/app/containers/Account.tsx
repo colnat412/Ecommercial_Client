@@ -13,18 +13,27 @@ import {
 	useRoute,
 } from '@react-navigation/native';
 import {
+	AppDispatch,
 	ScreenTabNavigationProp,
+	setAccessToken,
+	setAccessTokenSecure,
 	StackScreenNavigationProp,
+	useAppDispatch,
 	useAppSelector,
 } from '@/src/libs';
+import { setAuth, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
+import { setFeedback } from '@/src/libs/redux/store/feedbackSlice';
 
 export const Account = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
 	const detailsInformation = useAppSelector(state => state.detailInfomation);
+	const dispatch = useAppDispatch<AppDispatch>();
 
 	const [editDetail, setEditDetail] = useState<boolean>(false);
+
+	const [loading, setLoading] = useState<boolean>(true);
 
 	const handleEditDetail = () => {
 		setEditDetail(!editDetail);
@@ -37,14 +46,24 @@ export const Account = () => {
 	};
 
 	const handleLogout = () => {
-		
+		setAccessToken('');
+		setAccessTokenSecure('');
+
+		dispatch(setAuth(null))
+		dispatch(setDetailInfomation(null))
+		dispatch(setFavorite(null))
+		dispatch(setFeedback(null))
+
+		navigation.navigate('Login');
 	}
 
-	// const isFocused = useIsFocused();
+	const isFocused = useIsFocused();
 
-	// useEffect(() => {
-	// 	navigation.navigate('Login');
-	// }, [isFocused]);
+	useEffect(() => {
+		if (detailsInformation.detailInfomation === null) {
+			navigation.navigate('Login');
+		}
+	}, [isFocused]);
 
 	return (
 		<DismissKeyboardView>
@@ -83,7 +102,7 @@ export const Account = () => {
 						>
 							<Image
 								source={{
-									uri: detailsInformation.detailInfomation?.avatarUrl,
+									uri: detailsInformation.detailInfomation?.avatar_url,
 								}}
 								width={95}
 								height={95}
@@ -120,7 +139,7 @@ export const Account = () => {
 										},
 									]}
 								>
-									{detailsInformation.detailInfomation?.fullName}
+									{detailsInformation.detailInfomation?.full_name}
 								</Text>
 							</View>
 						</LinearGradient>
@@ -212,7 +231,7 @@ export const Account = () => {
 								<TextFields
 									edit={editDetail}
 									label="Fullname"
-									value={detailsInformation.detailInfomation?.fullName}
+									value={detailsInformation.detailInfomation?.full_name}
 								/>
 								<TextFields
 									edit={editDetail}
@@ -320,6 +339,7 @@ export const Account = () => {
 							)}
 						</View>
 						<Button
+							onPress={handleLogout}
 							mode="contained"
 							style={{ borderRadius: 8 }}
 							buttonColor={colors.brand}

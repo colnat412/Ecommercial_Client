@@ -20,19 +20,24 @@
 			"group": "build"
 		},
 		{
-			"type": "npm",
-			"script": "database",
-			"problemMatcher": [],
-			"label": "npm: database",
-			"detail": "json-server --watch dbTest.json --port 4000 --host 192.168.100.126"
-		},
-		{
 			"label": "Run all",
-			"dependsOn": ["npm: start", "npm: database", "npm: screen"],
+			"dependsOn": [
+				"npm: start",
+				"npm: screen"
+			],
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"type": "typescript",
+			"tsconfig": "tsconfig.json",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build",
+			"label": "tsc: build - tsconfig.json"
 		}
 	]
 }

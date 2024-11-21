@@ -1,7 +1,6 @@
-export interface Cart {
+export interface CartItem {
 	id: string;
-	name: string;
-	price: number;
-	image: string;
+	product: string;
 	quantity: number;
+	listOption: string[];
 }
