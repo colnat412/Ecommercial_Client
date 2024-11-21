@@ -1,16 +1,14 @@
 import { FlatList, View } from 'react-native';
-import { HomePageHeader } from '../navigation/components';
-import { Categories } from './category';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
 import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';
 import { Banner } from './Banner';
-import { getDataFromDBS } from './handle';
-import { useAppDispatch } from '@/src/libs';
-import { fetchDetailInformation } from '../localHandle';
-import { setDetailInfomation } from '@/src/libs/redux/store';
+import { Categories } from './category/Category';
+import { HomePageHeader } from '../navigation/components';
+
+
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);

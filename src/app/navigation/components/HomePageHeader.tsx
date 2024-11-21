@@ -8,7 +8,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { getData } from '../../containers';
 import { useEffect, useState } from 'react';
 
 export const HomePageHeader = () => {
@@ -22,9 +21,9 @@ export const HomePageHeader = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const data = await getData({ urlApi: '/carts' });
-			setLengthCart(data.length);
-			setCardChange(!cardChange);
+			// const data = await getData({ urlApi: '/carts' });
+			// setLengthCart(data.length);
+			// setCardChange(!cardChange);
 		};
 		fetchData();
 	}, [cardChange]);
@@ -38,10 +37,6 @@ export const HomePageHeader = () => {
 	};
 
 	const goCart = async () => {
-		const cartData = await getData({ urlApi: '/carts' });
-		navigation.navigate('Cart', {
-			productId: cartData.productId,
-		});
 	};
 
 	return (

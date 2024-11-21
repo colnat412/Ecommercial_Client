@@ -6,7 +6,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { colors, style } from '@/src/constants';
 import { Brand } from '@/src/assets';
 import {  Text, TextInput } from 'react-native-paper';
-import { GoBack } from '../../navigation/components';
+import { GoBack } from '../../navigation/components/GoBack';
 import { Account } from '@/src/types';
 import { login, LoginResponse } from './handle';
 import { setAuth } from '@/src/libs/redux/store';

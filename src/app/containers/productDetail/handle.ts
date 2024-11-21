@@ -1,9 +1,9 @@
-import { BE_RURL, BE_URL } from '@/env';
+import { BE_URL } from '@/env';
 import { api } from '@/src/libs';
 import { Feedback, ProductDetail } from '@/src/types';
 export const getProduct = async (productId: string) => {
 	try {
-		const response = await api.get(`${BE_RURL}/api/products/${productId}`);
+		const response = await api.get(`${BE_URL}/api/products/${productId}`);
 		const data: ProductDetail = response.data.data;
 		return {
 			data: data,

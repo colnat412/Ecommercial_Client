@@ -3,7 +3,7 @@ import { colors, style } from '@/src/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, shadow, Text, TextInput } from 'react-native-paper';
-import { HeaderTitle } from '../navigation/components';
+import { HeaderTitle } from '../navigation/components/HeaderTitle';
 import { useCallback, useEffect, useState } from 'react';
 import { DismissKeyboardView } from '../components';
 import {

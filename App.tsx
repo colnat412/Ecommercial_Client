@@ -7,9 +7,10 @@ import { View } from 'react-native';
 import { colors } from './src/constants';
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from './src/libs';
-import { Loading, StackScreenApp } from './src/app';
 
 import { useFonts } from 'expo-font';
+import { Loading } from './src/app/containers';
+import { StackScreenApp } from './src/app/navigation';
 
 export default function App() {
 	const [fontsLoaded] = useFonts(fonts);

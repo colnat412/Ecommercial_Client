@@ -1,17 +1,5 @@
 import { api, AppDispatch, getAccessTokenSecure, setAccessToken, Stack, useAppDispatch } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-	Carts,
-	Feedback,
-	Login,
-	OrderComponent,
-	OrderDetail,
-	PaymentOption,
-	PaymentResult,
-	ProductDetail,
-	Register,
-	SubCategory,
-} from '../containers';
 import { TabScreenApp } from './TabScreenApp';
 import { useEffect, useState } from 'react';
 
@@ -20,9 +8,16 @@ import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
 import { checkConnect } from '../localHandle';
-import axios from 'axios';
 import { Account } from '@/src/types';
 import { setAuth } from '@/src/libs/redux/store';
+import { Register } from '../containers';
+import { ProductDetail } from '../containers/productDetail';
+import { SubCategory } from '../containers/category';
+import { PaymentOption, PaymentResult } from '../containers/payment';
+import { OrderComponent, OrderDetail } from '../containers/order';
+import { Feedback } from '../containers/feedback';
+import { Carts } from '../containers/cart';
+import { Login } from '../containers/login';
 
 
 export const StackScreenApp = () => {
