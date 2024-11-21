@@ -4,10 +4,13 @@ import { Categories } from './category';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';
 import { Banner } from './Banner';
-
+import { getDataFromDBS } from './handle';
+import { useAppDispatch } from '@/src/libs';
+import { fetchDetailInformation } from '../localHandle';
+import { setDetailInfomation } from '@/src/libs/redux/store';
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
@@ -36,7 +39,31 @@ export const HomePage = () => {
 	// 	};
 	// 	fetchHomePage();
 	// }, []);
+	useEffect(() => {
+		getDataFromDBS({ urlApi: '/api/products' }).then((data) => {
+			setData(data.data);
+		});
+	}, []);
 
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		const fetchHomePage = async () => {
+			const responseDetailInfomation = await fetchDetailInformation();
+			if (responseDetailInfomation.status === 200) {
+				dispatch(
+					setDetailInfomation(
+						responseDetailInfomation.data
+							? responseDetailInfomation.data
+							: null,
+					),
+				);
+			} else if (responseDetailInfomation.status === 500) {
+				console.log('Error');
+			}
+		};
+		fetchHomePage();
+	}, []);
 	return (
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />
