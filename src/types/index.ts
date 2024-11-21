@@ -6,3 +6,6 @@ export * from './productDetail';
 export * from './order';
 export * from './cart';
 export * from './orderDetail';
+export * from './baseAxios'
+export * from './option'
+export * from './listOption'

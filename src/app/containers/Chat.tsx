@@ -1,5 +1,4 @@
 // src/Chat.tsx
-import { BE_URL_CHAT } from '@/env';
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Pressable } from 'react-native';
 import { io, Socket } from 'socket.io-client';
@@ -9,6 +8,7 @@ import {TextInput } from 'react-native-paper';
 import { Send } from '@/src/assets';
 import { HeaderTitle } from '../navigation/components/HeaderTitle';
 import {  useAppSelector } from '@/src/libs';
+import { BE_URL_CHAT } from '@/env';
 
 
 interface Message {
@@ -96,6 +96,10 @@ export const Chat: React.FC = () => {
 		const token = async () => {
 
 			console.log('Token:' +accessToken + "|")
+
+			if (!accessToken) {
+				return;
+			}
 
 			const newSocket = io(`${BE_URL_CHAT}`, {
 				transports: ['websocket'],

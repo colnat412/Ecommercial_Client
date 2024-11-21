@@ -4,8 +4,8 @@ export const favoriteDelete = async (
 	id: string
 ) => {
 	try {
-		const request = await api.delete(`/products/${id}`);
-		if (request.status === 200) {
+		const request = await api.delete(`/api/favorites/${id}`);
+		if (request.data.statusCode === 200) {
             return true;
 		}
         return false;

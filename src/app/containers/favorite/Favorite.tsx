@@ -1,14 +1,6 @@
 import { colors, style } from '@/src/constants';
-import {
-	NoData,
-	ProductList,
-} from '../../components';
-import {
-	Button,
-	Dialog,
-	Paragraph,
-	Portal,
-} from 'react-native-paper';
+import { NoData, ProductList } from '../../components';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { ActivityIndicator, View } from 'react-native';
 import { HeaderTitle } from '../../navigation/components';
 import { useEffect, useState } from 'react';
@@ -24,7 +16,6 @@ import { favoriteDelete } from './handle';
 import { Remove } from '@/src/assets';
 
 export const Favorite = () => {
-	const favoriteData = useAppSelector((state) => state.favorite);
 	const [deleteId, setDeleteId] = useState<string>('');
 	const [deleteing, setDeleteing] = useState(false);
 
@@ -32,6 +23,7 @@ export const Favorite = () => {
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigation<StackScreenNavigationProp>();
 
+	const favoriteData = useAppSelector((state) => state.favorite);
 	const dispatch = useAppDispatch();
 
 	const showModal = (id: string) => {
@@ -58,10 +50,12 @@ export const Favorite = () => {
 	useEffect(() => {
 		const fetchFavoriteData = async () => {
 			const response = await fetchFavorite();
-			if (response.status === 200) {
-				dispatch(setFavorite(response.data ? response.data : []));
-				setLoading(false);
+			if (response.statusCode === 200) {
+				dispatch(setFavorite(response.data));
 			}
+			console.log(response.data);
+
+			setLoading(false);
 		};
 		fetchFavoriteData();
 	}, []);
@@ -80,7 +74,7 @@ export const Favorite = () => {
 							Bạn có chắc chắn muốn xóa mục này không?
 						</Paragraph>
 					</Dialog.Content>
-					<Dialog.Actions style={{gap: 10}}>
+					<Dialog.Actions style={{ gap: 10 }}>
 						{deleteing && (
 							<ActivityIndicator size={'large'} color={colors.brand} />
 						)}
@@ -113,14 +107,11 @@ export const Favorite = () => {
 					<>
 						{favoriteData.favorite ? (
 							<ProductList
-							style={{ paddingHorizontal: 8 }}
+								style={{ paddingHorizontal: 8 }}
 								products={favoriteData.favorite}
 								onPressCard={handlePressCard}
-								componentRight={
-									<Remove />
-								}
+								componentRight={<Remove />}
 								onPressButtonRight={showModal}
-
 							/>
 						) : (
 							<NoData />

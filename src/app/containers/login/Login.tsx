@@ -9,7 +9,8 @@ import {  Text, TextInput } from 'react-native-paper';
 import { GoBack } from '../../navigation/components/GoBack';
 import { Account } from '@/src/types';
 import { login, LoginResponse } from './handle';
-import { setAuth } from '@/src/libs/redux/store';
+import { setAuth, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
+import { fetchDetailInformation, fetchFavorite } from '../../localHandle';
 
 export const Login = () => {
 	const [username, setUsername] = useState('');
@@ -33,6 +34,15 @@ export const Login = () => {
 				dispatch(setAuth({ account }));
 				setAccessToken(account.accessToken);
 				setAccessTokenSecure(account.accessToken);
+
+				dispatch(setAuth({ account }));
+
+				const detailInfomation = await fetchDetailInformation();
+				dispatch(setDetailInfomation(detailInfomation.data));
+
+				const favoriteData = await fetchFavorite();
+				dispatch(setFavorite(favoriteData.data));
+				
 			}
 			navigation.navigate('TabScreenApp');
 		}

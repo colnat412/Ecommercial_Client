@@ -1,4 +1,11 @@
-import { api, AppDispatch, getAccessTokenSecure, setAccessToken, Stack, useAppDispatch } from '@/src/libs';
+import {
+	api,
+	AppDispatch,
+	getAccessTokenSecure,
+	setAccessToken,
+	Stack,
+	useAppDispatch,
+} from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
 import { TabScreenApp } from './TabScreenApp';
 import { useEffect, useState } from 'react';
@@ -19,7 +26,6 @@ import { Feedback } from '../containers/feedback';
 import { Carts } from '../containers/cart';
 import { Login } from '../containers/login';
 
-
 export const StackScreenApp = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isConnect, setIsConnect] = useState<boolean>(false);
@@ -35,7 +41,6 @@ export const StackScreenApp = () => {
 					setIsLoading(false);
 					console.log('Stack Screen: Connect failed');
 				} else {
-					setIsConnect(true);
 					setIsLoading(false);
 					console.log('Stack Screen: Connect success');
 				}
@@ -51,31 +56,17 @@ export const StackScreenApp = () => {
 				const request = await api.get('/api/auth/my-account');
 				if (request.status === 200) {
 					const account: Account = request.data.data;
-					dispatch(setAuth({account}));
+					console.log('Stack Screen: Token = ' + account.accessToken);
+					dispatch(setAuth({ account }));
 					// console.log('Stack Screen:' + account.accessToken);
 					console.log('Stack Screen: AccessToken success');
-				}
-				else {
+				} else {
 					console.log('Stack Screen: AccessToken failed');
 				}
-
 			} catch (error) {
 				console.log('Stack Screen: AccessToken failed');
 			}
-
-			// try {
-			// 	const autoLogin = await axios.post(`${BE_URL}/api/auth/login`, {
-			// 		identifier: 'user2',
-			// 		password: '123',
-			// 	});
-
-			// 	const { id, accessToken } = autoLogin.data.data;
-
-			// 	login(id, accessToken);
-			// 	console.log('Stack Sreen: AccessToken success');
-			// } catch (error) {
-			// 	console.log('Stack Sreen: AccessToken failed');
-			// }
+			setIsConnect(true);
 		};
 		connect();
 	}, []);

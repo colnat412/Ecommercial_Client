@@ -58,7 +58,7 @@ export const ProductCard = React.memo(
 				/>
 				<View style={{ flex: 1, justifyContent: 'flex-start', gap: 8 }}>
 					<View>
-						<Text style={[style.headerText]}>{product.name}</Text>
+						<Text style={[style.headerText, {fontSize: 18}]} numberOfLines={1}>{product.name}</Text>
 						<Text numberOfLines={3} style={[style.titleText]}>
 							{description ? description : product.description}
 						</Text>
