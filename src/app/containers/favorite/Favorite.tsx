@@ -1,7 +1,5 @@
 import { colors, style } from '@/src/constants';
 import {
-	DismissKeyboardView,
-	FavoriteList,
 	NoData,
 	ProductList,
 } from '../../components';
@@ -10,8 +8,6 @@ import {
 	Dialog,
 	Paragraph,
 	Portal,
-	Text,
-	TextInput,
 } from 'react-native-paper';
 import { ActivityIndicator, View } from 'react-native';
 import { HeaderTitle } from '../../navigation/components';

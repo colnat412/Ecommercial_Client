@@ -10,13 +10,13 @@ import { Line } from '../../components';
 import { style } from '@/src/constants';
 import { Arrow } from '@/src/assets';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
-import { saveProductToCart, updateProductInCart } from './handle';
+import { CartRouteProp, StackScreenNavigationProp } from '@/src/libs';
+import { saveProductToCart } from './handle';
 import { getProduct } from '../productDetail';
 
 export const Carts = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
-	const route = useRoute<StackScreenRouteProp>();
+	const route = useRoute<CartRouteProp>();
 
 	const [data, setData] = useState<Cart[]>([]);
 	const [dataChanged, setDataChanged] = useState<boolean>(false);

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { DismissKeyboardView } from '../components';
 import { ScrollView, View } from 'react-native';
 import { colors, style } from '@/src/constants';
-import { Brand } from '@/src/assets';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { GoBack } from '../navigation/components';
 

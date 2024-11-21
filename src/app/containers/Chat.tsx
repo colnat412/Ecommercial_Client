@@ -1,15 +1,15 @@
 // src/Chat.tsx
-import { BE_URL, BE_URL_CHAT } from '@/env';
+import { BE_URL_CHAT } from '@/env';
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Pressable } from 'react-native';
 import { io, Socket } from 'socket.io-client';
-import { ChatComponent, DismissKeyboardView } from '../components';
-import { colors, style } from '@/src/constants';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { ChatComponent } from '../components';
+import { colors } from '@/src/constants';
+import {TextInput } from 'react-native-paper';
 import { Send } from '@/src/assets';
 import { HeaderTitle } from '../navigation/components';
 import {  useAppSelector } from '@/src/libs';
-import { useFocusEffect } from '@react-navigation/native';
+
 
 interface Message {
 	sender: 'sending' | 'receiving';

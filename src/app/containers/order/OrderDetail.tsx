@@ -1,19 +1,14 @@
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Line } from '../../components/Line';
-import { Cart } from '../cart';
 
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { OrderDetailRouteProp, RootStackParamList, StackScreenNavigationProp } from '@/src/libs';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { OrderDetailRouteProp, StackScreenNavigationProp } from '@/src/libs';
 import { HeaderTitleWithBack } from '../../navigation/components';
-import { PaymentMethod, PaymentProfile } from '../payment';
+import { PaymentProfile } from '../payment';
 import { style } from '@/src/constants';
-import { Order, Product, ProductDetail } from '@/src/types';
-import { useEffect, useState } from 'react';
-import { ProductItem } from '../product';
+
 import { ProductList } from '../../components';
-import { getProduct } from '../productDetail';
-import { fetchFavorite } from '../../localHandle';
 
 export const OrderDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
@@ -47,10 +42,10 @@ export const OrderDetail = () => {
 						<Line />
 						<PaymentProfile />
 						<Line />
-						<ProductList
-							products={order.products}
+						{/* <ProductList
+							products={{}}
 							onPressCard={() => {}}
-						/>
+						/> */}
 					</View>
 				}
 			></FlatList>

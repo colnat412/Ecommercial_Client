@@ -1,4 +1,4 @@
-import { BE_RURL, BE_URL } from '@/env';
+import { BE_URL } from '@/env';
 import axios from 'axios';
 
 export const getData = async ({ urlApi }: { urlApi: string }) => {
@@ -6,6 +6,6 @@ export const getData = async ({ urlApi }: { urlApi: string }) => {
 	return data;
 };
 export const getDataFromDBS = async ({ urlApi }: { urlApi: string }) => {
-	const { data } = await axios.get(BE_RURL + urlApi);
+	const { data } = await axios.get(BE_URL + urlApi);
 	return data;
 };

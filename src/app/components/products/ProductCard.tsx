@@ -1,7 +1,5 @@
-import { Edit, Remove } from '@/src/assets';
 import { colors, style } from '@/src/constants';
 import { Product } from '@/src/types';
-import { formatCurrency } from '@/src/utils';
 import React, { ReactNode } from 'react';
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 
@@ -50,7 +48,7 @@ export const ProductCard = React.memo(
 				]}
 			>
 				<Image
-					source={{ uri: product.images_url }}
+					source={{ uri: product.image_url }}
 					style={{
 						width: 100,
 						height: 100,
@@ -70,7 +68,11 @@ export const ProductCard = React.memo(
 					</Text>
 				</View>
 				{componentRight ? (
-					<TouchableOpacity onPress={()=>{onPressButtonRight(product.id)}}>
+					<TouchableOpacity
+						onPress={() => {
+							onPressButtonRight(product.id);
+						}}
+					>
 						{componentRight}
 					</TouchableOpacity>
 				) : (

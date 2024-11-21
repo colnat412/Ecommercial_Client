@@ -1,8 +1,8 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
 import { CategoryItem } from './CategoryItem';
 import { useEffect, useState } from 'react';
 import { Category } from '@/src/types/category';
-import { getData, getDataFromDBS } from '../handle';
+import { getDataFromDBS } from '../handle';
 
 export const Categories = () => {
 	const [categories, setCategories] = useState<Category[]>([]);

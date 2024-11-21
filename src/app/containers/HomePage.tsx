@@ -1,16 +1,13 @@
-import { FlatList, ScrollView, View } from 'react-native';
-import Banner from './Banner';
+import { FlatList, View } from 'react-native';
 import { HomePageHeader } from '../navigation/components';
 import { Categories } from './category';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { Product } from '@/src/types';
-import { getData, getDataFromDBS } from './handle';
-import { useAppDispatch } from '@/src/libs';
-import { fetchDetailInformation } from '../localHandle/getReduxDataContainer';
-import { setDetailInfomation } from '@/src/libs/redux/store';
+import { Banner } from './Banner';
+
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);

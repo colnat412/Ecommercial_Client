@@ -1,8 +1,7 @@
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { Search as SearchIcon } from '../../assets/';
-import { ReactNode } from 'react';
 import { DismissKeyboardView } from '../components';
 
 export const Search = () => {

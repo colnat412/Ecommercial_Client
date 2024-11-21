@@ -1,7 +1,6 @@
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
-import data from '@/dbTest.json';
 import { Text } from 'react-native-paper';
-import { colors, style } from '@/src/constants';
+import {  style } from '@/src/constants';
 import { ProductItemVertical } from '../../components';
 import { Product } from '@/src/types';
 

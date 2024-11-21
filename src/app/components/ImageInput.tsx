@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { Button } from 'react-native-paper';
 import { colors, style } from '@/src/constants';

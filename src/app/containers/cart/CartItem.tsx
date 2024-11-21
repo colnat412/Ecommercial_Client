@@ -1,12 +1,10 @@
-import { Add, Minus, Star, Trash, User } from '@/src/assets';
-import { colors, style } from '@/src/constants';
-import { Cart, Product } from '@/src/types';
+import { Add, Minus, Trash } from '@/src/assets';
+import { colors } from '@/src/constants';
+import { Cart } from '@/src/types';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
 import { useState } from 'react';
-import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { getProduct } from '../productDetail';
 import { deleteProductInCart } from './handle';
 

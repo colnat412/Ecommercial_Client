@@ -66,7 +66,7 @@ const OrderItem = ({ order, onPress }: OrderItemProps) => {
 			</View>
 			<View style={{ flex: 1 }}>
 				<Text style={{ fontSize: 12, color: colors.secondText }}>
-					{order.products.length} items
+					{order.date} items
 				</Text>
 			</View>
 			<View style={{ flex: 1 }}>

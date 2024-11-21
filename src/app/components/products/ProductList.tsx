@@ -1,7 +1,6 @@
 import { Product } from '@/src/types';
-import { FlatList, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { FlatList, StyleProp, ViewStyle } from 'react-native';
 import { ProductCard, ProductCardProps } from './ProductCard';
-import { useState } from 'react';
 
 interface ProductListProps extends Omit<ProductCardProps, 'product'> {
 	style?: StyleProp<ViewStyle>;

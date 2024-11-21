@@ -4,9 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import {
 	Image,
 	Pressable,
-	StyleSheet,
-	TouchableOpacity,
-	View,
+	StyleSheet
 } from 'react-native';
 import { Text } from 'react-native-paper';
 

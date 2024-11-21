@@ -1,11 +1,10 @@
-import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
-import { CartItem } from '../cart';
+import { Image, StyleSheet, View } from 'react-native';
+
 import { Cart } from '@/src/types';
 import { colors } from '@/src/constants';
-import { Checkbox, Text } from 'react-native-paper';
-import { Add, Minus, Trash } from '@/src/assets';
+import { Text } from 'react-native-paper';
+
 import { Line } from '../../components';
-import { useState } from 'react';
 
 interface PaymentCartItemProps {
 	cartItem: Cart;

@@ -17,14 +17,14 @@ export const ProductItemHorizontal = React.memo(({ product }: ProductItemProps) 
 	return (
 		<Pressable
 			onPress={() => {
-				navigation.navigate('ProductDetail');
+				navigation.navigate('ProductDetail', { productId: product.id });
 			}}
 			style={styles.container}
 		>
 			<View style={styles.imgContainer}>
 				<Image
 					style={{ width: 140, height: 140 }}
-					source={{ uri: product?.images_url }}
+					source={{ uri: product?.image_url }}
 				/>
 			</View>
 			<Text style={{ width: '100%', fontWeight: 'bold' }}>

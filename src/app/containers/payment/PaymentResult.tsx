@@ -1,6 +1,5 @@
 import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import { HeaderTitle } from '../../navigation/components';
 import Checked from '@/src/assets/svgs/Checked';
 import { colors, style } from '@/src/constants';
 import Warning from '@/src/assets/svgs/Warning';

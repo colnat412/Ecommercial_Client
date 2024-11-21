@@ -27,3 +27,5 @@ export * from './Filter';
 export * from './Trash';
 export * from './Arrow';
 export * from './Send'
+export * from './Qr'
+export * from './Momo'

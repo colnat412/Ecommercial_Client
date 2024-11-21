@@ -32,3 +32,4 @@ export type StackScreenNavigationProp =
 
 export type ProductDetailRouteProp = RouteProp<RootStackParamList, 'ProductDetail'>;
 export type OrderDetailRouteProp = RouteProp<RootStackParamList, 'OrderDetail'>;
+export type CartRouteProp = RouteProp<RootStackParamList, 'Cart'>;

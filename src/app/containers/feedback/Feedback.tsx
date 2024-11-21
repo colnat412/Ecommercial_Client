@@ -1,8 +1,6 @@
 import { BE_URL } from '@/env';
 import { colors, style } from '@/src/constants';
-import { StackScreenNavigationProp } from '@/src/libs';
 import { Product } from '@/src/types';
-import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {

@@ -38,19 +38,17 @@ import {
 import { useEffect, useState } from 'react';
 import {
 	Feedback,
-	Product,
 	ProductDetail as IProductDetail,
 } from '@/src/types';
 import { getProduct, getReviews } from './handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
-import { StackScreenApp } from '../../navigation';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { StackScreenNavigationProp, StackScreenRouteProp } from '@/src/libs';
 import { Line } from '../../components/Line';
+import { ProductDetailRouteProp, StackScreenNavigationProp } from '@/src/libs';
 
 export const ProductDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
-	const route = useRoute<StackScreenRouteProp>();
+	const route = useRoute<ProductDetailRouteProp>();
 
 	const [loading, setLoading] = useState<boolean>(true);
 	const [product, setProduct] = useState<IProductDetail>();

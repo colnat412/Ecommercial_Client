@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { SvgProps, Rect, G, Path, Defs, ClipPath } from 'react-native-svg';
-const Momo = (props: SvgProps) => (
+export const Momo = (props: SvgProps) => (
 	<Svg viewBox="0 0 38 38" fill="none" {...props}>
 		<Rect width={38} height={38} rx={7} fill="#AE2070" />
 		<G clipPath="url(#clip0_195_1554)">
@@ -41,4 +41,3 @@ const Momo = (props: SvgProps) => (
 		</Defs>
 	</Svg>
 );
-export default Momo;
