@@ -1,14 +1,16 @@
 import { FlatList, View } from 'react-native';
+import { HomePageHeader } from '../navigation/components';
+import { Categories } from './category';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
 import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';
 import { Banner } from './Banner';
-import { Categories } from './category/Category';
-import { HomePageHeader } from '../navigation/components';
-
-
+import { getDataFromDBS } from './handle';
+import { useAppDispatch } from '@/src/libs';
+import { fetchDetailInformation } from '../localHandle';
+import { setDetailInfomation } from '@/src/libs/redux/store';
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
@@ -48,7 +50,7 @@ export const HomePage = () => {
 	useEffect(() => {
 		const fetchHomePage = async () => {
 			const responseDetailInfomation = await fetchDetailInformation();
-			if (responseDetailInfomation.status === 200) {
+			if (responseDetailInfomation.statusCode === 200) {
 				dispatch(
 					setDetailInfomation(
 						responseDetailInfomation.data
@@ -56,7 +58,7 @@ export const HomePage = () => {
 							: null,
 					),
 				);
-			} else if (responseDetailInfomation.status === 500) {
+			} else if (responseDetailInfomation.statusCode === 500) {
 				console.log('Error');
 			}
 		};
