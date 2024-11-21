@@ -1,44 +1,42 @@
-import { FlatList, ScrollView, View } from 'react-native';
-import Banner from './Banner';
-import { HomePageHeader } from '../navigation/components';
-import { Categories } from './category';
+import { FlatList, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { Product } from '@/src/types';
-import { getData } from './handle';
-import { useAppDispatch } from '@/src/libs';
-import { fetchDetailInformation } from '../localHandle/getReduxDataContainer';
-import { setDetailInfomation } from '@/src/libs/redux/store';
+import { Banner } from './Banner';
+import { Categories } from './category/Category';
+import { HomePageHeader } from '../navigation/components';
+
+
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
-	useEffect(() => {
-		getData({ urlApi: '/products' }).then((data) => {
-			setData(data);
-		});
-	}, []);
+	// useEffect(() => {
+	// 	getData({ urlApi: '/products' }).then((data) => {
+	// 		setData(data);
+	// 	});
+	// }, []);
 
-	const dispatch = useAppDispatch();
+	// const dispatch = useAppDispatch();
 
-	useEffect(() => {
-		const fetchHomePage = async () => {
-			const responseDetailInfomation = await fetchDetailInformation();
-			if (responseDetailInfomation.status === 200) {
-				dispatch(
-					setDetailInfomation(
-						responseDetailInfomation.data
-							? responseDetailInfomation.data
-							: null,
-					),
-				);
-			} else if (responseDetailInfomation.status === 500) {
-				console.log('Error');
-			}
-		};
-		fetchHomePage();
-	}, []);
+	// useEffect(() => {
+	// 	const fetchHomePage = async () => {
+	// 		const responseDetailInfomation = await fetchDetailInformation();
+	// 		if (responseDetailInfomation.status === 200) {
+	// 			dispatch(
+	// 				setDetailInfomation(
+	// 					responseDetailInfomation.data
+	// 						? responseDetailInfomation.data
+	// 						: null,
+	// 				),
+	// 			);
+	// 		} else if (responseDetailInfomation.status === 500) {
+	// 			console.log('Error');
+	// 		}
+	// 	};
+	// 	fetchHomePage();
+	// }, []);
 
 	return (
 		<View style={{ flex: 1 }}>

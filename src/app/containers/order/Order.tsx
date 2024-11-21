@@ -1,7 +1,7 @@
 import { colors, style } from '@/src/constants';
-import { StackScreenAccountNavigationProp } from '@/src/libs';
+import { StackScreenNavigationProp } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
-import { FlatList, ScrollView, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { Order } from '@/src/types';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { getOrder } from './handle';
 
 export const OrderComponent = () => {
-	const navigation = useNavigation<StackScreenAccountNavigationProp>();
+	const navigation = useNavigation<StackScreenNavigationProp>();
 
 	const [orders, setOrders] = useState<Order[]>([]);
 
@@ -19,20 +19,22 @@ export const OrderComponent = () => {
 		});
 	}, []);
 
+	const onOrderPress = (order: Order) => {
+		navigation.navigate('OrderDetail', { order: order });
+	}
+
 	return (
 		<View style={[style.container, style.body, { paddingHorizontal: 0 }]}>
-			<HeaderTitleWithBack
-				showCart={false}
-				showUser={false}
-				title="Order"
-				navigation={navigation}
-			/>
+			<HeaderTitleWithBack showCart={false} showUser={false} title="Order" />
 			<FlatList
 				data={orders}
-				renderItem={({ item }) => <OrderItem order={item} />}
+				renderItem={({ item }) => (
+					<OrderItem order={item} onPress={onOrderPress} />
+				)}
 				style={{ paddingHorizontal: 8, paddingVertical: 5 }}
 				showsHorizontalScrollIndicator={false}
 				showsVerticalScrollIndicator={false}
+				initialNumToRender={5}
 			></FlatList>
 		</View>
 	);
@@ -40,11 +42,13 @@ export const OrderComponent = () => {
 
 interface OrderItemProps {
 	order: Order;
+	onPress?: (order: Order) => void;
 }
 
-const OrderItem = ({ order }: OrderItemProps) => {
+const OrderItem = ({ order, onPress }: OrderItemProps) => {
 	return (
-		<View
+		<Pressable
+		onPress={() => {onPress ? onPress(order) : {}}}
 			style={[
 				style.outline,
 				{
@@ -62,12 +66,12 @@ const OrderItem = ({ order }: OrderItemProps) => {
 			</View>
 			<View style={{ flex: 1 }}>
 				<Text style={{ fontSize: 12, color: colors.secondText }}>
-					{order.products.length} items
+					{order.date} items
 				</Text>
 			</View>
 			<View style={{ flex: 1 }}>
 				<Text style={[style.priceText]}>${order.total}</Text>
 			</View>
-		</View>
+		</Pressable>
 	);
 };

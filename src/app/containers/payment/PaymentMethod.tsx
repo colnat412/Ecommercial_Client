@@ -1,5 +1,5 @@
-import QrCode from '@/src/assets/Qr';
-import Momo from '@/src/assets/svgs/Momo';
+import { Momo } from '@/src/assets';
+import QrCode from '@/src/assets/svgs/Qr';
 import { colors, style } from '@/src/constants';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';

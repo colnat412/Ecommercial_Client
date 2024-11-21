@@ -6,14 +6,27 @@ import {
 	useAppSelector,
 } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import { useEffect, useState } from 'react';
 
 export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
+	const [lengthCart, setLengthCart] = useState<number>(0);
+	const [cardChange, setCardChange] = useState<boolean>(false);
+
 	const detailsInformation = useAppSelector((state) => state.detailInfomation);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			// const data = await getData({ urlApi: '/carts' });
+			// setLengthCart(data.length);
+			// setCardChange(!cardChange);
+		};
+		fetchData();
+	}, [cardChange]);
 
 	const goLogin = () => {
 		if (detailsInformation.detailInfomation) {
@@ -21,6 +34,9 @@ export const HomePageHeader = () => {
 		} else {
 			navigation.navigate('Login');
 		}
+	};
+
+	const goCart = async () => {
 	};
 
 	return (
@@ -38,7 +54,34 @@ export const HomePageHeader = () => {
 				</Text>
 			</View>
 			<View style={[style.rowCenter, { gap: 16 }]}>
-				<Cart width={20} height={20} color={colors.cart} />
+				<Pressable onPress={goCart}>
+					<View style={{ position: 'relative', top: 12 }}>
+						<Cart width={25} height={25} color={colors.cart} />
+						<View
+							style={{
+								position: 'relative',
+								top: -30,
+								right: -15,
+								backgroundColor: colors.brand,
+								borderRadius: 10,
+								width: 18,
+								height: 18,
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Text
+								style={{
+									color: 'white',
+									fontSize: 10,
+									fontWeight: 'bold',
+								}}
+							>
+								{lengthCart > 5 ? '5+' : lengthCart}
+							</Text>
+						</View>
+					</View>
+				</Pressable>
 				<TouchableOpacity onPress={goLogin}>
 					{detailsInformation.detailInfomation ? (
 						<Image
@@ -47,7 +90,11 @@ export const HomePageHeader = () => {
 							}}
 							width={30}
 							height={30}
-							style={{borderWidth: 2, borderColor: colors.brand, borderRadius: 300 }}
+							style={{
+								borderWidth: 2,
+								borderColor: colors.brand,
+								borderRadius: 300,
+							}}
 						/>
 					) : (
 						<User width={20} height={20} color={'black'} />

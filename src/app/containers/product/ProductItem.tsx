@@ -1,7 +1,7 @@
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
-import data from '@/dbTest.json';
+import { FlatList, StyleSheet, View } from 'react-native';
+
 import { Text } from 'react-native-paper';
-import { colors, style } from '@/src/constants';
+import { style } from '@/src/constants';
 import { ProductItemHorizontal } from '../../components';
 import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';

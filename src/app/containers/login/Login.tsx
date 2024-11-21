@@ -1,12 +1,15 @@
-import { api, setAccessToken, StackScreenNavigationProp } from '@/src/libs';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {  AppDispatch, setAccessToken, setAccessTokenSecure, StackScreenNavigationProp, useAppDispatch } from '@/src/libs';
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { DismissKeyboardView } from '../components';
-import { ScrollView, View } from 'react-native';
+import { DismissKeyboardView } from '../../components';
+import { Pressable, ScrollView, View } from 'react-native';
 import { colors, style } from '@/src/constants';
 import { Brand } from '@/src/assets';
-import { Button, Text, TextInput } from 'react-native-paper';
-import { GoBack } from '../navigation/components';
+import {  Text, TextInput } from 'react-native-paper';
+import { GoBack } from '../../navigation/components/GoBack';
+import { Account } from '@/src/types';
+import { login, LoginResponse } from './handle';
+import { setAuth } from '@/src/libs/redux/store';
 
 export const Login = () => {
 	const [username, setUsername] = useState('');
@@ -14,26 +17,24 @@ export const Login = () => {
 	const [error, setError] = useState('');
 
 	const navigation = useNavigation<StackScreenNavigationProp>();
+	const dispatch = useAppDispatch<AppDispatch>();
 
 	const handleLogin = async () => {
-		// Login -> return account
-		// use AuthSecureStore.login to set account + accessToken
-		// Redux -> Action: load cart, favorite
-		// ========================================
-		try {
-		    const response = await api.post('api/auth/login', {
-		        "identifier": username,
-		        "password": password
-		    });
-		    const { accessToken } = response.data.data;
-		    setAccessToken(accessToken);
-		    // console.log(accessToken);
-		    setError('');
-		    // Redirect or perform other actions after successful login
-		    const response2 = await api.get('api/favorite/1');
-		    console.log(JSON.stringify(response2.data));
-		} catch (err) {
-		    setError('Invalid username or password');
+		const resultLogin: LoginResponse =
+			await login(username, password);
+
+		if (resultLogin.erro) {
+			setError(resultLogin.erro);
+			return;
+		}else if (resultLogin.account) {
+			const account: Account| null = resultLogin.account;
+			console.log ('Login Page Return: ' + account.accessToken);
+			if (account) {
+				dispatch(setAuth({ account }));
+				setAccessToken(account.accessToken);
+				setAccessTokenSecure(account.accessToken);
+			}
+			navigation.navigate('TabScreenApp');
 		}
 	};
 
@@ -71,7 +72,9 @@ export const Login = () => {
 					</View>
 
 					<View style={[style.columnCenter]}>
-						{error && <Text>{error}</Text>}
+						{error && (
+							<Text style={{ color: colors.dangerous }}>{error}</Text>
+						)}
 						<TextInput
 							label="Username"
 							value={username}
@@ -102,16 +105,22 @@ export const Login = () => {
 						Forgot password?
 					</Text>
 
-					<Button
+					<Pressable
 						onPress={() => {
 							handleLogin();
 						}}
-						style={[style.button]}
-						mode="contained"
-						textColor={colors.textBrand}
+						style={[style.button, { paddingVertical: 12 }]}
 					>
-						Login
-					</Button>
+						<Text
+							style={{
+								color: colors.textBrand,
+								fontWeight: 'bold',
+								fontSize: 20,
+							}}
+						>
+							Login
+						</Text>
+					</Pressable>
 
 					<Text
 						style={{

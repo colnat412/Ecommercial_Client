@@ -7,7 +7,7 @@ interface BannerProps {
 	subTitle: string;
 }
 
-const Banner = ({ title, subTitle }: BannerProps) => {
+export const Banner = ({ title, subTitle }: BannerProps) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.text}>
@@ -16,7 +16,7 @@ const Banner = ({ title, subTitle }: BannerProps) => {
 			</View>
 			<Image
 				style={{ width: 108, height: 108 }}
-				source={require('@/src/assets/image.png')}
+				source={require('@/src/assets/images/image.png')}
 			/>
 		</View>
 	);
@@ -48,5 +48,3 @@ const styles = StyleSheet.create({
 		color: '#e2e2e2',
 	},
 });
-
-export default Banner;
