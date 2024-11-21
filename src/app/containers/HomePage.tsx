@@ -1,12 +1,13 @@
 import { FlatList, View } from 'react-native';
-import { HomePageHeader } from '../navigation/components';
-import { Categories } from './category';
 import { Text } from 'react-native-paper';
 import { style } from '@/src/constants';
 import { ProductItemVertical } from '../components';
 import {  useState } from 'react';
 import { Product } from '@/src/types';
 import { Banner } from './Banner';
+import { Categories } from './category/Category';
+import { HomePageHeader } from '../navigation/components';
+
 
 
 export const HomePage = () => {

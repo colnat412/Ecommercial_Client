@@ -1,9 +1,10 @@
-import { BE_RURL } from '@/env';
+
+import { BE_URL } from '@/env';
 import axios from 'axios';
 
 export const searchProduct = async (searchText: string) => {
 	const response = await axios.get(
-		`${BE_RURL}/api/products/searchProduct/${searchText}`,
+		`${BE_URL}/api/products/searchProduct/${searchText}`,
 	);
 	return response.data.data;
 };
@@ -13,7 +14,7 @@ export const searchProductByPriceRange = async (
 	maxPrice: number,
 ) => {
 	const response = await axios.get(
-		`${BE_RURL}/api/products/searchProductByPriceRange/${minPrice}/${maxPrice}`,
+		`${BE_URL}/api/products/searchProductByPriceRange/${minPrice}/${maxPrice}`,
 	);
 	return response.data.data;
 };

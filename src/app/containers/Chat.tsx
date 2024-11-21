@@ -7,7 +7,7 @@ import { ChatComponent } from '../components';
 import { colors } from '@/src/constants';
 import {TextInput } from 'react-native-paper';
 import { Send } from '@/src/assets';
-import { HeaderTitle } from '../navigation/components';
+import { HeaderTitle } from '../navigation/components/HeaderTitle';
 import {  useAppSelector } from '@/src/libs';
 
 
