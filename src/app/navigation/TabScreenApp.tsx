@@ -125,6 +125,8 @@ export const TabScreenApp = () => {
 					),
 				}}
 			/>
+
+			
 		</Tab.Navigator>
 	);
 };

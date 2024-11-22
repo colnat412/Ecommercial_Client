@@ -9,3 +9,4 @@ export * from './orderDetail';
 export * from './baseAxios'
 export * from './option'
 export * from './listOption'
+export * from './category'
