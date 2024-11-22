@@ -28,14 +28,14 @@ export const HomePageHeader = () => {
 		const fetchData = async () => {
 
 			
-			const getDetailInformation = await fetchDetailInformation();
-			if (getDetailInformation.statusCode === 200) {
-				dispatch(setDetailInfomation(getDetailInformation.data));
-			}
+			// const getDetailInformation = await fetchDetailInformation();
+			// if (getDetailInformation.statusCode === 200) {
+			// 	dispatch(setDetailInfomation(getDetailInformation.data));
+			// }
 
 		};
 		fetchData();
-	}, [dispatch]);
+	}, []);
 
 	const goLogin = () => {
 		if (detailsInformation.detailInfomation) {
@@ -50,27 +50,37 @@ export const HomePageHeader = () => {
 
 	return (
 		<View style={[style.headerContainer, { backgroundColor: 'white' }]}>
-			<View style={[style.rowCenter]}>
+			<View style={[style.rowCenterCenter]}>
 				<Brand width={40} height={40} />
 				<Text
 					style={{
-						fontSize: 24,
+						lineHeight: 40,
+						textAlign: 'center',
+						fontSize: 30,
 						color: colors.brand,
 						fontFamily: 'FiraMonoBold',
 					}}
 				>
-					FOTAINE
+					Fontaine
 				</Text>
 			</View>
 			<View style={[style.rowCenter, { gap: 16 }]}>
 				<Pressable onPress={goCart}>
-					<View style={{ position: 'relative', top: 12 }}>
-						<Cart width={25} height={25} color={colors.cart} />
+					<View
+						style={{
+							flex: 1,
+							position: 'relative',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<Cart width={30} height={25} color={colors.cart} />
 						<View
 							style={{
-								position: 'relative',
-								top: -30,
-								right: -15,
+								position: 'absolute',
+								zIndex: 10,
+								top: 4,
+								right: -8,
 								backgroundColor: colors.brand,
 								borderRadius: 10,
 								width: 18,
@@ -106,7 +116,7 @@ export const HomePageHeader = () => {
 							}}
 						/>
 					) : (
-						<User width={20} height={20} color={'black'} />
+						<User width={25} height={25} color={'black'} />
 					)}
 				</TouchableOpacity>
 			</View>

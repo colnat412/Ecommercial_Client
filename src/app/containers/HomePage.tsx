@@ -1,66 +1,80 @@
-import { FlatList, View } from 'react-native';
-import { HomePageHeader } from '../navigation/components';
-import { Categories } from './category';
-import { Text } from 'react-native-paper';
-import { style } from '@/src/constants';
-import { ProductItemVertical } from '../components';
-import { useEffect, useState } from 'react';
+import { colors, style } from '@/src/constants';
 import { Product } from '@/src/types';
+import { useEffect, useState } from 'react';
+import { FlatList, View } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native-paper';
+import { ErrorContainter, ProductItemVertical } from '../components';
+import { HomePageHeader } from '../navigation/components';
 import { Banner } from './Banner';
+import { Categories } from './category';
 import { getDataFromDBS } from './handle';
-import { useAppDispatch } from '@/src/libs';
-import { fetchDetailInformation } from '../localHandle';
-import { setDetailInfomation } from '@/src/libs/redux/store';
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
-	useEffect(() => {
-		const res = getDataFromDBS({ urlApi: '/api/products' });
-		res.then((data) => {
-			setData(data.data);
-		});
-	}, []);
-
-	const dispatch = useAppDispatch();
+	const [loading, setLoading] = useState<boolean>(true);
+	const [errorMessage, setErrorMessage] = useState<string>('');
+	const [isError, setIsError] = useState<boolean>(false);
 
 	useEffect(() => {
-		const fetchHomePage = async () => {
-			const responseDetailInfomation = await fetchDetailInformation();
-			if (responseDetailInfomation.statusCode === 200) {
-				dispatch(
-					setDetailInfomation(
-						responseDetailInfomation.data
-							? responseDetailInfomation.data
-							: null,
-					),
-				);
-			} else if (responseDetailInfomation.statusCode === 500) {
-				console.log('Error');
+		const fetch = async () => {
+			const response = await getDataFromDBS<Product[]>({
+				url: '/api/products',
+			});
+			if (response.statusCode === 200) {
+				setData(response.data ? response.data : []);
+			}else {
+				setErrorMessage(response.message);
+				setIsError(true);
 			}
+			setLoading(false);
 		};
-		fetchHomePage();
+		fetch();
 	}, []);
 	return (
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />
-			<FlatList
-				numColumns={2}
-				data={data}
-				renderItem={({ item }) => <ProductItemVertical product={item} />}
-				keyExtractor={(item) => item.id.toString()}
-				ListHeaderComponent={() => (
-					<>
-						<Categories />
-						<Banner title="Fashion" subTitle="World have many colors" />
-						<Banner title="Food" subTitle="World have many colors" />
-						<Text
-							style={[style.headerText, { fontSize: 16, padding: 12 }]}
-						>
-							Recommended for you
-						</Text>
-					</>
+			<View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+				{loading ? (
+					<ActivityIndicator size="large" color={colors.brand} />
+				) : isError ? (
+					<ErrorContainter message={errorMessage} />
+				) : (
+					<FlatList
+						numColumns={2}
+						contentContainerStyle={{ gap: 8 }}
+						data={data}
+						renderItem={({ item }) => (
+							<ProductItemVertical product={item} />
+						)}
+						keyExtractor={(item) => item.id.toString()}
+						style={{
+							backgroundColor: colors.mainBackground,
+							paddingHorizontal: 8,
+						}}
+						ListHeaderComponent={() => (
+							<>
+								<Categories />
+								<Banner
+									title="Fashion"
+									subTitle="World have many colors"
+								/>
+								<Banner
+									title="Food"
+									subTitle="World have many colors"
+								/>
+								<Text
+									style={[
+										style.headerText,
+										{ fontSize: 16, padding: 12 },
+									]}
+								>
+									Recommended for you
+								</Text>
+							</>
+						)}
+					></FlatList>
 				)}
-			></FlatList>
+			</View>
 		</View>
 	);
 };

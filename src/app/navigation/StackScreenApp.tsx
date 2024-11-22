@@ -10,7 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { TabScreenApp } from './TabScreenApp';
 import { useEffect, useState } from 'react';
 
-import { ErroContainter } from '../components';
+import { ErrorContainter, NoData } from '../components';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
@@ -29,6 +29,7 @@ import { Login } from '../containers/login';
 export const StackScreenApp = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isConnect, setIsConnect] = useState<boolean>(false);
+	const [error, setError] = useState<string>('');
 
 	const dispatch = useAppDispatch<AppDispatch>();
 
@@ -39,9 +40,9 @@ export const StackScreenApp = () => {
 				if (response.status === 500) {
 					setIsConnect(false);
 					setIsLoading(false);
-					console.log('Stack Screen: Connect failed');
+					setError('Server error');
+					return 
 				} else {
-					setIsLoading(false);
 					console.log('Stack Screen: Connect success');
 				}
 			} catch (e) {
@@ -52,20 +53,21 @@ export const StackScreenApp = () => {
 
 			setAccessToken(tokenSecure ? tokenSecure : '');
 
-			try {
-				const request = await api.get('/api/auth/my-account');
-				if (request.status === 200) {
-					const account: Account = request.data.data;
-					console.log('Stack Screen: Token = ' + account.accessToken);
-					dispatch(setAuth({ account }));
-					// console.log('Stack Screen:' + account.accessToken);
-					console.log('Stack Screen: AccessToken success');
-				} else {
+			if (tokenSecure !== '') {
+				try {
+					const request = await api.get('/api/auth/my-account');
+					if (request.status === 200) {
+						const account: Account = request.data.data;
+						dispatch(setAuth({ account }));
+						console.log('Stack Screen: AccessToken success');
+					} else {
+						console.log('Stack Screen: AccessToken failed');
+					}
+				} catch (error) {
 					console.log('Stack Screen: AccessToken failed');
 				}
-			} catch (error) {
-				console.log('Stack Screen: AccessToken failed');
 			}
+			setIsLoading(false);
 			setIsConnect(true);
 		};
 		connect();
@@ -131,7 +133,7 @@ export const StackScreenApp = () => {
 								{ justifyContent: 'center', alignItems: 'center' },
 							]}
 						>
-							<ErroContainter />
+							<ErrorContainter message={error} />
 						</View>
 					)}
 				</>
