@@ -14,33 +14,9 @@ import { setDetailInfomation } from '@/src/libs/redux/store';
 
 export const HomePage = () => {
 	const [data, setData] = useState<Product[]>([]);
-	// useEffect(() => {
-	// 	getData({ urlApi: '/products' }).then((data) => {
-	// 		setData(data);
-	// 	});
-	// }, []);
-
-	// const dispatch = useAppDispatch();
-
-	// useEffect(() => {
-	// 	const fetchHomePage = async () => {
-	// 		const responseDetailInfomation = await fetchDetailInformation();
-	// 		if (responseDetailInfomation.status === 200) {
-	// 			dispatch(
-	// 				setDetailInfomation(
-	// 					responseDetailInfomation.data
-	// 						? responseDetailInfomation.data
-	// 						: null,
-	// 				),
-	// 			);
-	// 		} else if (responseDetailInfomation.status === 500) {
-	// 			console.log('Error');
-	// 		}
-	// 	};
-	// 	fetchHomePage();
-	// }, []);
 	useEffect(() => {
-		getDataFromDBS({ urlApi: '/api/products' }).then((data) => {
+		const res = getDataFromDBS({ urlApi: '/api/products' });
+		res.then((data) => {
 			setData(data.data);
 		});
 	}, []);
