@@ -38,13 +38,21 @@ import {
 import { useEffect, useState } from 'react';
 import {
 	Feedback,
+	Product,
 	ProductDetail as IProductDetail,
 } from '@/src/types';
-import { getProduct, getReviews } from './handle';
+import {
+	getListOptionsOfOption,
+	getOptionsOfProduct,
+	getProduct,
+	getReviews,
+} from './handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Line } from '../../components/Line';
 import { ProductDetailRouteProp, StackScreenNavigationProp } from '@/src/libs';
+import { Line } from '../../components/Line';
+import { Option } from '@/src/types/option';
+import { ListOption } from '@/src/types/list-option';
 
 export const ProductDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
@@ -55,6 +63,9 @@ export const ProductDetail = () => {
 	const [visibleCart, setVisibleCart] = useState<boolean>(false);
 	const [feedback, setFeedback] = useState<Feedback[] | undefined>([]);
 
+	const [options, setOptions] = useState<Option[] | undefined>([]);
+	const [listOptions, setListOptions] = useState<ListOption[][]>([]);
+
 	useEffect(() => {
 		const getContainer = async () => {
 			const productResult = await getProduct(
@@ -64,12 +75,30 @@ export const ProductDetail = () => {
 				setProduct(productResult.data ? productResult.data : undefined);
 			}
 
-			const feedbackResult = await getReviews(
-				route.params?.productId ? route.params.productId : '',
+			// const feedbackResult = await getReviews(
+			// 	route.params?.productId ? route.params.productId : '',
+			// );
+			// if (feedbackResult) {
+			// 	setFeedback(feedbackResult.data ? feedbackResult.data : []);
+			// }
+			const optionsResult = await getOptionsOfProduct(
+				productResult.data?.id ? productResult.data.id : '',
 			);
-			if (feedbackResult) {
-				setFeedback(feedbackResult.data ? feedbackResult.data : []);
+			if (optionsResult) {
+				setOptions(optionsResult.data ? optionsResult.data : undefined);
+
+				const listOptionsPromises = optionsResult.data.map((option) =>
+					getListOptionsOfOption(option.id),
+				);
+
+				const listOptionsResults = await Promise.all(listOptionsPromises);
+				setListOptions(
+					listOptionsResults.map(
+						(result) => result.data as unknown as ListOption[],
+					),
+				);
 			}
+
 			setLoading(false);
 		};
 		getContainer();
@@ -101,13 +130,13 @@ export const ProductDetail = () => {
 				<ActivityIndicator size={'large'} color={colors.brand} />
 			) : (
 				<>
-					<HeaderTitleWithBack
-						title={product?.name ? product?.name : ''}
-					/>
 					<ScrollView
 						showsHorizontalScrollIndicator={false}
 						showsVerticalScrollIndicator={false}
 					>
+						<HeaderTitleWithBack
+							title={product?.name ? product?.name : ''}
+						/>
 						<View style={[style.body]}>
 							<View style={[style.contentBody]}>
 								<View
@@ -482,7 +511,7 @@ export const ProductDetail = () => {
 																color: colors.mainText,
 															}}
 														>
-															{item.detailInfomation.fullName}
+															{item.detailInfomation.full_name}
 														</Text>
 														<Text
 															style={{
@@ -616,7 +645,10 @@ export const ProductDetail = () => {
 																	color: colors.mainText,
 																}}
 															>
-																{item.detailInfomation.fullName}
+																{
+																	item.detailInfomation
+																		.full_name
+																}
 															</Text>
 															<Text
 																style={{
@@ -673,7 +705,7 @@ export const ProductDetail = () => {
 										<Text
 											style={[style.headerText, { fontSize: 16 }]}
 										>
-											HeadPhone
+											{product?.name ? product?.name : ''}
 										</Text>
 										<View style={[style.rowCenter]}>
 											<View style={{ flexDirection: 'row' }}>
@@ -702,8 +734,51 @@ export const ProductDetail = () => {
 									<View style={{ flex: 1, marginVertical: 16 }}>
 										<Line />
 									</View>
+									{options &&
+										options.length > 0 &&
+										options.map((option, index) => (
+											<View key={index}>
+												<Text
+													style={{
+														fontSize: 16,
+														fontWeight: '700',
+														marginLeft: 8,
+													}}
+												>
+													{option.name}
+												</Text>
+												<View
+													style={{
+														flex: 1,
+														flexWrap: 'wrap',
+														flexDirection: 'row',
+														gap: 12,
+													}}
+												>
+													{listOptions[index]?.map(
+														(listOption, listIndex) => (
+															<View
+																key={listIndex}
+																style={[style.rowCenter]}
+															>
+																<RadioButton
+																	value="first"
+																	status={
+																		listIndex === 0
+																			? 'checked'
+																			: 'unchecked'
+																	}
+																	color={colors.brand}
+																/>
+																<Text>{listOption.name}</Text>
+															</View>
+														),
+													)}
+												</View>
+											</View>
+										))}
 
-									<View>
+									{/* <View>
 										<Text
 											style={{
 												fontSize: 16,
@@ -795,7 +870,7 @@ export const ProductDetail = () => {
 												<Text>Pink</Text>
 											</View>
 										</View>
-									</View>
+									</View> */}
 									<View style={{ flex: 1, marginVertical: 16 }}>
 										<Line />
 									</View>
