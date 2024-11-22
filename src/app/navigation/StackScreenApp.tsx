@@ -41,7 +41,7 @@ export const StackScreenApp = () => {
 					setIsLoading(false);
 					console.log('Stack Screen: Connect failed');
 				} else {
-					setIsLoading(false);
+					
 					console.log('Stack Screen: Connect success');
 				}
 			} catch (e) {
@@ -58,7 +58,6 @@ export const StackScreenApp = () => {
 					const account: Account = request.data.data;
 					console.log('Stack Screen: Token = ' + account.accessToken);
 					dispatch(setAuth({ account }));
-					// console.log('Stack Screen:' + account.accessToken);
 					console.log('Stack Screen: AccessToken success');
 				} else {
 					console.log('Stack Screen: AccessToken failed');
@@ -66,6 +65,7 @@ export const StackScreenApp = () => {
 			} catch (error) {
 				console.log('Stack Screen: AccessToken failed');
 			}
+			setIsLoading(false);
 			setIsConnect(true);
 		};
 		connect();
