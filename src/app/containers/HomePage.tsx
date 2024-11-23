@@ -37,7 +37,6 @@ export const HomePage = () => {
 			setErrorMessage(response.message);
 			setIsError(true);
 		}
-
 	};
 
 	const handleLoadMore = () => {
@@ -60,7 +59,7 @@ export const HomePage = () => {
 		};
 		fetchProduct(1);
 		fetch();
-				setLoading(false);
+		setLoading(false);
 	}, []);
 
 	useEffect(() => {
