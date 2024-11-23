@@ -9,9 +9,10 @@ import {
 } from '@/src/assets';
 import { Text } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native';
-import { Account, Chat, HomePage } from '../containers';
+import {  Chat, HomePage } from '../containers';
 import { SearchInput, SearchPage } from '../containers/searchComponent';
 import { Favorite } from '../containers/favorite';
+import { Account } from '../containers/account/Account';
 
 export const TabScreenApp = () => {
 	return (

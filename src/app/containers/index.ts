@@ -1,4 +1,4 @@
-export * from './Account';
+
 export * from './Banner';
 export * from './Chat';
 export * from './HomePage';

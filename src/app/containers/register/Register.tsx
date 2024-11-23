@@ -1,4 +1,11 @@
-import { api, setAccessToken, StackScreenNavigationProp } from '@/src/libs';
+import {
+	api,
+	AppDispatch,
+	setAccessToken,
+	setAccessTokenSecure,
+	StackScreenNavigationProp,
+	useAppDispatch,
+} from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { DismissKeyboardView } from '../../components';
@@ -10,6 +17,16 @@ import { Add } from '@/src/assets';
 import { FileDetails } from '@/src/types/others';
 import * as DocumentPicker from 'expo-document-picker';
 import { fetchRegister } from './handle';
+import {
+	setAuth,
+	setCart,
+	setDetailInfomation,
+	setFavorite,
+	setFeedback,
+} from '@/src/libs/redux/store';
+import { fetchCart, fetchFavorite, fetchFeedback } from '../../localHandle';
+
+import { login as loginAction } from '../login/handle';
 
 export const Register = () => {
 	const [error, setError] = useState('');
@@ -22,7 +39,8 @@ export const Register = () => {
 	const [password, setPassword] = useState<string>();
 	const [phone, setPhone] = useState<string>();
 	const [address, setAddress] = useState<string>();
-	const [avatar, setAvatar] = useState<string>();
+
+	const dispatch =useAppDispatch<AppDispatch>()
 
 	const pickDocument = async () => {
 		try {
@@ -70,50 +88,85 @@ export const Register = () => {
 		}
 	};
 	const handleRegister = async () => {
-		try{
+		try {
 			setError('');
-		if (!fullname || !username || !email || !password || !phone || !address) {
-			setError('All fields are required');
-			return;
-		}
-		// REGISTER
-		const register = await fetchRegister({
-			username: username,
-			password: password,
-			email: email,
-		});
-
-		// UPDATE DETAIL INFORMATION
-		if (register.statusCode === 201) {
-			const avatar = await uploadImage();
-
-			// login
-			const login = await api.post('/api/auth/login', {
-				identifier: email,
+			if (
+				!fullname ||
+				!username ||
+				!email ||
+				!password ||
+				!phone ||
+				!address
+			) {
+				setError('All fields are required');
+				return;
+			}
+			// REGISTER
+			const register = await fetchRegister({
+				username: username,
 				password: password,
+				email: email,
 			});
 
-			if (login.data.statusCode === 200) {
-				setAccessToken(login.data.data.accessToken);
-			}
+			// UPDATE DETAIL INFORMATION
 
-			const res = await api.patch('/api/detail-information/update', {
-				full_name: fullname,
-				phone: phone,
-				address: address,
-				avatar_url: avatar,
-			});
-			if (res.data.statusCode === 200) {
-				navigation.navigate('Login');
-			} else {
-				setError(res.data.message);
+			if(register)
+
+			if (register.statusCode === 201) {
+				const avatar = await uploadImage();
+
+				// login
+				const login = await api.post('/api/auth/login', {
+					identifier: email,
+					password: password,
+				});
+
+				if (login.data.statusCode === 200) {
+					setAccessToken(login.data.data.accessToken);
+				}
+
+				const res = await api.patch('/api/detail-information/update', {
+					full_name: fullname,
+					phone: phone,
+					address: address,
+					avatar_url: avatar,
+				});
+				if (res.data.statusCode === 200) {
+					navigation.navigate('Login');
+				} else {
+					setError(res.data.message);
+				}
+
+				const resultLogin = await loginAction(username, password);
+
+				if (!resultLogin) {
+					return;
+				}
+				if (resultLogin.statusCode === 200 && resultLogin.data) {
+					setAccessToken(resultLogin.data.account.accessToken);
+					setAccessTokenSecure(resultLogin.data.account.accessToken);
+
+					dispatch(setAuth({ account: resultLogin.data.account }));
+
+					dispatch(
+						setDetailInfomation(resultLogin.data.detailInformation),
+					);
+
+					const favoriteData = await fetchFavorite();
+					dispatch(setFavorite(favoriteData?.data || []));
+
+					const feebackData = await fetchFeedback();
+					dispatch(setFeedback(feebackData?.data || []));
+
+					const cartData = await fetchCart();
+					dispatch(setCart(cartData?.data || []));
+
+					navigation.navigate('TabScreenApp');
+				}
+			} else if (register.statusCode === 401) {
+				setError(register.message);
 			}
-		}
-		else if (register.statusCode === 401) {
-			setError(register.message);
-		}
-		}
-		catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	};
