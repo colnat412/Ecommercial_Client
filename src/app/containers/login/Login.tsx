@@ -1,16 +1,33 @@
-import {  AppDispatch, setAccessToken, setAccessTokenSecure, StackScreenNavigationProp, useAppDispatch } from '@/src/libs';
+import {
+	AppDispatch,
+	setAccessToken,
+	setAccessTokenSecure,
+	StackScreenNavigationProp,
+	useAppDispatch,
+} from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { DismissKeyboardView } from '../../components';
 import { Pressable, ScrollView, View } from 'react-native';
 import { colors, style } from '@/src/constants';
 import { Brand } from '@/src/assets';
-import {  Text, TextInput } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 import { GoBack } from '../../navigation/components/GoBack';
 import { Account } from '@/src/types';
-import { login, LoginResponse } from './handle';
-import { setAuth, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
-import { fetchDetailInformation, fetchFavorite } from '../../localHandle';
+import { login } from './handle';
+import {
+	setAuth,
+	setCart,
+	setDetailInfomation,
+	setFavorite,
+	setFeedback,
+} from '@/src/libs/redux/store';
+import {
+	fetchCart,
+	fetchDetailInformation,
+	fetchFavorite,
+	fetchFeedback,
+} from '../../localHandle';
 
 export const Login = () => {
 	const [username, setUsername] = useState('');
@@ -21,29 +38,32 @@ export const Login = () => {
 	const dispatch = useAppDispatch<AppDispatch>();
 
 	const handleLogin = async () => {
-		const resultLogin: LoginResponse =
-			await login(username, password);
+		const resultLogin = await login(username, password);
 
-		if (resultLogin.erro) {
-			setError(resultLogin.erro);
+		if (!resultLogin) {
 			return;
-		}else if (resultLogin.account) {
-			const account: Account| null = resultLogin.account;
-			console.log ('Login Page Return: ' + account.accessToken);
-			if (account) {
-				dispatch(setAuth({ account }));
-				setAccessToken(account.accessToken);
-				setAccessTokenSecure(account.accessToken);
+		}
 
-				dispatch(setAuth({ account }));
+		if (resultLogin.statusCode === 404) {
+			setError(resultLogin.message);
+			return;
+		} else if (resultLogin.statusCode === 200 && resultLogin.data) {
 
-				const detailInfomation = await fetchDetailInformation();
-				dispatch(setDetailInfomation(detailInfomation.data));
+				setAccessToken(resultLogin.data.account.accessToken);
+				setAccessTokenSecure(resultLogin.data.account.accessToken);
+
+				dispatch(setAuth({ account: resultLogin.data.account }));
+
+				dispatch(setDetailInfomation(resultLogin.data.detailInformation));
 
 				const favoriteData = await fetchFavorite();
-				dispatch(setFavorite(favoriteData.data));
-				
-			}
+				dispatch(setFavorite(favoriteData?.data || []));
+
+				const feebackData = await fetchFeedback();
+				dispatch(setFeedback(feebackData?.data || []));
+
+				const cartData = await fetchCart();
+				dispatch(setCart(cartData?.data || []));
 			navigation.navigate('TabScreenApp');
 		}
 	};

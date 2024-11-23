@@ -1,6 +1,6 @@
 import { Feedback } from './feedback';
 
-export interface DetailInfomation {
+export interface DetailInformation {
 	full_name: string;
 	address: string;
 	phone: string;

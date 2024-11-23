@@ -14,9 +14,9 @@ import { ErrorContainter, NoData } from '../components';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
-import { checkConnect, fetchDetailInformation, fetchFavorite } from '../localHandle';
+import { checkConnect, fetchCart, fetchDetailInformation, fetchFavorite, fetchFeedback, fetchMyAccount } from '../localHandle';
 import { Account } from '@/src/types';
-import { setAuth, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
+import { setAuth, setCart, setDetailInfomation, setFavorite, setFeedback } from '@/src/libs/redux/store';
 import { Register } from '../containers';
 import { ProductDetail } from '../containers/productDetail';
 import { SubCategory } from '../containers/category';
@@ -55,15 +55,23 @@ export const StackScreenApp = () => {
 
 			if (tokenSecure !== '') {
 				try {
-					const request = await api.get('/api/auth/my-account');
-					if (request.status === 200) {
-						const account: Account = request.data.data;
-						dispatch(setAuth({ account }));
-						const detailInfomation = await fetchDetailInformation();
-						dispatch(setDetailInfomation(detailInfomation.data));
+					const account =await fetchMyAccount();
+					
+					if (account?.data && account.statusCode === 200) {
+						
+						dispatch(setAuth({ account: account.data.account }));
+						dispatch(setDetailInfomation(account.data.detailInformation));
 
 						const favoriteData = await fetchFavorite();
-						dispatch(setFavorite(favoriteData.data));
+						dispatch(setFavorite(favoriteData?.data || []));
+
+						const feedbackData = await fetchFeedback();
+						dispatch(setFeedback(feedbackData?.data || []));
+
+						const cartData = await fetchCart();
+						dispatch(setCart(cartData?.data || []));
+
+
 						console.log('Stack Screen: AccessToken success');
 					} else {
 						console.log('Stack Screen: AccessToken failed');

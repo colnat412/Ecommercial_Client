@@ -1,4 +1,4 @@
-import { api, StackScreenNavigationProp } from '@/src/libs';
+import { api, setAccessToken, StackScreenNavigationProp } from '@/src/libs';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { DismissKeyboardView } from '../../components';
@@ -45,68 +45,77 @@ export const Register = () => {
 	};
 
 	const uploadImage = async () => {
-		let newAvatar = file?.uri;
-		if (file?.uri && file?.type && file?.name) {
-			const formData = new FormData();
-			formData.append('file', {
-				uri: file.uri,
-				name: file.name,
-				type: file.type,
-				size: file.size,
-			} as unknown as Blob);
-			await api
-				.post('/api/cloud/upload-file', formData, {
+		try {
+			if (file?.uri && file?.type && file?.name) {
+				const formData = new FormData();
+				formData.append('file', {
+					uri: file.uri,
+					name: file.name,
+					type: file.type,
+					size: file.size,
+				} as unknown as Blob);
+				const result = await api.post('/api/cloud/upload-file', formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data',
 					},
-				})
-				.then((res) => res.data.data)
-				.then((data) => {
-					setAvatar(data.url);
-					newAvatar = data.url;
-				})
-				.catch((err) => console.log(JSON.stringify(err)));
+				});
+				return (
+					result.data.data.url ??
+					'https://i.pinimg.com/236x/7d/7e/b6/7d7eb65a1e0f84780188d62c7b7eef0d.jpg'
+				);
+			}
+			return 'https://i.pinimg.com/236x/7d/7e/b6/7d7eb65a1e0f84780188d62c7b7eef0d.jpg';
+		} catch (error) {
+			console.log(error);
 		}
-		return (
-			newAvatar ??
-			'https://i.pinimg.com/236x/7d/7e/b6/7d7eb65a1e0f84780188d62c7b7eef0d.jpg'
-		);
 	};
 	const handleRegister = async () => {
-		setError('');
+		try{
+			setError('');
 		if (!fullname || !username || !email || !password || !phone || !address) {
 			setError('All fields are required');
 			return;
 		}
-
+		// REGISTER
 		const register = await fetchRegister({
 			username: username,
 			password: password,
 			email: email,
-		})
+		});
 
-
-		// HANDLE
-		if (register.statusCode === 200) {
+		// UPDATE DETAIL INFORMATION
+		if (register.statusCode === 201) {
 			const avatar = await uploadImage();
-			const data = {
-				fullname,
-				username,
-				email,
-				password,
-				phone,
-				address,
-				avatar,
-			};
-			const res = await api.post('/api/auth/register', data);
+
+			// login
+			const login = await api.post('/api/auth/login', {
+				identifier: email,
+				password: password,
+			});
+
+			if (login.data.statusCode === 200) {
+				setAccessToken(login.data.data.accessToken);
+			}
+
+			const res = await api.patch('/api/detail-information/update', {
+				full_name: fullname,
+				phone: phone,
+				address: address,
+				avatar_url: avatar,
+			});
 			if (res.data.statusCode === 200) {
 				navigation.navigate('Login');
 			} else {
 				setError(res.data.message);
 			}
 		}
-		
-	
+		else if (register.statusCode === 401) {
+			setError(register.message);
+		}
+		}
+		catch(error){
+			console.log(error);
+		}
 	};
 
 	return (
@@ -254,7 +263,7 @@ export const Register = () => {
 								</View>
 							</View>
 							<Button
-								onPress={() => {}}
+								onPress={handleRegister}
 								style={[style.button, { marginTop: 16 }]}
 								mode="contained"
 								textColor={colors.textBrand}

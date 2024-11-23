@@ -13,32 +13,18 @@ import { Text } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { fetchDetailInformation } from '../../localHandle';
 import { setDetailInfomation } from '@/src/libs/redux/store';
+import { CartItem, DetailInformation } from '@/src/types';
 
 export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
-	const [lengthCart, setLengthCart] = useState<number>(0);
-	const [cardChange, setCardChange] = useState<boolean>(false);
-
-	const detailsInformation = useAppSelector((state) => state.detailInfomation);
+	const detailsInformation: DetailInformation| null = useAppSelector((state) => state.detailInfomation?.detailInfomation ?? null);
+	const cart:CartItem[]|null = useAppSelector((state) => state.cart?.cartItem ?? null);
 	const dispatch = useAppDispatch<AppDispatch>();
 
-	useEffect(() => {
-		const fetchData = async () => {
-
-			
-			// const getDetailInformation = await fetchDetailInformation();
-			// if (getDetailInformation.statusCode === 200) {
-			// 	dispatch(setDetailInfomation(getDetailInformation.data));
-			// }
-
-		};
-		fetchData();
-	}, []);
-
 	const goLogin = () => {
-		if (detailsInformation.detailInfomation) {
+		if (detailsInformation) {
 			navigationTab.navigate('Account');
 		} else {
 			navigation.navigate('Login');
@@ -75,37 +61,39 @@ export const HomePageHeader = () => {
 						}}
 					>
 						<Cart width={30} height={25} color={colors.cart} />
-						<View
-							style={{
-								position: 'absolute',
-								zIndex: 10,
-								top: 4,
-								right: -8,
-								backgroundColor: colors.brand,
-								borderRadius: 10,
-								width: 18,
-								height: 18,
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-						>
-							<Text
+
+							<View
 								style={{
-									color: 'white',
-									fontSize: 10,
-									fontWeight: 'bold',
+									position: 'absolute',
+									zIndex: 10,
+									top: 4,
+									right: -8,
+									backgroundColor: colors.brand,
+									borderRadius: 10,
+									width: 18,
+									height: 18,
+									justifyContent: 'center',
+									alignItems: 'center',
 								}}
 							>
-								{lengthCart > 5 ? '5+' : lengthCart}
-							</Text>
-						</View>
+								<Text
+									style={{
+										color: 'white',
+										fontSize: 10,
+										fontWeight: 'bold',
+									}}
+								>
+									{cart ? cart.length : 0}
+								</Text>
+							</View>
+							
 					</View>
 				</Pressable>
 				<TouchableOpacity onPress={goLogin}>
-					{detailsInformation.detailInfomation ? (
+					{detailsInformation ? (
 						<Image
 							source={{
-								uri: detailsInformation.detailInfomation.avatar_url,
+								uri: detailsInformation.avatar_url,
 							}}
 							width={30}
 							height={30}

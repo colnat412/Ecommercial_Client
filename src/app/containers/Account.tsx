@@ -21,7 +21,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from '@/src/libs';
-import { setAuth, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
+import { setAuth, setCart, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
 import { setFeedback } from '@/src/libs/redux/store/feedbackSlice';
 
 export const Account = () => {
@@ -53,6 +53,7 @@ export const Account = () => {
 		dispatch(setDetailInfomation(null))
 		dispatch(setFavorite(null))
 		dispatch(setFeedback(null))
+		dispatch(setCart(null))
 
 		navigation.navigate('Login');
 	}
