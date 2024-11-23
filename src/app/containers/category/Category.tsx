@@ -51,6 +51,9 @@ export const Categories = () => {
 									initialNumToRender={5}
 									maxToRenderPerBatch={5}
 									showsHorizontalScrollIndicator={false}
+									contentContainerStyle={{
+										gap: 16
+									}}
 								/>
 							) : (
 								<ErrorContainter message="No data"></ErrorContainter>

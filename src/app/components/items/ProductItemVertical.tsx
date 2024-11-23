@@ -67,7 +67,7 @@ export const ProductItemVertical = React.memo(
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		marginHorizontal: 8,
+		marginHorizontal: 4,
 		flexDirection: 'column',
 		gap: 10,
 		justifyContent: 'center',

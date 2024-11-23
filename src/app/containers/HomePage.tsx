@@ -3,7 +3,7 @@ import { Product } from '@/src/types';
 import { useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
-import { ErrorContainter, ProductItemVertical } from '../components';
+import { ErrorContainter, Line, ProductItemVertical } from '../components';
 import { HomePageHeader } from '../navigation/components';
 import { Banner } from './Banner';
 import { Categories } from './category';
@@ -33,13 +33,17 @@ export const HomePage = () => {
 	return (
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />
-			<View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+			<View
+				style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+			>
 				{loading ? (
 					<ActivityIndicator size="large" color={colors.brand} />
 				) : isError ? (
 					<ErrorContainter message={errorMessage} />
 				) : (
 					<FlatList
+						showsHorizontalScrollIndicator={false}
+						showsVerticalScrollIndicator={false}
 						numColumns={2}
 						contentContainerStyle={{ gap: 8 }}
 						data={data}
@@ -54,14 +58,21 @@ export const HomePage = () => {
 						ListHeaderComponent={() => (
 							<>
 								<Categories />
+
 								<Banner
 									title="Fashion"
 									subTitle="World have many colors"
+									image={require('@/src/assets/images/shoe.png')}
+
 								/>
 								<Banner
-									title="Food"
-									subTitle="World have many colors"
+									title="Skincare"
+									subTitle="Love your skin"
+									image={require('@/src/assets/images/bottle.png')}
+									leftImage
+									color='purple'
 								/>
+								<Line />
 								<Text
 									style={[
 										style.headerText,

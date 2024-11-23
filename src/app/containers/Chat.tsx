@@ -1,106 +1,50 @@
 // src/Chat.tsx
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Pressable } from 'react-native';
+import { View, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import { io, Socket } from 'socket.io-client';
 import { ChatComponent } from '../components';
 import { colors } from '@/src/constants';
-import {TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { Send } from '@/src/assets';
 import { HeaderTitle } from '../navigation/components/HeaderTitle';
-import {  useAppSelector } from '@/src/libs';
+import { StackScreenNavigationProp, useAppSelector } from '@/src/libs';
 import { BE_URL_CHAT } from '@/env';
-
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { DetailInfomation } from '@/src/types';
 
 interface Message {
-	sender: 'sending' | 'receiving';
+	sender: string;
 	message: string;
 	image?: string;
 }
 
 export const Chat: React.FC = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
-	const [messages, setMessages] = useState<Message[]>([
-		// {
-		// 	sender: 'sending',
-		// 	message: 'Iphone 5 nhiêu anh',
-		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-		// },
-		// {
-		// 	sender: 'sending',
-		// 	message: 'bền hông anh ?',
-		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-		// },
-		// {
-		// 	sender: 'receiving',
-		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-		// 	message: 'Ok em',
-		// },
-		// {
-		// 	sender: 'receiving',
-		// 	image: 'https://i.pinimg.com/736x/fe/74/b5/fe74b5dc3f45877bc653fea0c228650b.jpg',
-		// 	message: `xịnsa;dlk;laskdl;saas;dk
-		// 		<address>asd
-		// 		asd
-		// 		asd
-		// 		a
-		// 		sd
-		// 		<aside><data value="asdas
-		// 		dataas
-		// 		dataasd
-		// 		a
-		// 		sendMessaged
-		// 		as
-		// 		dataasdasd
-		// 		asdd
-		// 		asda
-		// 		sda
-		// 		sdas
-		// 		d
-		// 		asdd
-		// 		asd
-		// 		asd
-		// 		asd
-		// 		asdas
-		// 		dataas
-		// 		dataasdasdasd
-		// 		asda
-		// 		sdaasd
-		// 		asdas
-		// 		dataasdasdasd
-		// 		asdas
-		// 		dataas
-		// 		dataasd
-		// 		asdd
-		// 		asdasd
-		// 		a
-		// 		sd
-		// 		asdasdas
-		// 		d
-		// 		as
-		// 		d
-		// 		asdas
-		// 		dataasd
-		// 		asda
-		// 		"></data></aside></address> nha`,
-		// },
-	]);
-	// const {accountId, accessToken} = useAppSelector((state) => state.auth);
+	const [messages, setMessages] = useState<Message[]>([]);
+	const [loading, setLoading] = useState<boolean>(true);
+
+	const navigation = useNavigation<StackScreenNavigationProp>();
 
 	const [message, setMessage] = useState<string>('');
-	const [sender, setSender] = useState<string>('AnhMinh'); // Có thể thay đổi thành tên người dùng thực tế
 
 	const accessToken: string | null = useAppSelector((state) =>
 		state.auth.account?.accessToken ? state.auth.account?.accessToken : null,
 	);
+
+	const accountId: string | null = useAppSelector((state) =>
+		state.auth.account?.id ? state.auth.account?.id : null,
+	);
+
+	const detailInformation: DetailInfomation | null = useAppSelector((state) =>
+		state.detailInfomation ? state.detailInfomation.detailInfomation : null,
+	);
+	const focus = useIsFocused();
 	useEffect(() => {
+		setMessages([]);
 		const token = async () => {
-
-			console.log('Token:' +accessToken + "|")
-
 			if (!accessToken) {
 				return;
 			}
-
 			const newSocket = io(`${BE_URL_CHAT}`, {
 				transports: ['websocket'],
 				extraHeaders: {
@@ -108,33 +52,63 @@ export const Chat: React.FC = () => {
 				},
 			});
 
-			setSocket(newSocket);
 
-			const join = () =>
-				newSocket.emit('joinRoom', {
-					userIdOrder: '0652aabc-69f7-44a2-bfa1-dd51135c1e5a',
-					content: 'Helo',
-				});
-			join();
+
+			newSocket.emit('joinRoom', {
+				owner_id: accountId,
+			});
+
+			newSocket.on('oldMessages', (messages: any) => {
+				const messageArray: Message[] = messages.messages.map(
+					(message: any) => {
+						return {
+							sender: message.account.id,
+							message: message.content,
+						};
+					},
+				);
+
+				setMessages(messageArray);
+				setLoading(false);
+			});
+			setSocket(newSocket);
+			console.log('connected');
 		};
 
+		if (focus) {
+			setLoading(true);
+		}
 		if (accessToken) {
 			token();
+		} else {
+			navigation.navigate('Login');
 		}
-	}, []);
+
+		if (socket && focus === false) {
+			socket.disconnect();
+		}
+	}, [focus]);
+
+	useEffect(() => {
+		if (socket) {
+			socket.on('message', (message: any) => {
+				setMessages((prev) => [
+					...prev,
+					{
+						sender: message.sender.id,
+						message: message.message,
+					},
+				]);
+			});
+		}
+	}, [socket?.on]);
 
 	const handleSendMessage = () => {
 		if (socket && message) {
-			socket.emit(
-				'message',
-				{
-					userIdOrder: '0652aabc-69f7-44a2-bfa1-dd51135c1e5a',
-					content: message,
-				},
-				(data: any) => {
-					console.log(data);
-				},
-			);
+			socket.emit('message', {
+				content: message,
+			});
+
 			setMessage('');
 		}
 	};
@@ -148,58 +122,72 @@ export const Chat: React.FC = () => {
 			}}
 		>
 			<HeaderTitle title="Chat" />
-			<View
-				style={{
-					gap: 10,
-					flex: 1,
-					justifyContent: 'flex-end',
-				}}
-			>
-				<FlatList
-					inverted
-					style={{ paddingHorizontal: 8 }}
-					showsHorizontalScrollIndicator={false}
-					showsVerticalScrollIndicator={false}
-					scrollEnabled={true}
-					data={messages.toReversed()}
-					renderItem={({ item }) => (
-						<ChatComponent
-							message={item.message}
-							image={item.image ? item.image : ''}
-							sender={item.sender}
-						/>
-					)}
-				/>
+			{loading ? (
+				<View style={{ flex: 1, justifyContent: 'center' }}>
+					<ActivityIndicator size={'large'} color={colors.brand} />
+				</View>
+			) : (
 				<View
 					style={{
-						justifyContent: 'center',
-						alignItems: 'center',
-						gap: 8,
-						flexDirection: 'row',
-						paddingHorizontal: 8,
+						gap: 10,
+						flex: 1,
+						justifyContent: 'flex-end',
 					}}
 				>
-					<TextInput
-						style={{ height: 40, flex: 1 }}
-						placeholder="Message"
-						mode="outlined"
-						contentStyle={{ paddingVertical: 2 }}
-						activeOutlineColor={colors.brand}
-						value={message}
-						onChangeText={(text) => setMessage(text)}
+					<FlatList
+						inverted
+						style={{ paddingHorizontal: 8 }}
+						showsHorizontalScrollIndicator={false}
+						showsVerticalScrollIndicator={false}
+						scrollEnabled={true}
+						data={messages.toReversed()}
+						renderItem={({ item }) => (
+							<ChatComponent
+								message={item.message}
+								image={
+									item.sender === accountId
+										? detailInformation?.avatar_url
+											? detailInformation.avatar_url
+											: 'https://i.pinimg.com/736x/e9/6f/fb/e96ffb0a7aba1f17f686a15f368b5d58.jpg'
+										: 'https://i.pinimg.com/736x/e9/6f/fb/e96ffb0a7aba1f17f686a15f368b5d58.jpg'
+								}
+								sender={
+									item.sender === accountId ? 'sending' : 'receiving'
+								}
+							/>
+						)}
 					/>
-					<Pressable
-						onPress={handleSendMessage}
+					<View
 						style={{
-							backgroundColor: colors.brand,
-							borderRadius: 4,
-							padding: 8,
+							justifyContent: 'center',
+							alignItems: 'center',
+							gap: 8,
+							flexDirection: 'row',
+							paddingHorizontal: 8,
 						}}
 					>
-						<Send color={colors.background} />
-					</Pressable>
+						<TextInput
+							style={{ height: 40, flex: 1 }}
+							placeholder="Message"
+							mode="outlined"
+							contentStyle={{ paddingVertical: 2 }}
+							activeOutlineColor={colors.brand}
+							value={message}
+							onChangeText={(text) => setMessage(text)}
+						/>
+						<Pressable
+							onPress={handleSendMessage}
+							style={{
+								backgroundColor: colors.brand,
+								borderRadius: 4,
+								padding: 8,
+							}}
+						>
+							<Send color={colors.background} />
+						</Pressable>
+					</View>
 				</View>
-			</View>
+			)}
 		</View>
 	);
 };
