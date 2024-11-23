@@ -22,9 +22,9 @@ export const getDataFromDBS = async <T>({ url }: BaseAxiosRequest) => {
 		const response = await api.get(BE_URL + url);
 		const data: BaseAxiosResponse<T> = {
 			data: response.data.data,
-			statusCode: response.status,
-			message: response.statusText,
-		}
+			statusCode: response.data.statusCode,
+			message: response.data.message,
+		};
 		
 
 		return data;

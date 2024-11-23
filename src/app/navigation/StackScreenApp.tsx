@@ -138,7 +138,7 @@ export const StackScreenApp = () => {
 								{ justifyContent: 'center', alignItems: 'center' },
 							]}
 						>
-							<ErrorContainter message={error} />
+							<ErrorContainter message={error}  type='large'/>
 						</View>
 					)}
 				</>

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { authReducer, detailInfomationReducer, favoriteReducer } from "./store";
+import { authReducer, detailInfomationReducer, favoriteReducer, feedbackReducer } from "./store";
 
 
 export const store = configureStore({
@@ -9,6 +9,7 @@ export const store = configureStore({
 		detailInfomation: detailInfomationReducer,
 		favorite: favoriteReducer,
 		auth: authReducer,
+		feedback: feedbackReducer
 	},
 });
 
