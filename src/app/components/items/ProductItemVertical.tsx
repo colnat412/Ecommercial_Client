@@ -44,7 +44,7 @@ export const ProductItemVertical = React.memo(
 						</Text>
 					</View>
 
-					<View style={[styles.child2, {flex: 0}]}>
+					<View style={[styles.child2, { flex: 0 }]}>
 						<Star width={18} height={18} />
 						<Text>{formatRating(product.rating)}</Text>
 					</View>

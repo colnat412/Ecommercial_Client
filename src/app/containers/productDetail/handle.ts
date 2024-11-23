@@ -78,3 +78,29 @@ export const getListOptionsOfOption = async (optionId: string) => {
 		};
 	}
 };
+export const addProductToCart = async (
+	itemId: string,
+	qty: number,
+	listOptionId: string[],
+) => {
+	try {
+		const response = await api.post(`${BE_URL}/api/carts/add-product`, {
+			itemId: itemId,
+			quantity: qty,
+			listOptionId: listOptionId,
+		});
+		const data = response.data;
+		return {
+			data: data,
+			status: response.status,
+			message: response.statusText,
+		};
+	} catch (error) {
+		console.error(error);
+		return {
+			data: null,
+			status: 500,
+			message: 'Internal Server Error',
+		};
+	}
+};

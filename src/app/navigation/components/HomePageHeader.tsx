@@ -26,13 +26,10 @@ export const HomePageHeader = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-
-			
 			// const getDetailInformation = await fetchDetailInformation();
 			// if (getDetailInformation.statusCode === 200) {
 			// 	dispatch(setDetailInfomation(getDetailInformation.data));
 			// }
-
 		};
 		fetchData();
 	}, []);
@@ -46,6 +43,7 @@ export const HomePageHeader = () => {
 	};
 
 	const goCart = async () => {
+		navigationTab.navigate('Cart');
 	};
 
 	return (

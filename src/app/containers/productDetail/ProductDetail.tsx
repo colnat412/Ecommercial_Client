@@ -42,6 +42,7 @@ import {
 	ProductDetail as IProductDetail,
 } from '@/src/types';
 import {
+	addProductToCart,
 	getListOptionsOfOption,
 	getOptionsOfProduct,
 	getProduct,
@@ -54,6 +55,10 @@ import { Line } from '../../components/Line';
 import { Option } from '@/src/types/option';
 import { ListOption } from '@/src/types/list-option';
 
+interface SelectedOptions {
+	[key: string]: number;
+}
+
 export const ProductDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const route = useRoute<ProductDetailRouteProp>();
@@ -65,6 +70,7 @@ export const ProductDetail = () => {
 
 	const [options, setOptions] = useState<Option[] | undefined>([]);
 	const [listOptions, setListOptions] = useState<ListOption[][]>([]);
+	const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
 
 	useEffect(() => {
 		const getContainer = async () => {
@@ -112,6 +118,35 @@ export const ProductDetail = () => {
 
 	const toggleModalReviews = () => {
 		setRisibleReviews(!visibleReviews);
+	};
+
+	const handleListOptionSelect = (optionIndex: number, listIndex: number) => {
+		setSelectedOptions({
+			...selectedOptions,
+			[optionIndex]: listIndex,
+		});
+		console.log('selectedOptions', selectedOptions);
+	};
+
+	const addItemToCart = async (
+		itemId: string,
+		qty: number,
+		listOptionId: string[],
+	) => {
+		try {
+			console.log('itemId', itemId);
+			console.log('qty', qty);
+			console.log('listOptionId', listOptionId);
+
+			const response = await addProductToCart(itemId, qty, listOptionId);
+			if (response.status === 200 || response.status === 201) {
+				Alert.alert('Success', 'Add to cart success');
+			} else {
+				Alert.alert('Error', response.message || 'Failed to add to cart');
+			}
+		} catch (error) {
+			Alert.alert('Error', 'An unexpected error occurred');
+		}
 	};
 
 	const goPayment = () => {
@@ -764,9 +799,16 @@ export const ProductDetail = () => {
 																<RadioButton
 																	value="first"
 																	status={
-																		listIndex === 0
+																		selectedOptions[index] ===
+																		listIndex
 																			? 'checked'
 																			: 'unchecked'
+																	}
+																	onPress={() =>
+																		handleListOptionSelect(
+																			index,
+																			listIndex,
+																		)
 																	}
 																	color={colors.brand}
 																/>
@@ -778,99 +820,6 @@ export const ProductDetail = () => {
 											</View>
 										))}
 
-									{/* <View>
-										<Text
-											style={{
-												fontSize: 16,
-												fontWeight: '700',
-												marginLeft: 8,
-											}}
-										>
-											Color
-										</Text>
-										<View
-											style={{
-												flex: 1,
-												flexWrap: 'wrap',
-												flexDirection: 'row',
-												gap: 12,
-											}}
-										>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="checked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Black</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>White</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Pink</Text>
-											</View>
-										</View>
-									</View>
-
-									<View style={{ flex: 1, marginVertical: 16 }}>
-										<Line />
-									</View>
-
-									<View>
-										<Text
-											style={{
-												fontSize: 16,
-												fontWeight: '700',
-												marginLeft: 8,
-											}}
-										>
-											Option
-										</Text>
-										<View
-											style={{
-												flex: 1,
-												flexWrap: 'wrap',
-												flexDirection: 'row',
-												gap: 12,
-											}}
-										>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="checked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Black</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>White</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Pink</Text>
-											</View>
-										</View>
-									</View> */}
 									<View style={{ flex: 1, marginVertical: 16 }}>
 										<Line />
 									</View>
@@ -920,10 +869,34 @@ export const ProductDetail = () => {
 														color={colors.mainBackground}
 													/>
 												</Pressable>
+												<Text
+													style={{ opacity: 0.5, fontSize: 12 }}
+												>
+													(100 pieces available)
+												</Text>
 											</View>
 										</View>
 										<Pressable
-											onPress={goPayment}
+											onPress={() => {
+												if (product?.id) {
+													const selectedOptionIds = Object.keys(
+														selectedOptions,
+													).map((optionIndex) => {
+														const listIndex =
+															selectedOptions[
+																optionIndex as unknown as number
+															];
+														return listOptions[
+															optionIndex as unknown as number
+														][listIndex].id;
+													});
+													addItemToCart(
+														product.id,
+														1,
+														selectedOptionIds,
+													);
+												}
+											}}
 											style={{
 												flex: 1,
 												backgroundColor: colors.brand,
