@@ -26,22 +26,14 @@ import {
 	TextInput,
 } from 'react-native-paper';
 import { Cancel, Star } from '@/src/assets';
+import { useAppSelector } from '@/src/libs';
 
 export const Feedback = () => {
-	const [productData, setProductData] = useState<Product[]>([]);
+	const productData: Product[] = useAppSelector((state) => state.feedback?.feedback || []);
 	const [visibleFeedback, setVisibleFeedback] = useState<boolean>(false);
 	const [rating, setRating] = useState<number>(5);
 
 	useEffect(() => {
-		const fetchFeedback = async () => {
-			try {
-				const response = await axios.get(`${BE_URL}/products`);
-				setProductData(response.data);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		fetchFeedback();
 	}, []);
 
 	const handleRating = (value: number) => {

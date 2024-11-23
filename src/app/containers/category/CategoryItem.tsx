@@ -34,8 +34,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
-		gap: 16,
-		padding: 8,
+		gap: 8,
 	},
 	circularImage: {
 		width: 80,
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
 	textStyle: {
 		fontSize: 16,
 		fontWeight: 'bold',
+		minWidth: 100,
 		maxWidth: 100
 	},
 });

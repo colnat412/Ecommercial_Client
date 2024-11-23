@@ -14,9 +14,9 @@ import { ErrorContainter, NoData } from '../components';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
-import { checkConnect } from '../localHandle';
+import { checkConnect, fetchDetailInformation, fetchFavorite } from '../localHandle';
 import { Account } from '@/src/types';
-import { setAuth } from '@/src/libs/redux/store';
+import { setAuth, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
 import { Register } from '../containers';
 import { ProductDetail } from '../containers/productDetail';
 import { SubCategory } from '../containers/category';
@@ -41,7 +41,7 @@ export const StackScreenApp = () => {
 					setIsConnect(false);
 					setIsLoading(false);
 					setError('Server error');
-					return 
+					return;
 				} else {
 					console.log('Stack Screen: Connect success');
 				}
@@ -59,6 +59,11 @@ export const StackScreenApp = () => {
 					if (request.status === 200) {
 						const account: Account = request.data.data;
 						dispatch(setAuth({ account }));
+						const detailInfomation = await fetchDetailInformation();
+						dispatch(setDetailInfomation(detailInfomation.data));
+
+						const favoriteData = await fetchFavorite();
+						dispatch(setFavorite(favoriteData.data));
 						console.log('Stack Screen: AccessToken success');
 					} else {
 						console.log('Stack Screen: AccessToken failed');
@@ -133,7 +138,7 @@ export const StackScreenApp = () => {
 								{ justifyContent: 'center', alignItems: 'center' },
 							]}
 						>
-							<ErrorContainter message={error} />
+							<ErrorContainter message={error}  type='large'/>
 						</View>
 					)}
 				</>

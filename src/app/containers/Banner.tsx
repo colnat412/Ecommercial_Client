@@ -1,36 +1,56 @@
 import { colors } from '@/src/constants';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 interface BannerProps {
 	title: string;
 	subTitle: string;
+	leftImage?: boolean;
+	color?: string;
+	image: ImageSourcePropType;
 }
 
-export const Banner = ({ title, subTitle }: BannerProps) => {
+export const Banner = ({
+	title,
+	subTitle,
+	leftImage = false,
+	color = colors.brand,
+	image,
+}: BannerProps) => {
 	return (
-		<View style={styles.container}>
+		<View
+			style={[
+				styles.container,
+				{
+					flexDirection: leftImage ? 'row-reverse' : 'row',
+					backgroundColor: color,
+				},
+			]}
+		>
 			<View style={styles.text}>
 				<Text style={styles.title}>{title}</Text>
 				<Text style={styles.subTitle}>{subTitle}</Text>
 			</View>
-			<Image
-				style={{ width: 108, height: 108 }}
-				source={require('@/src/assets/images/image.png')}
-			/>
+			<View style={{ padding: 8 }}>
+				<Image
+					style={{ width: 108, height: 108, resizeMode: 'contain' }}
+					source={image}
+				/>
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: colors.brand,
 		justifyContent: 'center',
 		alignItems: 'center',
-		flexDirection: 'row',
+		gap: 40,
 		borderRadius: 5,
-		padding: 10,
-		margin: 10,
+		paddingHorizontal: 30,
+		marginVertical: 8,
 	},
 	text: {
 		padding: 20,
@@ -40,11 +60,11 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 25,
 		fontWeight: 'bold',
-		color: '#e2e2e2',
+		color: colors.background
 	},
 	subTitle: {
 		opacity: 0.5,
-		fontSize: 12,
-		color: '#e2e2e2',
+		fontSize: 14,
+		color: colors.mainBackground,
 	},
 });
