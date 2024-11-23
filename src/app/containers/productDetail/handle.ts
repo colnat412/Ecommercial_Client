@@ -4,7 +4,7 @@ import { Feedback, ProductDetail } from '@/src/types';
 import { Option } from '@/src/types/option';
 export const getProduct = async (productId: string) => {
 	try {
-		const response = await api.get(`${BE_URL}/api/products/${productId}`);
+		const response = await api.get(`${BE_URL}/api/products/get/${productId}`);
 		const data: ProductDetail = response.data.data;
 		return {
 			data: data,
