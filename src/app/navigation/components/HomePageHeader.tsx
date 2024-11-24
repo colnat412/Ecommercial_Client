@@ -67,9 +67,16 @@ export const HomePageHeader = () => {
 						{cart && (
 							<View
 								style={{
-									color: 'white',
-									fontSize: 10,
-									fontWeight: 'bold',
+									position: 'absolute',
+									zIndex: 10,
+									top: 4,
+									right: -8,
+									backgroundColor: colors.brand,
+									borderRadius: 10,
+									width: 18,
+									height: 18,
+									justifyContent: 'center',
+									alignItems: 'center',
 								}}
 							>
 								<Text
@@ -79,7 +86,11 @@ export const HomePageHeader = () => {
 										fontWeight: 'bold',
 									}}
 								>
-									{cart ? cart.length : 0}
+									{cart && cart.length > 0
+										? cart.length > 5
+											? `5+`
+											: cart.length
+										: 0}
 								</Text>
 							</View>
 						)}
