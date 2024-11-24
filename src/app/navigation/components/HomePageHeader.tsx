@@ -19,8 +19,12 @@ export const HomePageHeader = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
-	const detailsInformation: DetailInformation| null = useAppSelector((state) => state.detailInfomation?.detailInfomation ?? null);
-	const cart:CartItem[]|null = useAppSelector((state) => state.cart?.cartItem ?? null);
+	const detailsInformation: DetailInformation | null = useAppSelector(
+		(state) => state.detailInfomation?.detailInfomation ?? null,
+	);
+	const cart: CartItem[] | null = useAppSelector(
+		(state) => state.cart?.cartItem ?? null,
+	);
 	const dispatch = useAppDispatch<AppDispatch>();
 
 	const goLogin = () => {
@@ -63,31 +67,34 @@ export const HomePageHeader = () => {
 					>
 						<Cart width={30} height={25} color={colors.cart} />
 
-							<View
+						<View
+							style={{
+								position: 'absolute',
+								zIndex: 10,
+								top: 4,
+								right: -8,
+								backgroundColor: colors.brand,
+								borderRadius: 10,
+								width: 18,
+								height: 18,
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Text
 								style={{
-									position: 'absolute',
-									zIndex: 10,
-									top: 4,
-									right: -8,
-									backgroundColor: colors.brand,
-									borderRadius: 10,
-									width: 18,
-									height: 18,
-									justifyContent: 'center',
-									alignItems: 'center',
+									color: 'white',
+									fontSize: 10,
+									fontWeight: 'bold',
 								}}
 							>
-								<Text
-									style={{
-										color: 'white',
-										fontSize: 10,
-										fontWeight: 'bold',
-									}}
-								>
-									{cart ? cart.length : 0}
-								</Text>
-							</View>
-							
+								{cart && cart.length > 0
+									? cart.length > 5
+										? '5+'
+										: cart.length
+									: 0}
+							</Text>
+						</View>
 					</View>
 				</Pressable>
 				<TouchableOpacity onPress={goLogin}>

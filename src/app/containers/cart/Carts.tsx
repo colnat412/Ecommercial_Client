@@ -2,7 +2,12 @@ import { FlatList, Pressable, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 
 import { CartItem } from './CartItem';
-import { CartItem as CartItemI, Option, Product } from '@/src/types';
+import {
+	CartItem as CartItemI,
+	ListOption,
+	Option,
+	Product,
+} from '@/src/types';
 import { useEffect, useState } from 'react';
 import { getData, getDataFromDBS } from '../handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
@@ -29,13 +34,18 @@ export const ShoppingCart = () => {
 			try {
 				const response = await getCartItem();
 				const cartItems = response.data.data?.cartItems ?? [];
+
 				if (cartItems.length) {
-					const mappedItems = cartItems.map((cartItem: CartItemI) => ({
+					const mappedItems = cartItems.map((cartItem: any) => ({
 						id: cartItem.id,
 						quantity: cartItem.quantity,
 						item: cartItem.item,
+						// listOptions: cartItem.options.map(
+						// 	(option: Option) => option.listOption.name,
+						// ),
 					}));
 					setData(mappedItems);
+					console.log('Cart items:', mappedItems);
 				} else {
 					console.warn('No cart items found.');
 					setData([]);
