@@ -3,7 +3,7 @@ import { api } from '@/src/libs';
 import {
 	Account,
 	BaseAxiosResponse,
-	ICartItem,
+	CartItem,
 	DetailInformation,
 	Product,
 	Role,
@@ -56,7 +56,7 @@ export const fetchFavorite = async () => {
 export const fetchCart = async () => {
 	try {
 		const response = await api.get(`${BE_URL}/api/carts`);
-		const data: BaseAxiosResponse<ICartItem[]> = {
+		const data: BaseAxiosResponse<CartItem[]> = {
 			data: response.data.data.cartItems,
 			statusCode: response.data.statusCode,
 			message: response.data.message,
@@ -65,7 +65,7 @@ export const fetchCart = async () => {
 	} catch (err) {
 		console.log(err);
 		if (axios.isAxiosError(err)) {
-			const data: BaseAxiosResponse<ICartItem[]> = {
+			const data: BaseAxiosResponse<CartItem[]> = {
 				data: null,
 				statusCode: err.response?.data.statusCode || 500,
 				message: err.response?.data.message || 'Internal Server Error',

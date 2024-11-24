@@ -3,7 +3,7 @@ import {
 	getAccessTokenSecure,
 	setAccessToken,
 	Stack,
-	useAppDispatch
+	useAppDispatch,
 } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { ErrorContainter } from '../components';
 import { Register } from '../containers';
-import { Carts } from '../containers/cart';
+import { ShoppingCart } from '../containers/cart';
 import { SubCategory } from '../containers/category';
 import { ChatAdmin } from '../containers/chat';
 import { Feedback } from '../containers/feedback';
@@ -34,7 +34,7 @@ import {
 	fetchCart,
 	fetchFavorite,
 	fetchFeedback,
-	fetchMyAccount
+	fetchMyAccount,
 } from '../localHandle';
 
 export const StackScreenApp = () => {
@@ -150,7 +150,7 @@ export const StackScreenApp = () => {
 									component={OrderDetail}
 								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
-								<Stack.Screen name="Cart" component={Carts} />
+								<Stack.Screen name="Cart" component={ShoppingCart} />
 								<Stack.Screen name="ChatAdmin" component={ChatAdmin} />
 							</Stack.Navigator>
 						</NavigationContainer>
