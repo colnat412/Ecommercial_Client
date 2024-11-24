@@ -14,16 +14,29 @@ import { ErrorContainter, NoData } from '../components';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
-import { checkConnect, fetchCart, fetchDetailInformation, fetchFavorite, fetchFeedback, fetchMyAccount } from '../localHandle';
+import {
+	checkConnect,
+	fetchCart,
+	fetchDetailInformation,
+	fetchFavorite,
+	fetchFeedback,
+	fetchMyAccount,
+} from '../localHandle';
 import { Account } from '@/src/types';
-import { setAuth, setCart, setDetailInfomation, setFavorite, setFeedback } from '@/src/libs/redux/store';
+import {
+	setAuth,
+	setCart,
+	setDetailInfomation,
+	setFavorite,
+	setFeedback,
+} from '@/src/libs/redux/store';
 import { Register } from '../containers';
 import { ProductDetail } from '../containers/productDetail';
 import { SubCategory } from '../containers/category';
 import { PaymentOption, PaymentResult } from '../containers/payment';
 import { OrderComponent, OrderDetail } from '../containers/order';
 import { Feedback } from '../containers/feedback';
-import { Carts } from '../containers/cart';
+import { ShoppingCart } from '../containers/cart';
 import { Login } from '../containers/login';
 
 export const StackScreenApp = () => {
@@ -55,10 +68,9 @@ export const StackScreenApp = () => {
 
 			if (tokenSecure !== '') {
 				try {
-					const account =await fetchMyAccount();
-					
+					const account = await fetchMyAccount();
+
 					if (account?.data && account.statusCode === 200) {
-						
 						dispatch(setAuth({ account: account.data.account }));
 						dispatch(setDetailInfomation(account.data.detailInformation));
 
@@ -70,7 +82,6 @@ export const StackScreenApp = () => {
 
 						const cartData = await fetchCart();
 						dispatch(setCart(cartData?.data || []));
-
 
 						console.log('Stack Screen: AccessToken success');
 					} else {
@@ -136,7 +147,7 @@ export const StackScreenApp = () => {
 									component={OrderDetail}
 								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
-								<Stack.Screen name="Cart" component={Carts} />
+								<Stack.Screen name="Cart" component={ShoppingCart} />
 							</Stack.Navigator>
 						</NavigationContainer>
 					) : (
@@ -146,7 +157,7 @@ export const StackScreenApp = () => {
 								{ justifyContent: 'center', alignItems: 'center' },
 							]}
 						>
-							<ErrorContainter message={error}  type='large'/>
+							<ErrorContainter message={error} type="large" />
 						</View>
 					)}
 				</>
