@@ -1,8 +1,8 @@
-import { DetailInfomation } from "@/src/types";
+import { DetailInformation } from "@/src/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DetailInfomationState {
-    detailInfomation: DetailInfomation | null;
+	detailInfomation: DetailInformation | null;
 }
 
 const initialState: DetailInfomationState = {
@@ -13,7 +13,10 @@ const detailInfomationSlice = createSlice({
 	name: 'detailInfomation',
 	initialState,
 	reducers: {
-		setDetailInfomation: (state, action: PayloadAction<DetailInfomation | null>) => {
+		setDetailInfomation: (
+			state,
+			action: PayloadAction<DetailInformation | null>,
+		) => {
 			state.detailInfomation = action.payload;
 		},
 	},

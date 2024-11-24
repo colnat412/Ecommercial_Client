@@ -2,21 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import { io, Socket } from 'socket.io-client';
-import { ChatComponent } from '../components';
+
 import { colors } from '@/src/constants';
 import { TextInput } from 'react-native-paper';
 import { Send } from '@/src/assets';
-import { HeaderTitle } from '../navigation/components/HeaderTitle';
 import { StackScreenNavigationProp, useAppSelector } from '@/src/libs';
 import { BE_URL_CHAT } from '@/env';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { DetailInfomation } from '@/src/types';
+import { DetailInformation } from '@/src/types';
+import { HeaderTitle } from '../../navigation/components';
+import { ChatComponent } from '../../components';
+import { Message } from '@/src/types/message';
 
-interface Message {
-	sender: string;
-	message: string;
-	image?: string;
-}
+
 
 export const Chat: React.FC = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
@@ -35,10 +33,12 @@ export const Chat: React.FC = () => {
 		state.auth.account?.id ? state.auth.account?.id : null,
 	);
 
-	const detailInformation: DetailInfomation | null = useAppSelector((state) =>
+	const detailInformation: DetailInformation | null = useAppSelector((state) =>
 		state.detailInfomation ? state.detailInfomation.detailInfomation : null,
 	);
+
 	const focus = useIsFocused();
+	
 	useEffect(() => {
 		setMessages([]);
 		const token = async () => {
@@ -86,6 +86,10 @@ export const Chat: React.FC = () => {
 
 		if (socket && focus === false) {
 			socket.disconnect();
+		}
+
+		if (!focus){
+			setLoading(true);
 		}
 	}, [focus]);
 

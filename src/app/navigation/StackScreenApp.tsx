@@ -1,28 +1,15 @@
 import {
-	api,
 	AppDispatch,
 	getAccessTokenSecure,
 	setAccessToken,
 	Stack,
-	useAppDispatch,
+	useAppDispatch
 } from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
-import { TabScreenApp } from './TabScreenApp';
 import { useEffect, useState } from 'react';
+import { TabScreenApp } from './TabScreenApp';
 
-import { ErrorContainter, NoData } from '../components';
-import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
-import { View } from 'react-native';
-import {
-	checkConnect,
-	fetchCart,
-	fetchDetailInformation,
-	fetchFavorite,
-	fetchFeedback,
-	fetchMyAccount,
-} from '../localHandle';
-import { Account } from '@/src/types';
 import {
 	setAuth,
 	setCart,
@@ -30,14 +17,25 @@ import {
 	setFavorite,
 	setFeedback,
 } from '@/src/libs/redux/store';
+import { View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { ErrorContainter } from '../components';
 import { Register } from '../containers';
-import { ProductDetail } from '../containers/productDetail';
+import { Carts } from '../containers/cart';
 import { SubCategory } from '../containers/category';
-import { PaymentOption, PaymentResult } from '../containers/payment';
-import { OrderComponent, OrderDetail } from '../containers/order';
+import { ChatAdmin } from '../containers/chat';
 import { Feedback } from '../containers/feedback';
-import { ShoppingCart } from '../containers/cart';
 import { Login } from '../containers/login';
+import { OrderComponent, OrderDetail } from '../containers/order';
+import { PaymentOption, PaymentResult } from '../containers/payment';
+import { ProductDetail } from '../containers/productDetail';
+import {
+	checkConnect,
+	fetchCart,
+	fetchFavorite,
+	fetchFeedback,
+	fetchMyAccount
+} from '../localHandle';
 
 export const StackScreenApp = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -71,7 +69,12 @@ export const StackScreenApp = () => {
 					const account = await fetchMyAccount();
 
 					if (account?.data && account.statusCode === 200) {
-						dispatch(setAuth({ account: account.data.account }));
+						dispatch(
+							setAuth({
+								account: account.data.account,
+								role: account.data.role,
+							}),
+						);
 						dispatch(setDetailInfomation(account.data.detailInformation));
 
 						const favoriteData = await fetchFavorite();
@@ -147,7 +150,8 @@ export const StackScreenApp = () => {
 									component={OrderDetail}
 								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
-								<Stack.Screen name="Cart" component={ShoppingCart} />
+								<Stack.Screen name="Cart" component={Carts} />
+								<Stack.Screen name="ChatAdmin" component={ChatAdmin} />
 							</Stack.Navigator>
 						</NavigationContainer>
 					) : (

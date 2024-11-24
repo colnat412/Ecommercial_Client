@@ -43,28 +43,28 @@ export const Login = () => {
 		if (!resultLogin) {
 			return;
 		}
+		if (resultLogin.statusCode === 200 && resultLogin.data) {
+			setAccessToken(resultLogin.data.account.accessToken);
+			setAccessTokenSecure(resultLogin.data.account.accessToken);
 
-		if (resultLogin.statusCode === 404) {
-			setError(resultLogin.message);
-			return;
-		} else if (resultLogin.statusCode === 200 && resultLogin.data) {
+			dispatch(setAuth({ account: resultLogin.data.account, role: resultLogin.data.role }));
 
-				setAccessToken(resultLogin.data.account.accessToken);
-				setAccessTokenSecure(resultLogin.data.account.accessToken);
+			dispatch(setDetailInfomation(resultLogin.data.detailInformation));
 
-				dispatch(setAuth({ account: resultLogin.data.account }));
+			const favoriteData = await fetchFavorite();
+			dispatch(setFavorite(favoriteData?.data || []));
 
-				dispatch(setDetailInfomation(resultLogin.data.detailInformation));
+			const feebackData = await fetchFeedback();
+			dispatch(setFeedback(feebackData?.data || []));
 
-				const favoriteData = await fetchFavorite();
-				dispatch(setFavorite(favoriteData?.data || []));
+			const cartData = await fetchCart();
+			dispatch(setCart(cartData?.data || []));
 
-				const feebackData = await fetchFeedback();
-				dispatch(setFeedback(feebackData?.data || []));
-
-				const cartData = await fetchCart();
-				dispatch(setCart(cartData?.data || []));
 			navigation.navigate('TabScreenApp');
+		}
+		else {
+			setError(resultLogin.message);
+			return 
 		}
 	};
 
@@ -124,7 +124,7 @@ export const Login = () => {
 						/>
 					</View>
 
-					<Text
+					{/* <Text
 						style={{
 							color: colors.secondText,
 							textAlign: 'right',
@@ -133,13 +133,13 @@ export const Login = () => {
 						}}
 					>
 						Forgot password?
-					</Text>
+					</Text> */}
 
 					<Pressable
 						onPress={() => {
 							handleLogin();
 						}}
-						style={[style.button, { paddingVertical: 12 }]}
+						style={[style.button, { paddingVertical: 12, marginTop: 16 }]}
 					>
 						<Text
 							style={{

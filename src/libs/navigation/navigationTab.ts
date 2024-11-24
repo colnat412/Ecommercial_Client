@@ -7,6 +7,7 @@ export type RootTabParamList = {
 	Favorite: undefined;
 	Chat: undefined;
 	Account: undefined;
+	ListChat: undefined;
 };
 
 export const Tab = createBottomTabNavigator<RootTabParamList>();

@@ -6,6 +6,7 @@ import {
 	ICartItem,
 	DetailInformation,
 	Product,
+	Role,
 } from '@/src/types';
 import axios from 'axios';
 export const fetchDetailInformation = async () => {
@@ -102,10 +103,12 @@ export const fetchMyAccount = async () => {
 		const data: BaseAxiosResponse<{
 			account: Account;
 			detailInformation: DetailInformation;
+			role: Role;
 		}> = {
 			data: {
 				account: response.data.data,
 				detailInformation: response.data.data.detailInformation,
+				role: response.data.data.role,
 			},
 			statusCode: response.data.statusCode,
 			message: response.data.message,
@@ -117,6 +120,7 @@ export const fetchMyAccount = async () => {
 			const data: BaseAxiosResponse<{
 				account: Account;
 				detailInformation: DetailInformation;
+				role: Role;
 			}> = {
 				data: null,
 				statusCode: err.response?.data.statusCode || 500,

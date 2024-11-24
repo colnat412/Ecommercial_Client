@@ -35,9 +35,7 @@ export const HomePageHeader = () => {
 		}
 	};
 
-	const goCart = async () => {
-		navigationTab.navigate('Cart');
-	};
+	const goCart = async () => {};
 
 	return (
 		<View style={[style.headerContainer, { backgroundColor: 'white' }]}>
@@ -66,35 +64,25 @@ export const HomePageHeader = () => {
 						}}
 					>
 						<Cart width={30} height={25} color={colors.cart} />
-
-						<View
-							style={{
-								position: 'absolute',
-								zIndex: 10,
-								top: 4,
-								right: -8,
-								backgroundColor: colors.brand,
-								borderRadius: 10,
-								width: 18,
-								height: 18,
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-						>
-							<Text
+						{cart && (
+							<View
 								style={{
 									color: 'white',
 									fontSize: 10,
 									fontWeight: 'bold',
 								}}
 							>
-								{cart && cart.length > 0
-									? cart.length > 5
-										? '5+'
-										: cart.length
-									: 0}
-							</Text>
-						</View>
+								<Text
+									style={{
+										color: 'white',
+										fontSize: 10,
+										fontWeight: 'bold',
+									}}
+								>
+									{cart ? cart.length : 0}
+								</Text>
+							</View>
+						)}
 					</View>
 				</Pressable>
 				<TouchableOpacity onPress={goLogin}>

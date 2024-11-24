@@ -1,22 +1,30 @@
-import { Tab } from '@/src/libs';
-import { colors } from '@/src/constants';
 import {
+	ChatBox,
+	Favorite as FavoriteIcon,
 	Home,
 	Search as SearchIcon,
-	Favorite as FavoriteIcon,
 	User,
-	ChatBox,
 } from '@/src/assets';
-import { Text } from 'react-native-paper';
+import { colors } from '@/src/constants';
+import { Tab, useAppSelector } from '@/src/libs';
 import { TouchableOpacity } from 'react-native';
-import { Account, Chat, HomePage } from '../containers';
-import { SearchInput, SearchPage } from '../containers/searchComponent';
+import { Text } from 'react-native-paper';
+import { HomePage } from '../containers';
+import { Account } from '../containers/account/Account';
 import { Favorite } from '../containers/favorite';
+import { SearchPage } from '../containers/searchComponent';
+import { Chat, ListChat } from '../containers/chat';
+import { Role } from '@/src/types';
 
 export const TabScreenApp = () => {
+	const role: Role | null = useAppSelector(
+		(state) => state.auth?.role ?? null,
+	);
+
+	console.log('role', role);
 	return (
 		<Tab.Navigator
-			screenOptions={{
+			screenOptions={({ route }) => ({
 				headerShown: false,
 				tabBarLabelStyle: { fontSize: 10, fontWeight: '700' },
 				tabBarLabel(props) {
@@ -33,6 +41,16 @@ export const TabScreenApp = () => {
 					);
 				},
 				tabBarButton: (props) => {
+					if (!role && route.name === 'ListChat') {
+						return null;
+					} else if (role) {
+						if (role.name === 'customer' && route.name === 'ListChat') {
+							return null;
+						} else if (role.name === 'admin' && route.name === 'Chat') {
+							return null;
+						}
+					}
+
 					return (
 						<TouchableOpacity
 							{...props}
@@ -52,8 +70,9 @@ export const TabScreenApp = () => {
 					justifyContent: 'center',
 					alignItems: 'center',
 				},
-			}}
-			initialRouteName="HomePage"
+				tabBarShowLabel: true,
+			})}
+			initialRouteName="ListChat"
 		>
 			<Tab.Screen
 				name="HomePage"
@@ -112,6 +131,20 @@ export const TabScreenApp = () => {
 				}}
 			/>
 			<Tab.Screen
+				name="ListChat"
+				component={ListChat}
+				options={{
+					title: 'Chat',
+					tabBarIcon: ({ focused }) => (
+						<ChatBox
+							width={20}
+							height={20}
+							color={focused ? colors.brand : colors.disable}
+						/>
+					),
+				}}
+			/>
+			<Tab.Screen
 				name="Account"
 				component={Account}
 				options={{
@@ -125,8 +158,6 @@ export const TabScreenApp = () => {
 					),
 				}}
 			/>
-
-			
 		</Tab.Navigator>
 	);
 };
