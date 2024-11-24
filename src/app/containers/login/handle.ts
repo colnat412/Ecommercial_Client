@@ -1,12 +1,8 @@
 import { api, setAccessToken } from '@/src/libs';
-import { Account } from '@/src/types';
+import { Account, BaseAxiosResponse, DetailInformation, Role } from '@/src/types';
+import axios from 'axios';
 
-export interface LoginResponse {
-	account: Account | null;
-	erro: string | null;
-}
-
-export const login = async (username: string, password: string): Promise<LoginResponse> => {
+export const login = async (username: string, password: string) => {
 	// Login -> return account
 	// use AuthSecureStore.login to set account + accessToken
 	// Redux -> Action: load cart, favorite
@@ -16,26 +12,39 @@ export const login = async (username: string, password: string): Promise<LoginRe
 			identifier: username,
 			password: password,
 		});
-		const accountData: Account = response.data.data;
-
-
-		if (response.data.statusCode !== 200) {
-			return {
-				account: null,
-				erro: 'Invalid username or password',
+		if (response.data.statusCode === 200) {
+			const data: BaseAxiosResponse<{
+				account: Account;
+				detailInformation: DetailInformation;
+				role: Role
+			}> = {
+				data: {
+					account: response.data.data,
+					detailInformation: response.data.data.detailInformation,
+					role: response.data.data.role
+				},
+				message: response.data.message,
+				statusCode: response.data.statusCode,
 			};
+			setAccessToken(data.data?.account.accessToken || '');
+			return data;
 		}
 
-		setAccessToken(accountData.accessToken);
-		return {
-			account: accountData,
-			erro: null,
-		};
+
+
 	} catch (err) {
-		console.log('Login:' + err);
-		return {
-			account: null,
-			erro: 'Something went wrong',
-		};
+		console.log(err);
+		if (axios.isAxiosError(err)) {
+			const data: BaseAxiosResponse<{
+				account: Account;
+				detailInformation: DetailInformation;
+				role: Role
+			}> = {
+				data: null,
+				message: err.response?.data.message || 'Internal Server Error',
+				statusCode: err.response?.data.statusCode || 500,
+			};
+			return data;
+		}
 	}
 };

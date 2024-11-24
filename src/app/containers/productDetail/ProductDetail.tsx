@@ -38,13 +38,26 @@ import {
 import { useEffect, useState } from 'react';
 import {
 	Feedback,
+	Product,
 	ProductDetail as IProductDetail,
 } from '@/src/types';
-import { getProduct, getReviews } from './handle';
+import {
+	addProductToCart,
+	getListOptionsOfOption,
+	getOptionsOfProduct,
+	getProduct,
+	getReviews,
+} from './handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Line } from '../../components/Line';
 import { ProductDetailRouteProp, StackScreenNavigationProp } from '@/src/libs';
+import { Line } from '../../components/Line';
+import { Option } from '@/src/types/option';
+import { ListOption } from '@/src/types/list-option';
+
+interface SelectedOptions {
+	[key: string]: number;
+}
 
 export const ProductDetail = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
@@ -55,6 +68,10 @@ export const ProductDetail = () => {
 	const [visibleCart, setVisibleCart] = useState<boolean>(false);
 	const [feedback, setFeedback] = useState<Feedback[] | undefined>([]);
 
+	const [options, setOptions] = useState<Option[] | undefined>([]);
+	const [listOptions, setListOptions] = useState<ListOption[][]>([]);
+	const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
+
 	useEffect(() => {
 		const getContainer = async () => {
 			const productResult = await getProduct(
@@ -64,12 +81,30 @@ export const ProductDetail = () => {
 				setProduct(productResult.data ? productResult.data : undefined);
 			}
 
-			const feedbackResult = await getReviews(
-				route.params?.productId ? route.params.productId : '',
+			// const feedbackResult = await getReviews(
+			// 	route.params?.productId ? route.params.productId : '',
+			// );
+			// if (feedbackResult) {
+			// 	setFeedback(feedbackResult.data ? feedbackResult.data : []);
+			// }
+			const optionsResult = await getOptionsOfProduct(
+				productResult.data?.id ? productResult.data.id : '',
 			);
-			if (feedbackResult) {
-				setFeedback(feedbackResult.data ? feedbackResult.data : []);
+			if (optionsResult) {
+				setOptions(optionsResult.data ? optionsResult.data : undefined);
+
+				const listOptionsPromises = optionsResult.data.map((option) =>
+					getListOptionsOfOption(option.id),
+				);
+
+				const listOptionsResults = await Promise.all(listOptionsPromises);
+				setListOptions(
+					listOptionsResults.map(
+						(result) => result.data as unknown as ListOption[],
+					),
+				);
 			}
+
 			setLoading(false);
 		};
 		getContainer();
@@ -83,6 +118,35 @@ export const ProductDetail = () => {
 
 	const toggleModalReviews = () => {
 		setRisibleReviews(!visibleReviews);
+	};
+
+	const handleListOptionSelect = (optionIndex: number, listIndex: number) => {
+		setSelectedOptions({
+			...selectedOptions,
+			[optionIndex]: listIndex,
+		});
+		console.log('selectedOptions', selectedOptions);
+	};
+
+	const addItemToCart = async (
+		itemId: string,
+		qty: number,
+		listOptionId: string[],
+	) => {
+		try {
+			console.log('itemId', itemId);
+			console.log('qty', qty);
+			console.log('listOptionId', listOptionId);
+
+			const response = await addProductToCart(itemId, qty, listOptionId);
+			if (response.status === 200 || response.status === 201) {
+				Alert.alert('Success', 'Add to cart success');
+			} else {
+				Alert.alert('Error', response.message || 'Failed to add to cart');
+			}
+		} catch (error) {
+			Alert.alert('Error', 'An unexpected error occurred');
+		}
 	};
 
 	const goPayment = () => {
@@ -101,13 +165,13 @@ export const ProductDetail = () => {
 				<ActivityIndicator size={'large'} color={colors.brand} />
 			) : (
 				<>
-					<HeaderTitleWithBack
-						title={product?.name ? product?.name : ''}
-					/>
 					<ScrollView
 						showsHorizontalScrollIndicator={false}
 						showsVerticalScrollIndicator={false}
 					>
+						<HeaderTitleWithBack
+							title={product?.name ? product?.name : ''}
+						/>
 						<View style={[style.body]}>
 							<View style={[style.contentBody]}>
 								<View
@@ -482,7 +546,7 @@ export const ProductDetail = () => {
 																color: colors.mainText,
 															}}
 														>
-															{item.detailInfomation.fullName}
+															{item.detailInfomation.full_name}
 														</Text>
 														<Text
 															style={{
@@ -616,7 +680,10 @@ export const ProductDetail = () => {
 																	color: colors.mainText,
 																}}
 															>
-																{item.detailInfomation.fullName}
+																{
+																	item.detailInfomation
+																		.full_name
+																}
 															</Text>
 															<Text
 																style={{
@@ -673,7 +740,7 @@ export const ProductDetail = () => {
 										<Text
 											style={[style.headerText, { fontSize: 16 }]}
 										>
-											HeadPhone
+											{product?.name ? product?.name : ''}
 										</Text>
 										<View style={[style.rowCenter]}>
 											<View style={{ flexDirection: 'row' }}>
@@ -702,100 +769,57 @@ export const ProductDetail = () => {
 									<View style={{ flex: 1, marginVertical: 16 }}>
 										<Line />
 									</View>
+									{options &&
+										options.length > 0 &&
+										options.map((option, index) => (
+											<View key={index}>
+												<Text
+													style={{
+														fontSize: 16,
+														fontWeight: '700',
+														marginLeft: 8,
+													}}
+												>
+													{option.name}
+												</Text>
+												<View
+													style={{
+														flex: 1,
+														flexWrap: 'wrap',
+														flexDirection: 'row',
+														gap: 12,
+													}}
+												>
+													{listOptions[index]?.map(
+														(listOption, listIndex) => (
+															<View
+																key={listIndex}
+																style={[style.rowCenter]}
+															>
+																<RadioButton
+																	value="first"
+																	status={
+																		selectedOptions[index] ===
+																		listIndex
+																			? 'checked'
+																			: 'unchecked'
+																	}
+																	onPress={() =>
+																		handleListOptionSelect(
+																			index,
+																			listIndex,
+																		)
+																	}
+																	color={colors.brand}
+																/>
+																<Text>{listOption.name}</Text>
+															</View>
+														),
+													)}
+												</View>
+											</View>
+										))}
 
-									<View>
-										<Text
-											style={{
-												fontSize: 16,
-												fontWeight: '700',
-												marginLeft: 8,
-											}}
-										>
-											Color
-										</Text>
-										<View
-											style={{
-												flex: 1,
-												flexWrap: 'wrap',
-												flexDirection: 'row',
-												gap: 12,
-											}}
-										>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="checked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Black</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>White</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Pink</Text>
-											</View>
-										</View>
-									</View>
-
-									<View style={{ flex: 1, marginVertical: 16 }}>
-										<Line />
-									</View>
-
-									<View>
-										<Text
-											style={{
-												fontSize: 16,
-												fontWeight: '700',
-												marginLeft: 8,
-											}}
-										>
-											Option
-										</Text>
-										<View
-											style={{
-												flex: 1,
-												flexWrap: 'wrap',
-												flexDirection: 'row',
-												gap: 12,
-											}}
-										>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="checked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Black</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>White</Text>
-											</View>
-											<View style={[style.rowCenter]}>
-												<RadioButton
-													status="unchecked"
-													color={colors.brand}
-													value="first"
-												/>
-												<Text>Pink</Text>
-											</View>
-										</View>
-									</View>
 									<View style={{ flex: 1, marginVertical: 16 }}>
 										<Line />
 									</View>
@@ -845,10 +869,34 @@ export const ProductDetail = () => {
 														color={colors.mainBackground}
 													/>
 												</Pressable>
+												<Text
+													style={{ opacity: 0.5, fontSize: 12 }}
+												>
+													(100 pieces available)
+												</Text>
 											</View>
 										</View>
 										<Pressable
-											onPress={goPayment}
+											onPress={() => {
+												if (product?.id) {
+													const selectedOptionIds = Object.keys(
+														selectedOptions,
+													).map((optionIndex) => {
+														const listIndex =
+															selectedOptions[
+																optionIndex as unknown as number
+															];
+														return listOptions[
+															optionIndex as unknown as number
+														][listIndex].id;
+													});
+													addItemToCart(
+														product.id,
+														1,
+														selectedOptionIds,
+													);
+												}
+											}}
 											style={{
 												flex: 1,
 												backgroundColor: colors.brand,

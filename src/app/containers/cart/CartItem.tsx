@@ -1,6 +1,6 @@
 import { Add, Minus, Trash } from '@/src/assets';
 import { colors } from '@/src/constants';
-import { Cart } from '@/src/types';
+import { CartItem as ICartItem } from '@/src/types';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
@@ -9,7 +9,7 @@ import { getProduct } from '../productDetail';
 import { deleteProductInCart } from './handle';
 
 interface CartItemProps {
-	cartItem: Cart;
+	cartItem: ICartItem;
 }
 
 export const CartItem = ({ cartItem }: CartItemProps) => {
@@ -40,13 +40,17 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
 				<Checkbox status="checked" />
-				<Image width={100} height={100} source={{ uri: cartItem.image }} />
+				<Image
+					width={100}
+					height={100}
+					source={{ uri: cartItem.item.image_url }}
+				/>
 				<View style={styles.info}>
-					<Text style={styles.nameText}>{cartItem.name}</Text>
+					<Text style={styles.nameText}>{cartItem.item.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
-						Black, Headphone + Wire
+						HMMMM
 					</Text>
-					<Text style={styles.priceText}>${cartItem.price}</Text>
+					<Text style={styles.priceText}>${cartItem.item.price}</Text>
 					<View style={styles.qtyContainer}>
 						<Pressable onPress={handleMinusQty}>
 							<Minus />
@@ -69,12 +73,13 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		gap: 24,
+		gap: 16,
 		margin: 8,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	info: {
+		flex: 1,
 		justifyContent: 'center',
 		gap: 5,
 	},

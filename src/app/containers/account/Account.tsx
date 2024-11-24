@@ -1,30 +1,41 @@
 import { Edit, Package, StarProduct } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Button, shadow, Text, TextInput } from 'react-native-paper';
-import { HeaderTitle } from '../navigation/components/HeaderTitle';
-import { useCallback, useEffect, useState } from 'react';
-import { DismissKeyboardView } from '../components';
 import {
-	useFocusEffect,
-	useIsFocused,
-	useNavigation,
-	useRoute,
-} from '@react-navigation/native';
-import {
-	ScreenTabNavigationProp,
+	AppDispatch,
+	setAccessToken,
+	setAccessTokenSecure,
 	StackScreenNavigationProp,
-	useAppSelector,
+	useAppDispatch,
+	useAppSelector
 } from '@/src/libs';
+import { setAuth, setCart, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
+import { setFeedback } from '@/src/libs/redux/store/feedbackSlice';
+import {
+	useIsFocused,
+	useNavigation
+} from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useState } from 'react';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
+import { DismissKeyboardView } from '../../components';
+import { fetchDetailInformation } from '../../localHandle';
+import { HeaderTitle } from '../../navigation/components/HeaderTitle';
+import { fetchUpdateDetailInformation } from '../register/handle';
 
 export const Account = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
-	const navigationTab = useNavigation<ScreenTabNavigationProp>();
 
 	const detailsInformation = useAppSelector(state => state.detailInfomation);
+	const account = useAppSelector(state => state.auth?.account);
+	const dispatch = useAppDispatch<AppDispatch>();
 
 	const [editDetail, setEditDetail] = useState<boolean>(false);
+
+	const [fullname, setFullname] = useState<string>(detailsInformation.detailInfomation?.full_name);
+	const [address, setAddress] = useState<string>(detailsInformation.detailInfomation?.address);
+	const [phone, setPhone] = useState<string>(detailsInformation.detailInfomation?.phone);
+
 
 	const handleEditDetail = () => {
 		setEditDetail(!editDetail);
@@ -37,14 +48,38 @@ export const Account = () => {
 	};
 
 	const handleLogout = () => {
-		
+		setAccessToken('');
+		setAccessTokenSecure('');
+
+		dispatch(setAuth(null))
+		dispatch(setDetailInfomation(null))
+		dispatch(setFavorite(null))
+		dispatch(setFeedback(null))
+		dispatch(setCart(null))
+
+		navigation.navigate('Login');
 	}
 
-	// const isFocused = useIsFocused();
+	const handleUpdateDetail = async () => {
+		const result = await fetchUpdateDetailInformation({fullname, address, phone});
 
-	// useEffect(() => {
-	// 	navigation.navigate('Login');
-	// }, [isFocused]);
+		if ( result && result.statusCode === 200) {
+			dispatch(setDetailInfomation(result.data));
+			setEditDetail(false);
+
+			const detailInformation = await fetchDetailInformation();
+			dispatch(setDetailInfomation(detailInformation?.data || null));
+		}
+
+	}
+
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (detailsInformation.detailInfomation === null) {
+			navigation.navigate('Login');
+		}
+	}, [isFocused]);
 
 	return (
 		<DismissKeyboardView>
@@ -83,7 +118,7 @@ export const Account = () => {
 						>
 							<Image
 								source={{
-									uri: detailsInformation.detailInfomation?.avatarUrl,
+									uri: detailsInformation.detailInfomation?.avatar_url,
 								}}
 								width={95}
 								height={95}
@@ -120,7 +155,7 @@ export const Account = () => {
 										},
 									]}
 								>
-									{detailsInformation.detailInfomation?.fullName}
+									{detailsInformation.detailInfomation?.full_name}
 								</Text>
 							</View>
 						</LinearGradient>
@@ -212,22 +247,25 @@ export const Account = () => {
 								<TextFields
 									edit={editDetail}
 									label="Fullname"
-									value={detailsInformation.detailInfomation?.fullName}
+									value={fullname}
+									onChangeText={setFullname}
 								/>
 								<TextFields
 									edit={editDetail}
 									label="Address"
-									value={detailsInformation.detailInfomation?.address}
+									value={address}
+									onChangeText={setAddress}
 								/>
 								<TextFields
 									edit={editDetail}
 									label="Phone"
-									value={detailsInformation.detailInfomation?.phone}
+									value={phone}
+									onChangeText={setPhone}
 								/>
 								<TextFields
 									edit={editDetail}
 									label="Email"
-									value="Dieglevel@gmail.com"
+									value={account?.email}
 								/>
 							</View>
 
@@ -242,6 +280,7 @@ export const Account = () => {
 										Cancel
 									</Button>
 									<Button
+										onPress={handleUpdateDetail}
 										mode="contained"
 										style={{ borderRadius: 8 }}
 										buttonColor={colors.brand}
@@ -320,6 +359,7 @@ export const Account = () => {
 							)}
 						</View>
 						<Button
+							onPress={handleLogout}
 							mode="contained"
 							style={{ borderRadius: 8 }}
 							buttonColor={colors.brand}
@@ -338,13 +378,16 @@ interface TextFieldsProps {
 	value?: string;
 	edit?: boolean;
 	secureTextEntry?: boolean;
+	onChangeText?: (text: string) => void;
 }
 
 const TextFields = ({
 	label,
-	value = '************',
+	value = '',
 	edit = false,
 	secureTextEntry = false,
+	onChangeText,
+	
 }: TextFieldsProps) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -363,6 +406,8 @@ const TextFields = ({
 			{edit ? (
 				<View style={[style.rowCenter, { flex: 1 }]}>
 					<TextInput
+						value={value}
+						onChangeText={onChangeText}
 						secureTextEntry={secureTextEntry && showPassword}
 						mode="outlined"
 						placeholderTextColor={colors.secondText}
@@ -390,7 +435,7 @@ const TextFields = ({
 					)}
 				</View>
 			) : (
-				<Text style={[{ flex: 1 }]}>{value}</Text>
+				<Text style={[{ flex: 1 }]}>{secureTextEntry ? "*********" : value}</Text>
 			)}
 		</View>
 	);

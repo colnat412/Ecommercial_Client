@@ -1,18 +1,10 @@
 import { colors, style } from '@/src/constants';
-import {
-	NoData,
-	ProductList,
-} from '../../components';
-import {
-	Button,
-	Dialog,
-	Paragraph,
-	Portal,
-} from 'react-native-paper';
+import { NoData, ProductList } from '../../components';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { ActivityIndicator, View } from 'react-native';
 import { HeaderTitle } from '../../navigation/components';
 import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
 	StackScreenNavigationProp,
 	useAppDispatch,
@@ -22,17 +14,33 @@ import { removeFavorite, setFavorite } from '@/src/libs/redux/store';
 import { fetchFavorite } from '../../localHandle';
 import { favoriteDelete } from './handle';
 import { Remove } from '@/src/assets';
+import { DetailInformation } from '@/src/types';
 
 export const Favorite = () => {
-	const favoriteData = useAppSelector((state) => state.favorite);
 	const [deleteId, setDeleteId] = useState<string>('');
 	const [deleteing, setDeleteing] = useState(false);
 
 	const [visible, setVisible] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const navigate = useNavigation<StackScreenNavigationProp>();
+	const navigation = useNavigation<StackScreenNavigationProp>();
 
+	const favoriteData = useAppSelector((state) => state.favorite);
+	const detailsInformation: DetailInformation | null = useAppSelector(
+		(state) => state.detailInfomation.detailInfomation,
+	);
 	const dispatch = useAppDispatch();
+
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (detailsInformation === null) {
+			navigation.navigate('Login');
+		}
+		setLoading(false);
+		if (!isFocused){
+			setLoading(true);
+		}
+	}, [isFocused]);
 
 	const showModal = (id: string) => {
 		setDeleteId(id);
@@ -52,19 +60,8 @@ export const Favorite = () => {
 	};
 
 	const handlePressCard = (productId: string) => {
-		navigate.navigate('ProductDetail', { productId: productId });
+		navigation.navigate('ProductDetail', { productId: productId });
 	};
-
-	useEffect(() => {
-		const fetchFavoriteData = async () => {
-			const response = await fetchFavorite();
-			if (response.status === 200) {
-				dispatch(setFavorite(response.data ? response.data : []));
-				setLoading(false);
-			}
-		};
-		fetchFavoriteData();
-	}, []);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -80,7 +77,7 @@ export const Favorite = () => {
 							Bạn có chắc chắn muốn xóa mục này không?
 						</Paragraph>
 					</Dialog.Content>
-					<Dialog.Actions style={{gap: 10}}>
+					<Dialog.Actions style={{ gap: 10 }}>
 						{deleteing && (
 							<ActivityIndicator size={'large'} color={colors.brand} />
 						)}
@@ -111,19 +108,16 @@ export const Favorite = () => {
 					<ActivityIndicator size="large" color={colors.brand} />
 				) : (
 					<>
-						{favoriteData.favorite ? (
+						{favoriteData.favorite && favoriteData.favorite.length > 0 ? (
 							<ProductList
-							style={{ paddingHorizontal: 8 }}
+								style={{ paddingHorizontal: 8 }}
 								products={favoriteData.favorite}
 								onPressCard={handlePressCard}
-								componentRight={
-									<Remove />
-								}
+								componentRight={<Remove />}
 								onPressButtonRight={showModal}
-
 							/>
 						) : (
-							<NoData />
+							<NoData message={`You don't have any favorite`} />
 						)}
 					</>
 				)}

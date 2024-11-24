@@ -1,3 +1,4 @@
+import { colors } from '@/src/constants';
 import { StackScreenNavigationProp } from '@/src/libs';
 import { Category } from '@/src/types/category';
 import { useNavigation } from '@react-navigation/native';
@@ -33,18 +34,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
-		gap: 16,
-		padding: 8,
+		gap: 8,
 	},
 	circularImage: {
 		width: 80,
 		height: 80,
 		borderRadius: 50,
-		overflow: 'hidden',
+		borderWidth: 2,
+		borderColor: colors.brand
 	},
 	textStyle: {
 		fontSize: 16,
 		fontWeight: 'bold',
-		maxWidth: 100,
+		minWidth: 100,
+		maxWidth: 100
 	},
 });

@@ -1,28 +1,46 @@
-import { api, AppDispatch, getAccessTokenSecure, setAccessToken, Stack, useAppDispatch } from '@/src/libs';
+import {
+	AppDispatch,
+	getAccessTokenSecure,
+	setAccessToken,
+	Stack,
+	useAppDispatch,
+} from '@/src/libs';
 import { NavigationContainer } from '@react-navigation/native';
-import { TabScreenApp } from './TabScreenApp';
 import { useEffect, useState } from 'react';
+import { TabScreenApp } from './TabScreenApp';
 
-import { ErroContainter } from '../components';
-import { ActivityIndicator } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
+import {
+	setAuth,
+	setCart,
+	setDetailInfomation,
+	setFavorite,
+	setFeedback,
+} from '@/src/libs/redux/store';
 import { View } from 'react-native';
-import { checkConnect } from '../localHandle';
-import { Account } from '@/src/types';
-import { setAuth } from '@/src/libs/redux/store';
+import { ActivityIndicator } from 'react-native-paper';
+import { ErrorContainter } from '../components';
 import { Register } from '../containers';
-import { ProductDetail } from '../containers/productDetail';
+import { ShoppingCart } from '../containers/cart';
 import { SubCategory } from '../containers/category';
-import { PaymentOption, PaymentResult } from '../containers/payment';
-import { OrderComponent, OrderDetail } from '../containers/order';
+import { ChatAdmin } from '../containers/chat';
 import { Feedback } from '../containers/feedback';
-import { Carts } from '../containers/cart';
 import { Login } from '../containers/login';
-
+import { OrderComponent, OrderDetail } from '../containers/order';
+import { PaymentOption, PaymentResult } from '../containers/payment';
+import { ProductDetail } from '../containers/productDetail';
+import {
+	checkConnect,
+	fetchCart,
+	fetchFavorite,
+	fetchFeedback,
+	fetchMyAccount,
+} from '../localHandle';
 
 export const StackScreenApp = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isConnect, setIsConnect] = useState<boolean>(false);
+	const [error, setError] = useState<string>('');
 
 	const dispatch = useAppDispatch<AppDispatch>();
 
@@ -33,10 +51,9 @@ export const StackScreenApp = () => {
 				if (response.status === 500) {
 					setIsConnect(false);
 					setIsLoading(false);
-					console.log('Stack Screen: Connect failed');
+					setError('Server error');
+					return;
 				} else {
-					setIsConnect(true);
-					setIsLoading(false);
 					console.log('Stack Screen: Connect success');
 				}
 			} catch (e) {
@@ -47,35 +64,38 @@ export const StackScreenApp = () => {
 
 			setAccessToken(tokenSecure ? tokenSecure : '');
 
-			try {
-				const request = await api.get('/api/auth/my-account');
-				if (request.status === 200) {
-					const account: Account = request.data.data;
-					dispatch(setAuth({account}));
-					// console.log('Stack Screen:' + account.accessToken);
-					console.log('Stack Screen: AccessToken success');
-				}
-				else {
+			if (tokenSecure !== '') {
+				try {
+					const account = await fetchMyAccount();
+
+					if (account?.data && account.statusCode === 200) {
+						dispatch(
+							setAuth({
+								account: account.data.account,
+								role: account.data.role,
+							}),
+						);
+						dispatch(setDetailInfomation(account.data.detailInformation));
+
+						const favoriteData = await fetchFavorite();
+						dispatch(setFavorite(favoriteData?.data || []));
+
+						const feedbackData = await fetchFeedback();
+						dispatch(setFeedback(feedbackData?.data || []));
+
+						const cartData = await fetchCart();
+						dispatch(setCart(cartData?.data || []));
+
+						console.log('Stack Screen: AccessToken success');
+					} else {
+						console.log('Stack Screen: AccessToken failed');
+					}
+				} catch (error) {
 					console.log('Stack Screen: AccessToken failed');
 				}
-
-			} catch (error) {
-				console.log('Stack Screen: AccessToken failed');
 			}
-
-			// try {
-			// 	const autoLogin = await axios.post(`${BE_URL}/api/auth/login`, {
-			// 		identifier: 'user2',
-			// 		password: '123',
-			// 	});
-
-			// 	const { id, accessToken } = autoLogin.data.data;
-
-			// 	login(id, accessToken);
-			// 	console.log('Stack Sreen: AccessToken success');
-			// } catch (error) {
-			// 	console.log('Stack Sreen: AccessToken failed');
-			// }
+			setIsLoading(false);
+			setIsConnect(true);
 		};
 		connect();
 	}, []);
@@ -130,7 +150,8 @@ export const StackScreenApp = () => {
 									component={OrderDetail}
 								/>
 								<Stack.Screen name="Feedback" component={Feedback} />
-								<Stack.Screen name="Cart" component={Carts} />
+								<Stack.Screen name="Cart" component={ShoppingCart} />
+								<Stack.Screen name="ChatAdmin" component={ChatAdmin} />
 							</Stack.Navigator>
 						</NavigationContainer>
 					) : (
@@ -140,7 +161,7 @@ export const StackScreenApp = () => {
 								{ justifyContent: 'center', alignItems: 'center' },
 							]}
 						>
-							<ErroContainter />
+							<ErrorContainter message={error} type="large" />
 						</View>
 					)}
 				</>

@@ -29,3 +29,4 @@ export * from './Arrow';
 export * from './Send'
 export * from './Qr'
 export * from './Momo'
+export * from './EmptyBox'

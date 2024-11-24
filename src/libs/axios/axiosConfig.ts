@@ -22,9 +22,7 @@ api.interceptors.request.use(
 	},
 	(error) => {
 		if (error.response.status === 401) {
-					console.log(
-			'\x1b[41m Axios\x1b[0m \x1b[31m \x1b[0m',
-		);
+			console.log('\x1b[41m Axios\x1b[0m \x1b[31m \x1b[0m');
 		}
 
 		return Promise.reject(error);

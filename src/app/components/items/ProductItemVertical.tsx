@@ -1,7 +1,8 @@
 import { Cart, Star } from '@/src/assets';
-import { style } from '@/src/constants';
+import { colors, style } from '@/src/constants';
 import { StackScreenNavigationProp } from '@/src/libs';
 import { Product } from '@/src/types';
+import { formatRating } from '@/src/utils';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
@@ -20,33 +21,40 @@ export const ProductItemVertical = React.memo(
 
 		return (
 			<Pressable onPress={goProductDetail} style={styles.container}>
-				<View style={{ padding: 5 }}>
+				<View style={{ width: '100%', height: 200 }}>
 					<Image
-						style={{ width: 150, height: 150 }}
 						source={{ uri: product?.image_url }}
+						style={{
+							flex: 1,
+							borderRadius: 6,
+							borderWidth: 2,
+							borderColor: colors.outline,
+							backgroundColor: colors.outline,
+						}}
+						resizeMode="cover"
 					/>
 				</View>
 				<View style={styles.info}>
-					<View>
+					<View style={styles.child}>
 						<Text
-							style={{ width: '100%', maxWidth: 100 }}
+							style={{ fontSize: 16, fontWeight: 'bold' }}
 							numberOfLines={1}
 						>
 							{product?.name}
 						</Text>
 					</View>
 
-					<View style={styles.rating}>
+					<View style={[styles.child2, { flex: 0 }]}>
 						<Star width={18} height={18} />
-						<Text>4.5</Text>
+						<Text>{formatRating(product.rating)}</Text>
 					</View>
 				</View>
-				<View style={styles.info}>
-					<View>
-						<Text style={style.priceText}>${product?.price}</Text>
+				<View style={[styles.info]}>
+					<View style={styles.child}>
+						<Text style={style.priceText}>{`$ ${product?.price}`}</Text>
 					</View>
 
-					<View style={styles.rating}>
+					<View style={styles.child2}>
 						<Cart width={18} height={18} />
 						<Text>12.5k</Text>
 					</View>
@@ -58,15 +66,16 @@ export const ProductItemVertical = React.memo(
 
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: 10,
-		marginVertical: 10,
+		flex: 1,
+		marginHorizontal: 4,
 		flexDirection: 'column',
 		gap: 10,
-		width: '45%',
 		justifyContent: 'center',
 		alignItems: 'center',
-		padding: '2%',
-		borderRadius: 6,
+		padding: 8,
+		borderRadius: 8,
+		borderWidth: 1,
+		borderColor: colors.outline,
 		backgroundColor: '#FFFFFF',
 		shadowColor: '#000',
 		shadowOffset: {
@@ -79,13 +88,27 @@ const styles = StyleSheet.create({
 		elevation: 3,
 	},
 	info: {
-		width: '100%',
+		flex: 1,
+		// backgroundColor: 'blue',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 	rating: {
 		flexDirection: 'row',
-		alignItems: 'center',
 	},
-	price: {},
+	child: {
+		flex: 1,
+		gap: 2,
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		flexDirection: 'row',
+	},
+	child2: {
+		flex: 1,
+		gap: 2,
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+	},
 });
