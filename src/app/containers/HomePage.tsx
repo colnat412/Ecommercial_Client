@@ -63,11 +63,11 @@ export const HomePage = () => {
 				setLoading(false);
 	}, []);
 
-	useEffect(() => {
-		if (page > 1) {
-			fetchProduct(page);
-		}
-	}, [page]);
+	// useEffect(() => {
+	// 	if (page > 1) {
+	// 		fetchProduct(page);
+	// 	}
+	// }, [page]);
 	return (
 		<View style={{ flex: 1 }}>
 			<HomePageHeader />
@@ -84,7 +84,7 @@ export const HomePage = () => {
 						showsVerticalScrollIndicator={false}
 						numColumns={2}
 						onEndReached={handleLoadMore}
-						onEndReachedThreshold={0.2}
+						onEndReachedThreshold={0.7}
 						contentContainerStyle={{ gap: 8 }}
 						data={data}
 						renderItem={({ item }) => (

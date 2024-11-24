@@ -19,6 +19,7 @@ export type RootStackParamList = {
 	Feedback: undefined;
 	PaymentResult: undefined;
 	Cart: { productId: string };
+	ChatAdmin: {userId: string};
 };
 
 declare global {
@@ -33,3 +34,4 @@ export type StackScreenNavigationProp =
 export type ProductDetailRouteProp = RouteProp<RootStackParamList, 'ProductDetail'>;
 export type OrderDetailRouteProp = RouteProp<RootStackParamList, 'OrderDetail'>;
 export type CartRouteProp = RouteProp<RootStackParamList, 'Cart'>;
+export type ChatAdminRouteProp = RouteProp<RootStackParamList, 'ChatAdmin'>;

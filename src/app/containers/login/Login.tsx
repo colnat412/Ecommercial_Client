@@ -47,7 +47,7 @@ export const Login = () => {
 			setAccessToken(resultLogin.data.account.accessToken);
 			setAccessTokenSecure(resultLogin.data.account.accessToken);
 
-			dispatch(setAuth({ account: resultLogin.data.account }));
+			dispatch(setAuth({ account: resultLogin.data.account, role: resultLogin.data.role }));
 
 			dispatch(setDetailInfomation(resultLogin.data.detailInformation));
 
