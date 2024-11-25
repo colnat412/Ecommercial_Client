@@ -10,19 +10,24 @@ import { useEffect, useState } from 'react';
 import { CartItem } from '@/src/types';
 import { getData } from '../handle';
 import { useRoute } from '@react-navigation/native';
+import { PaymentOptionRouteProp } from '@/src/libs';
 
 export const PaymentOption = () => {
+	const route = useRoute<PaymentOptionRouteProp>();
 	const [data, setData] = useState<CartItem[]>([]);
 
 	useEffect(() => {
-		const fetchData = () => {};
+		const fetchData = () => {
+			const cartItems = route.params.selectedItems;
+			setData(cartItems);
+		};
 		fetchData();
 	}, []);
 
 	return (
 		<View style={styles.container}>
 			<HeaderTitleWithBack title="Payment" />
-			<ScrollView>
+			<View style={{ flex: 1 }}>
 				<View style={styles.priceText}>
 					<Text style={{ fontSize: 26, letterSpacing: 3 }}>TOTAL</Text>
 					<Text
@@ -42,7 +47,7 @@ export const PaymentOption = () => {
 					/>
 				</View>
 				<PaymentMethod />
-			</ScrollView>
+			</View>
 		</View>
 	);
 };
