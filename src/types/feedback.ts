@@ -1,5 +1,5 @@
 import { Account } from './account';
-import { DetailInfomation } from './detailInfomation';
+import { DetailInformation } from './detailInfomation';
 
 export interface Feedback {
 	id: string;
@@ -7,7 +7,13 @@ export interface Feedback {
 	imageUrl: string;
 	rating: number;
 	comment: string;
-	detailInfomation: DetailInfomation;
+	detailInfomation: DetailInformation;
 	createdAt?: string;
 	updatedAt?: string;
+}
+
+export interface FeedbackProductDetail extends Feedback {
+	account: {
+		detailInformation: DetailInformation;
+	} & Account;
 }
