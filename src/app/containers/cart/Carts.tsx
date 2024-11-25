@@ -93,6 +93,10 @@ export const ShoppingCart = () => {
 		}
 	};
 
+	const goPayment = () => {
+		navigation.navigate('PaymentOption', { selectedItems: selectedItems });
+	};
+
 	return (
 		<View style={{ flex: 1, marginTop: 30, padding: 5 }}>
 			<HeaderTitleWithBack title="Carts" />
@@ -149,6 +153,7 @@ export const ShoppingCart = () => {
 					</Text>
 				</Pressable>
 				<Pressable
+					onPress={goPayment}
 					style={[
 						style.button,
 						{

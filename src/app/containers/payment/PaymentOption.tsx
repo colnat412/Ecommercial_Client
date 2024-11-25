@@ -7,19 +7,15 @@ import { PaymentCartItem } from './PaymentCartItem';
 import { Line } from '../../components/Line';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { useEffect, useState } from 'react';
-import { Cart } from '@/src/types';
+import { CartItem } from '@/src/types';
 import { getData } from '../handle';
+import { useRoute } from '@react-navigation/native';
 
 export const PaymentOption = () => {
-	const [data, setData] = useState<Cart[]>([]);
+	const [data, setData] = useState<CartItem[]>([]);
 
 	useEffect(() => {
-		const fetchData = () => {
-			const res = getData({ urlApi: '/carts' });
-			res.then((data) => {
-				setData(data);
-			});
-		};
+		const fetchData = () => {};
 		fetchData();
 	}, []);
 
