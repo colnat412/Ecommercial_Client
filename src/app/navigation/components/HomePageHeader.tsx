@@ -36,7 +36,7 @@ export const HomePageHeader = () => {
 	};
 
 	const goCart = async () => {
-		navigation.navigate('Cart', { productId: '' });
+		navigation.navigate('Cart', { productId: '', callback: () => {} });
 	};
 
 	return (

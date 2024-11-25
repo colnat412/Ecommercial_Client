@@ -62,6 +62,27 @@ export const updateProductInCart = async (id: string) => {
 	}
 };
 
+export const deleteAllCartItem = async (ids: string[]) => {
+	try {
+		const promise = ids.map((id) =>
+			api.delete(`${BE_URL}/api/carts/remove-product/${id}`),
+		);
+		const response = await Promise.all(promise);
+		return {
+			data: response.map((res) => res.data),
+			status: 200,
+			message: 'Success',
+		};
+	} catch (error) {
+		console.error(error);
+		return {
+			data: null,
+			status: 500,
+			message: 'Internal Server Error',
+		};
+	}
+};
+
 export const deleteCartItem = async (id: string) => {
 	try {
 		const response = await api.delete(
