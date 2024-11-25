@@ -6,6 +6,8 @@ export interface CartItem {
 	id: string;
 	quantity: number;
 	item: Product;
-	options: Option[];
-	listOptions: ListOption[];
+	options: {
+		id: string;
+		listOption: ListOption;
+	}[];
 }

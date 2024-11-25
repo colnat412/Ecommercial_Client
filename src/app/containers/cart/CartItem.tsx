@@ -25,6 +25,16 @@ export const CartItem = ({
 	const handleAddQty = () => setQty(qty + 1);
 	const handleMinusQty = () => qty > 0 && setQty(qty - 1);
 
+	const calculateTotalPrice = () => {
+		const priceTotal =
+			cartItem.item.price +
+			cartItem.options.reduce(
+				(sum, option) => sum + option.listOption.adjustPrice,
+				0,
+			);
+		return priceTotal;
+	};
+
 	return (
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
@@ -40,9 +50,11 @@ export const CartItem = ({
 				<View style={styles.info}>
 					<Text style={styles.nameText}>{cartItem.item.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
-						{cartItem.listOptions.map((option) => option.name).join(', ')}
+						{cartItem.options
+							.map((option) => option.listOption.name)
+							.join(', ')}
 					</Text>
-					<Text style={styles.priceText}>${cartItem.item.price}</Text>
+					<Text style={styles.priceText}>${calculateTotalPrice()}</Text>
 					<View style={styles.qtyContainer}>
 						<Pressable onPress={handleMinusQty}>
 							<Minus />

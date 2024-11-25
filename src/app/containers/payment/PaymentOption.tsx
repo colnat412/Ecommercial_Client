@@ -27,13 +27,13 @@ export const PaymentOption = () => {
 	return (
 		<View style={styles.container}>
 			<HeaderTitleWithBack title="Payment" />
-			<View style={{ flex: 1 }}>
+			<View style={{ flex: 1, paddingHorizontal: 20 }}>
 				<View style={styles.priceText}>
 					<Text style={{ fontSize: 26, letterSpacing: 3 }}>TOTAL</Text>
 					<Text
 						style={{ fontSize: 26, fontWeight: 'bold', letterSpacing: 3 }}
 					>
-						$2.500
+						${route.params.totalPrice}
 					</Text>
 				</View>
 				<Line />

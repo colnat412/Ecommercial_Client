@@ -612,11 +612,6 @@ export const ProductDetail = () => {
 							<Favorite width={20} height={20} />
 						</Pressable>
 						<Button
-							onPress={() =>
-								navigation.navigate('PaymentOption', {
-									selectedItems: [],
-								})
-							}
 							style={[
 								style.outline,
 								{ borderColor: colors.brand, flex: 1 },

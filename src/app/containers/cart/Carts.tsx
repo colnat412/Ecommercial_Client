@@ -10,6 +10,11 @@ import { Arrow } from '@/src/assets';
 import { useNavigation } from '@react-navigation/native';
 import { deleteCartItem, getCartItem } from './handle';
 
+interface CartResponse {
+	shoppingCart: CartItemI[];
+	cartItems: CartItemI[];
+}
+
 export const ShoppingCart = () => {
 	const navigation = useNavigation();
 	const [data, setData] = useState<CartItemI[]>([]);
@@ -22,13 +27,25 @@ export const ShoppingCart = () => {
 		const fetchCartItems = async () => {
 			try {
 				const response = await getCartItem();
-				const cartItems = response.data.data?.cartItems ?? [];
-				const mappedItems = cartItems.map((cartItem: CartItemI) => ({
-					id: cartItem.id,
-					quantity: cartItem.quantity,
-					item: cartItem.item,
-					listOptions: cartItem.options.map((option) => option.listOption),
-				}));
+				const cartItems: CartItemI[] = response.data.data?.cartItems ?? [];
+				const mappedItems = cartItems.map((cartItem: CartItemI) => {
+					const priceTotal =
+						cartItem.item.price +
+						cartItem.options.reduce(
+							(sum, option) => sum + option.listOption.adjustPrice,
+							0,
+						);
+					return {
+						id: cartItem.id,
+						quantity: cartItem.quantity,
+						item: cartItem.item,
+						priceTotal: priceTotal,
+						options: cartItem.options,
+						listOptions: cartItem.options.map(
+							(option) => option.listOption,
+						),
+					};
+				});
 				setDataChanged(true);
 				setData(mappedItems);
 			} catch (error) {
@@ -99,7 +116,19 @@ export const ShoppingCart = () => {
 	};
 
 	const goPayment = () => {
-		navigation.navigate('PaymentOption', { selectedItems: selectedItems });
+		navigation.navigate('PaymentOption', {
+			selectedItems: selectedItems,
+			totalPrice: selectedItems.reduce(
+				(total, item) =>
+					(total +
+						item.item.price +
+						item.options
+							.map((option) => option.listOption.adjustPrice)
+							.reduce((sum, price) => sum + price, 0)) *
+					item.quantity,
+				0,
+			),
+		});
 	};
 
 	return (
@@ -137,8 +166,25 @@ export const ShoppingCart = () => {
 					alignItems: 'center',
 				}}
 			>
-				<Text style={{ fontSize: 16 }}>Total:</Text>
-				<Text style={{ fontSize: 16, fontWeight: 'bold' }}>$2222</Text>
+				<View style={{ maxWidth: 300, flexDirection: 'row' }}>
+					<Text style={{ fontSize: 16 }}>Total:</Text>
+					<Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+						$
+						{selectedItems
+							.reduce(
+								(total, item) =>
+									(total +
+										item.item.price +
+										item.options
+											.map((option) => option.listOption.adjustPrice)
+											.reduce((sum, price) => sum + price, 0)) *
+									item.quantity,
+								0,
+							)
+							.toFixed(2)}
+					</Text>
+				</View>
+
 				<Pressable
 					onPress={handleDeleteAll}
 					style={[
