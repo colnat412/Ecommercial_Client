@@ -72,7 +72,7 @@ export const TabScreenApp = () => {
 				},
 				tabBarShowLabel: true,
 			})}
-			initialRouteName="ListChat"
+			initialRouteName="HomePage"
 		>
 			<Tab.Screen
 				name="HomePage"

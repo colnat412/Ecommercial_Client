@@ -1,9 +1,3 @@
-import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import {  Modal, Portal, RadioButton, Text } from 'react-native-paper';
-import { SearchInput } from './SearchInput';
-import { Line, ProductItemVertical } from '../../components';
-import { useState } from 'react';
 import {
 	BestDeal,
 	Cancel,
@@ -13,9 +7,25 @@ import {
 	Star,
 } from '@/src/assets';
 import { colors, style } from '@/src/constants';
-import { searchProduct, searchProductByPriceRange } from './handle';
 import { Product } from '@/src/types';
-
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import { useEffect, useRef, useState } from 'react';
+import {
+	FlatList,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	View,
+} from 'react-native';
+import { Modal, Portal, RadioButton, Text } from 'react-native-paper';
+import {
+	DismissKeyboardView,
+	Line,
+	ProductItemVertical,
+} from '../../components';
+import { HeaderTitle } from '../../navigation/components';
+import { searchProduct, searchProductByPriceRange } from './handle';
+import { SearchInput } from './SearchInput';
 interface shippingOptionsProps {
 	instant: boolean;
 	express: boolean;
@@ -31,6 +41,7 @@ interface OthersOptionsProps {
 
 export const SearchPage = () => {
 	const [data, setData] = useState<Product[]>([]);
+
 	const [priceRange, setPriceRange] = useState<number[]>([0, 800]);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
@@ -47,6 +58,7 @@ export const SearchPage = () => {
 		shipToStore: false,
 	});
 
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const handleVisible = () => {
 		setIsVisible(!isVisible);
 	};
@@ -76,315 +88,381 @@ export const SearchPage = () => {
 	};
 
 	const handleSearch = (text: string) => {
-		searchProduct(text).then((data) => {
-			setData(data);
-		});
+		// Xóa timer cũ nếu người dùng tiếp tục nhập
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+
+		// Đặt timer mới
+		timeoutRef.current = setTimeout(() => {
+			if (text === '') {
+				setData([]);
+			} else {
+				handleSearchResult(text);
+			}
+		}, 500); // Trì hoãn 500ms
+	};
+	const handleSearchResult = async (text: string) => {
+		const response = await searchProduct(text);
+		if (response && response.data && response.statusCode === 200) {
+			setData(response.data);
+		} else {
+			setData([]);
+		}
 	};
 
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, []);
+
 	return (
-		<View style={styles.container}>
-			<SearchInput
-				handleSearch={handleSearch}
-				handleShowFilter={handleVisible}
-			/>
-			<Portal>
-				<Modal
-					visible={isVisible}
-					onDismiss={handleVisible}
-					contentContainerStyle={styles.modalContainer}
-				>
-					<View
-						style={[
-							styles.header,
-							{
-								flexDirection: 'row',
-								justifyContent: 'space-between',
-								alignItems: 'center',
-							},
-						]}
-					>
-						<View style={{ flex: 1 }} />
-						<View style={{ flex: 1, alignItems: 'center' }}>
-							<Text style={{ fontWeight: 'bold', fontSize: 20 }}>
-								FILTER
-							</Text>
-						</View>
-						<Pressable
-							onPress={() => setIsVisible(false)}
-							style={{ flex: 1, alignItems: 'flex-end' }}
-						>
-							<Cancel color={'black'} />
-						</Pressable>
-					</View>
-					<View style={styles.shippingOptionsContainer}>
-						<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-							Shipping options
-						</Text>
-						<View style={styles.option}>
-							<RadioButton
-								onPress={() => handleShippingOptions(1)}
-								status={
-									shippingOptions.instant ? 'checked' : 'unchecked'
-								}
-								value="instant"
-							/>
-							<Text>Instant (2 hours delivery)</Text>
-						</View>
-						<View style={styles.option}>
-							<RadioButton
-								onPress={() => handleShippingOptions(2)}
-								status={
-									shippingOptions.express ? 'checked' : 'unchecked'
-								}
-								value="express"
-							/>
-							<Text>Express (2 days delivery)</Text>
-						</View>
-						<View style={styles.option}>
-							<RadioButton
-								onPress={() => handleShippingOptions(3)}
-								status={
-									shippingOptions.standard ? 'checked' : 'unchecked'
-								}
-								value="standard"
-							/>
-							<Text>Standard (7-10 days delivery)</Text>
-						</View>
-					</View>
-					<Line />
-					<View style={styles.priceRangeContainer}>
-						<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-							Price range
-						</Text>
-						<View
-							style={{
-								flexDirection: 'row',
-								justifyContent: 'space-between',
-							}}
-						>
-							<View
-								style={{
-									borderWidth: 0.5,
-									padding: 10,
-									maxWidth: 100,
-									width: 100,
-									borderRadius: 6,
-								}}
-							>
-								<Text style={{ fontWeight: 'bold' }}>
-									$ {priceRange[0]}
-								</Text>
-							</View>
-							<View
-								style={{
-									borderWidth: 0.5,
-									padding: 10,
-									maxWidth: 100,
-									width: 100,
-									borderRadius: 6,
-								}}
-							>
-								<Text style={{ fontWeight: 'bold' }}>
-									$ {priceRange[1]}
-								</Text>
-							</View>
-						</View>
-						<MultiSlider
-							containerStyle={{
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-							sliderLength={360}
-							values={[priceRange[0], priceRange[1]]}
-							min={0}
-							max={1000}
-							onValuesChange={(value) => setPriceRange(value)}
-							step={1}
+		<DismissKeyboardView>
+			<View style={[style.body]}>
+				<HeaderTitle title="Search" />
+
+				<View style={{ flex: 1, padding: 4 }}>
+					<View style={{height: 40, paddingHorizontal: 4}}>
+						<SearchInput
+							handleSearch={handleSearch}
+							handleShowFilter={handleVisible}
 						/>
 					</View>
-					<Line />
-					<View style={styles.ratingContainer}>
-						<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-							Average review
-						</Text>
-						<View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-								gap: 16,
-							}}
-						>
-							<Pressable>
-								<Star width={27} height={27} />
-							</Pressable>
-							<Pressable>
-								<Star width={27} height={27} />
-							</Pressable>
-							<Pressable>
-								<Star width={27} height={27} />
-							</Pressable>
-							<Pressable>
-								<Star width={27} height={27} />
-							</Pressable>
-							<Pressable>
-								<Star width={27} height={27} />
-							</Pressable>
-							<Text>& Up</Text>
-						</View>
-					</View>
-					<Line />
-					<View style={styles.othersContainer}>
-						<Text
-							style={{ fontWeight: 'bold', fontSize: 16, padding: 16 }}
-						>
-							Others
-						</Text>
-						<View style={{ gap: 8 }}>
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'space-around',
-								}}
-							>
-								<Pressable
-									onPress={() => handleOthersOption(1)}
-									style={[
-										styles.others,
-										othersOptions.return && {
-											borderColor: colors.brand,
-										},
-									]}
-								>
-									<Return
-										color={
-											othersOptions.return ? colors.brand : undefined
-										}
-										width={40}
-										height={40}
-									/>
-									<Text
-										style={{
-											color: othersOptions.return
-												? colors.brand
-												: undefined,
-										}}
-									>
-										30-day Free Return
-									</Text>
-								</Pressable>
-								<Pressable
-									onPress={() => handleOthersOption(2)}
-									style={[
-										styles.others,
-										othersOptions.protect && {
-											borderColor: colors.brand,
-										},
-									]}
-								>
-									<Protect
-										color={
-											othersOptions.protect
-												? colors.brand
-												: undefined
-										}
-										width={40}
-										height={40}
-									/>
-									<Text
-										style={{
-											color: othersOptions.protect
-												? colors.brand
-												: undefined,
-										}}
-									>
-										Buyer Protection
-									</Text>
-								</Pressable>
-							</View>
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'space-around',
-								}}
-							>
-								<Pressable
-									onPress={() => handleOthersOption(3)}
-									style={[
-										styles.others,
-										othersOptions.bestDeal && {
-											borderColor: colors.brand,
-										},
-									]}
-								>
-									<BestDeal
-										color={
-											othersOptions.bestDeal
-												? colors.brand
-												: undefined
-										}
-										width={40}
-										height={40}
-									/>
-									<Text
-										style={{
-											color: othersOptions.bestDeal
-												? colors.brand
-												: undefined,
-										}}
-									>
-										Best Deal
-									</Text>
-								</Pressable>
-								<Pressable
-									onPress={() => handleOthersOption(4)}
-									style={[
-										styles.others,
-										othersOptions.shipToStore && {
-											borderColor: colors.brand,
-										},
-									]}
-								>
-									<Location
-										color={
-											othersOptions.shipToStore
-												? colors.brand
-												: undefined
-										}
-										width={40}
-										height={40}
-									/>
-									<Text
-										style={{
-											color: othersOptions.shipToStore
-												? colors.brand
-												: undefined,
-										}}
-									>
-										Ship to store
-									</Text>
-								</Pressable>
-							</View>
-						</View>
-					</View>
-					<Pressable
-						onPress={handleConfirmModal}
-						style={[style.button, { padding: 10 }]}
+					<FlatList
+						data={data}
+						renderItem={({ item, index }) => (
+							<ProductItemVertical product={item} index={index} />
+						)}
+						numColumns={2}
+						contentContainerStyle={{ gap: 8, padding: 8}}
+						showsHorizontalScrollIndicator={false}
+						showsVerticalScrollIndicator={false}
+						style={{ marginTop: 4}}
+					/>
+				</View>
+				{/* <Portal>
+					<Modal
+						style={{ justifyContent: 'flex-end' }}
+						visible={isVisible}
+						onDismiss={handleVisible}
+						contentContainerStyle={[styles.modalContainer]}
 					>
-						<Text style={{ color: 'white', fontWeight: 'bold' }}>
-							Confirm
-						</Text>
-					</Pressable>
-				</Modal>
-			</Portal>
-			{data && (
-				<FlatList
-					data={data}
-					renderItem={({ item }) => <ProductItemVertical product={item} />}
-					numColumns={2}
-				/>
-			)}
-		</View>
+						<ScrollView
+							style={{ height: '70%' }}
+							scrollEnabled
+							showsHorizontalScrollIndicator={false}
+							showsVerticalScrollIndicator={false}
+						>
+							<View style={{}}>
+								<View
+									style={[
+										styles.header,
+										{
+											flexDirection: 'row',
+											justifyContent: 'space-between',
+											alignItems: 'center',
+											marginVertical: 4,
+										},
+									]}
+								>
+									<View style={{ flex: 1 }}>
+										<Text
+											style={{ fontWeight: 'bold', fontSize: 20 }}
+										>
+											FILTER
+										</Text>
+									</View>
+									<Pressable
+										onPress={() => setIsVisible(false)}
+										style={{ flex: 1, alignItems: 'flex-end' }}
+									>
+										<Cancel color={'black'} />
+									</Pressable>
+								</View>
+								<Line />
+								<View style={styles.shippingOptionsContainer}>
+									<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+										Shipping options
+									</Text>
+									<View style={styles.option}>
+										<RadioButton
+											onPress={() => handleShippingOptions(1)}
+											status={
+												shippingOptions.instant
+													? 'checked'
+													: 'unchecked'
+											}
+											value="instant"
+										/>
+										<Text>Instant (2 hours delivery)</Text>
+									</View>
+									<View style={styles.option}>
+										<RadioButton
+											onPress={() => handleShippingOptions(2)}
+											status={
+												shippingOptions.express
+													? 'checked'
+													: 'unchecked'
+											}
+											value="express"
+										/>
+										<Text>Express (2 days delivery)</Text>
+									</View>
+									<View style={styles.option}>
+										<RadioButton
+											onPress={() => handleShippingOptions(3)}
+											status={
+												shippingOptions.standard
+													? 'checked'
+													: 'unchecked'
+											}
+											value="standard"
+										/>
+										<Text>Standard (7-10 days delivery)</Text>
+									</View>
+								</View>
+								<Line />
+								<View style={styles.priceRangeContainer}>
+									<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+										Price range
+									</Text>
+									<View
+										style={{
+											flexDirection: 'row',
+											justifyContent: 'space-between',
+										}}
+									>
+										<View
+											style={{
+												borderWidth: 0.5,
+												padding: 10,
+												maxWidth: 100,
+												width: 100,
+												borderRadius: 6,
+											}}
+										>
+											<Text style={{ fontWeight: 'bold' }}>
+												$ {priceRange[0]}
+											</Text>
+										</View>
+										<View
+											style={{
+												borderWidth: 0.5,
+												padding: 10,
+												maxWidth: 100,
+												width: 100,
+												borderRadius: 6,
+											}}
+										>
+											<Text style={{ fontWeight: 'bold' }}>
+												$ {priceRange[1]}
+											</Text>
+										</View>
+									</View>
+									<MultiSlider
+										containerStyle={{
+											justifyContent: 'center',
+											alignItems: 'center',
+										}}
+										sliderLength={360}
+										values={[priceRange[0], priceRange[1]]}
+										min={0}
+										max={1000}
+										onValuesChange={(value) => setPriceRange(value)}
+										step={1}
+									/>
+								</View>
+								<Line />
+								<View style={styles.ratingContainer}>
+									<Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+										Average review
+									</Text>
+									<View
+										style={{
+											flexDirection: 'row',
+											alignItems: 'center',
+											justifyContent: 'center',
+											gap: 16,
+										}}
+									>
+										<Pressable>
+											<Star width={27} height={27} />
+										</Pressable>
+										<Pressable>
+											<Star width={27} height={27} />
+										</Pressable>
+										<Pressable>
+											<Star width={27} height={27} />
+										</Pressable>
+										<Pressable>
+											<Star width={27} height={27} />
+										</Pressable>
+										<Pressable>
+											<Star width={27} height={27} />
+										</Pressable>
+										<Text>& Up</Text>
+									</View>
+								</View>
+								<Line />
+								<View style={styles.othersContainer}>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											fontSize: 16,
+											padding: 16,
+										}}
+									>
+										Others
+									</Text>
+									<View style={{ gap: 8 }}>
+										<View
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'space-around',
+											}}
+										>
+											<Pressable
+												onPress={() => handleOthersOption(1)}
+												style={[
+													styles.others,
+													othersOptions.return && {
+														borderColor: colors.brand,
+													},
+												]}
+											>
+												<Return
+													color={
+														othersOptions.return
+															? colors.brand
+															: undefined
+													}
+													width={40}
+													height={40}
+												/>
+												<Text
+													style={{
+														color: othersOptions.return
+															? colors.brand
+															: undefined,
+													}}
+												>
+													30-day Free Return
+												</Text>
+											</Pressable>
+											<Pressable
+												onPress={() => handleOthersOption(2)}
+												style={[
+													styles.others,
+													othersOptions.protect && {
+														borderColor: colors.brand,
+													},
+												]}
+											>
+												<Protect
+													color={
+														othersOptions.protect
+															? colors.brand
+															: undefined
+													}
+													width={40}
+													height={40}
+												/>
+												<Text
+													style={{
+														color: othersOptions.protect
+															? colors.brand
+															: undefined,
+													}}
+												>
+													Buyer Protection
+												</Text>
+											</Pressable>
+										</View>
+										<View
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'space-around',
+											}}
+										>
+											<Pressable
+												onPress={() => handleOthersOption(3)}
+												style={[
+													styles.others,
+													othersOptions.bestDeal && {
+														borderColor: colors.brand,
+													},
+												]}
+											>
+												<BestDeal
+													color={
+														othersOptions.bestDeal
+															? colors.brand
+															: undefined
+													}
+													width={40}
+													height={40}
+												/>
+												<Text
+													style={{
+														color: othersOptions.bestDeal
+															? colors.brand
+															: undefined,
+													}}
+												>
+													Best Deal
+												</Text>
+											</Pressable>
+											<Pressable
+												onPress={() => handleOthersOption(4)}
+												style={[
+													styles.others,
+													othersOptions.shipToStore && {
+														borderColor: colors.brand,
+													},
+												]}
+											>
+												<Location
+													color={
+														othersOptions.shipToStore
+															? colors.brand
+															: undefined
+													}
+													width={40}
+													height={40}
+												/>
+												<Text
+													style={{
+														color: othersOptions.shipToStore
+															? colors.brand
+															: undefined,
+													}}
+												>
+													Ship to store
+												</Text>
+											</Pressable>
+										</View>
+									</View>
+								</View>
+								<Pressable
+									onPress={handleConfirmModal}
+									style={[
+										style.button,
+										{ padding: 10, marginTop: 10 },
+									]}
+								>
+									<Text style={{ color: 'white', fontWeight: 'bold' }}>
+										Confirm
+									</Text>
+								</Pressable>
+							</View>
+						</ScrollView>
+					</Modal>
+				</Portal> */}
+			</View>
+		</DismissKeyboardView>
 	);
 };
 
@@ -394,7 +472,8 @@ const styles = StyleSheet.create({
 	},
 	modalContainer: {
 		backgroundColor: 'white',
-		borderRadius: 10,
+		borderTopStartRadius: 10,
+		borderTopEndRadius: 10,
 		padding: 16,
 		gap: 5,
 	},

@@ -27,7 +27,7 @@ export const ProductCard = React.memo(
 				style={[
 					style.rowCenter,
 					{
-						marginVertical: 4,
+
 						backgroundColor: colors.textBrand,
 						paddingVertical: 8,
 						paddingHorizontal: 8,

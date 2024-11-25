@@ -15,16 +15,18 @@ export const HeaderTitle = ({ title }: HeaderTitleProps) => {
 				{ backgroundColor: 'white' },
 			]}
 		>
-			<Text
-				style={{
-					textAlign: 'center',
-					fontSize: 20,
-					width: '100%',
-					fontWeight: 'bold',
-				}}
-			>
-				{title}
-			</Text>
+			<View style={{flex: 1}}>
+				<Text
+					style={{
+						textAlign: 'center',
+						fontSize: 20,
+						width: '100%',
+						fontWeight: 'bold',
+					}}
+				>
+					{title}
+				</Text>
+			</View>
 		</View>
 	);
 };
