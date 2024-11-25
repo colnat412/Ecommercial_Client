@@ -29,7 +29,7 @@ export const HeaderTitleWithBack = ({
 		<View
 			style={[
 				style.headerContainer,
-				{ backgroundColor: 'white', paddingTop: 0 },
+				{ paddingTop: 0, minHeight: 40 },
 			]}
 		>
 			<View style={[style.rowCenter]}>

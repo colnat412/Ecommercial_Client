@@ -8,15 +8,16 @@ import { colors } from './color';
 
 export const style = StyleSheet.create({
 	headerContainer: {
-		paddingTop: 32,
+		paddingTop: 40,
 		paddingHorizontal: 8,
 		paddingVertical: 4,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		minHeight: 40,
+		minHeight: 80,
 		borderBottomWidth: 1,
 		borderBottomColor: colors.outline,
+
 	},
 	container: {
 		flex: 1,

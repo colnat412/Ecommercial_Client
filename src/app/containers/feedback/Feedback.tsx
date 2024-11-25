@@ -29,27 +29,37 @@ import { Cancel, Star } from '@/src/assets';
 import { useAppSelector } from '@/src/libs';
 
 export const Feedback = () => {
-	const productData: Product[] = useAppSelector((state) => state.feedback?.feedback || []);
+	const productData: Product[] = useAppSelector(
+		(state) => state.feedback?.feedback || [],
+	);
 	const [visibleFeedback, setVisibleFeedback] = useState<boolean>(false);
 	const [rating, setRating] = useState<number>(5);
-
-	useEffect(() => {
-	}, []);
+	const [comment, setComment] = useState<string>('');
+	const [image, setImage] = useState<string>('');
+	const [productId, setProductId] = useState<string>('');
 
 	const handleRating = (value: number) => {
 		setRating(value);
 	};
 
-	const handlePressCard = () => {
+	const handlePressCard = (id: string) => {
 		setVisibleFeedback(!visibleFeedback);
+		console.log('id', id);
 	};
+
+	const handleSubmit = async () => {
+	}
 
 	const toggleModalCart = () => {
 		setVisibleFeedback(!visibleFeedback);
+		setRating(5);
+		setComment('');
+		setImage('');
+		setProductId('');
 	};
 
 	return (
-		<View style={[style.body, { marginTop: 32 }]}>
+		<View style={[style.body, { paddingTop: 32, backgroundColor: colors.background }]}>
 			<Portal>
 				<Modal
 					visible={visibleFeedback}
@@ -115,7 +125,7 @@ export const Feedback = () => {
 										<View
 											style={[
 												style.rowCenter,
-												{ justifyContent: 'space-between' },
+												{ justifyContent: 'center' },
 											]}
 										>
 											<Pressable onPress={() => handleRating(1)}>
@@ -189,7 +199,12 @@ export const Feedback = () => {
 				</Modal>
 			</Portal>
 			<HeaderTitleWithBack title="Feedback" />
-			<ProductList products={productData} onPressCard={handlePressCard} />
+
+			<ProductList
+				style={{ paddingHorizontal: 8, backgroundColor: colors.mainBackground }}
+				products={productData}
+				onPressCard={handlePressCard}
+			/>
 		</View>
 	);
 };
