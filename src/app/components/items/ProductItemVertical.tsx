@@ -10,17 +10,30 @@ import { Text } from 'react-native-paper';
 
 interface RecommendItemProps {
 	product: Product;
+	index: number;
 }
 
 export const ProductItemVertical = React.memo(
-	({ product }: RecommendItemProps) => {
+	({ product, index }: RecommendItemProps) => {
 		const navigation = useNavigation<StackScreenNavigationProp>();
 		const goProductDetail = () => {
 			navigation.navigate('ProductDetail', { productId: product.id });
 		};
 
 		return (
-			<Pressable onPress={goProductDetail} style={styles.container}>
+			<Pressable
+				onPress={goProductDetail}
+				style={[
+					styles.container,
+					index % 2 === 0
+						? {
+								marginRight: 4,
+							}
+						: {
+								marginLeft: 4,
+							},
+				]}
+			>
 				<View style={{ width: '100%', height: 200 }}>
 					<Image
 						source={{ uri: product?.image_url }}
@@ -67,7 +80,6 @@ export const ProductItemVertical = React.memo(
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		marginHorizontal: 4,
 		flexDirection: 'column',
 		gap: 10,
 		justifyContent: 'center',

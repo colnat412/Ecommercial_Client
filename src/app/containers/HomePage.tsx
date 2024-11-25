@@ -84,15 +84,14 @@ export const HomePage = () => {
 						numColumns={2}
 						onEndReached={handleLoadMore}
 						onEndReachedThreshold={0.7}
-						contentContainerStyle={{ gap: 8 }}
+						contentContainerStyle={{  padding: 8,gap: 8 }}
 						data={data}
-						renderItem={({ item }) => (
-							<ProductItemVertical product={item} />
+						renderItem={({ item,index }) => (
+							<ProductItemVertical product={item} index={index}/>
 						)}
 						keyExtractor={(item) => item.id.toString()}
 						style={{
 							backgroundColor: colors.mainBackground,
-							paddingHorizontal: 8,
 						}}
 						ListFooterComponent={() => (
 							<ActivityIndicator size="small" color={colors.brand} />

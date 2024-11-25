@@ -16,9 +16,10 @@ export const ProductList = ({
 }: ProductListProps) => {
 	return (
 		<FlatList
-			style={[style, { paddingVertical: 4 }]}
+			contentContainerStyle={{gap: 10, padding: 10}}
 			showsHorizontalScrollIndicator={false}
 			showsVerticalScrollIndicator={false}
+			keyExtractor={(item, index) => index.toString()}
 			data={products}
 			renderItem={({ item }) => (
 				<ProductCard

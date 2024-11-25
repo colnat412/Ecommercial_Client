@@ -77,7 +77,7 @@ export const fetchCart = async () => {
 
 export const fetchFeedback = async () => {
 	try {
-		const response = await api.get(`${BE_URL}/api/carts/my-cart`);
+		const response = await api.get(`${BE_URL}/api/feedbacks`);
 		const data: BaseAxiosResponse<Product[]> = {
 			data: response.data.data.map((item: any) => item.product),
 			statusCode: response.data.statusCode,

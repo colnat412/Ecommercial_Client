@@ -125,7 +125,6 @@ export const ProductDetail = () => {
 			...selectedOptions,
 			[optionIndex]: listIndex,
 		});
-		console.log('selectedOptions', selectedOptions);
 	};
 
 	const addItemToCart = async (
@@ -134,10 +133,6 @@ export const ProductDetail = () => {
 		listOptionId: string[],
 	) => {
 		try {
-			console.log('itemId', itemId);
-			console.log('qty', qty);
-			console.log('listOptionId', listOptionId);
-
 			const response = await addProductToCart(itemId, qty, listOptionId);
 			if (response.status === 200 || response.status === 201) {
 				Alert.alert('Success', 'Add to cart success');
@@ -151,7 +146,10 @@ export const ProductDetail = () => {
 
 	const goPayment = () => {
 		if (product?.id) {
-			navigation.navigate('Cart', { productId: product.id });
+			navigation.navigate('Cart', {
+				productId: product.id,
+				callback: () => {},
+			});
 		}
 		setTimeout(() => {
 			Alert.alert('Success', 'Add to cart success'); // set timeout for 2s

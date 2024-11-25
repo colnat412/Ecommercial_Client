@@ -3,43 +3,35 @@ import { colors } from '@/src/constants';
 import { CartItem as ICartItem } from '@/src/types';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox, Text } from 'react-native-paper';
-import { Line } from '../../components';
 import { useState } from 'react';
-import { getProduct } from '../productDetail';
-import { deleteProductInCart } from './handle';
+import { Line } from '../../components';
+import { deleteCartItem } from './handle';
 
 interface CartItemProps {
 	cartItem: ICartItem;
+	isSelected: boolean;
+	toggleSelectItem: (id: string) => void;
+	onDelete: (id: string) => void;
 }
 
-export const CartItem = ({ cartItem }: CartItemProps) => {
+export const CartItem = ({
+	cartItem,
+	isSelected,
+	toggleSelectItem,
+	onDelete,
+}: CartItemProps) => {
 	const [qty, setQty] = useState<number>(cartItem.quantity);
-	const handleAddQty = () => {
-		let newQty = qty + 1;
-		setQty(newQty);
-	};
 
-	const handleMinusQty = () => {
-		if (qty > 0) {
-			let newQty = qty - 1;
-			setQty(newQty);
-		}
-	};
-
-	const deleteCartItem = async (id: string) => {
-		const cartItemDelete = await getProduct(id);
-		console.log('cartItemDelete:', cartItemDelete);
-
-		if (cartItemDelete && cartItemDelete.data) {
-			await deleteProductInCart(cartItemDelete.data.id);
-			Alert.alert('Success', 'Delete Success');
-		}
-	};
+	const handleAddQty = () => setQty(qty + 1);
+	const handleMinusQty = () => qty > 0 && setQty(qty - 1);
 
 	return (
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
-				<Checkbox status="checked" />
+				<Checkbox
+					onPress={() => toggleSelectItem(cartItem.id)}
+					status={isSelected ? 'checked' : 'unchecked'}
+				/>
 				<Image
 					width={100}
 					height={100}
@@ -48,7 +40,7 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 				<View style={styles.info}>
 					<Text style={styles.nameText}>{cartItem.item.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
-						HMMMM
+						{cartItem.listOptions.map((option) => option.name).join(', ')}
 					</Text>
 					<Text style={styles.priceText}>${cartItem.item.price}</Text>
 					<View style={styles.qtyContainer}>
@@ -61,7 +53,7 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 						</Pressable>
 					</View>
 				</View>
-				<Pressable onPress={() => deleteCartItem(cartItem.id)}>
+				<Pressable onPress={() => onDelete(cartItem.id)}>
 					<Trash color={'red'} width={30} height={30} />
 				</Pressable>
 			</View>

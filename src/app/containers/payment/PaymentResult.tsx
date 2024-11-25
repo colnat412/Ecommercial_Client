@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Checked from '@/src/assets/svgs/Checked';
 import { colors, style } from '@/src/constants';
