@@ -62,9 +62,11 @@ export const updateProductInCart = async (id: string) => {
 	}
 };
 
-export const deleteProductInCart = async (id: string) => {
+export const deleteCartItem = async (id: string) => {
 	try {
-		const response = await api.delete(`${BE_URL}/carts/${id}`);
+		const response = await api.delete(
+			`${BE_URL}/api/carts/remove-product/${id}`,
+		);
 		return {
 			data: response.data,
 			status: response.status,

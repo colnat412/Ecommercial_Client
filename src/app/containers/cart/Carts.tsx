@@ -45,7 +45,6 @@ export const ShoppingCart = () => {
 						),
 					}));
 					setData(mappedItems);
-					console.log('Cart items:', mappedItems);
 				} else {
 					console.warn('No cart items found.');
 					setData([]);
@@ -62,7 +61,7 @@ export const ShoppingCart = () => {
 		<View style={{ flex: 1, marginTop: 30, padding: 5 }}>
 			<HeaderTitleWithBack title="Carts" />
 			<View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-				<Checkbox status="checked" />
+				<Checkbox status="unchecked" />
 				<Text style={{ fontWeight: 'bold', opacity: 0.5 }}>Select all</Text>
 			</View>
 			<Line />

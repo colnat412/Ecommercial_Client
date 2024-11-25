@@ -6,13 +6,15 @@ import { Checkbox, Text } from 'react-native-paper';
 import { Line } from '../../components';
 import { useState } from 'react';
 import { getProduct } from '../productDetail';
-import { deleteProductInCart } from './handle';
+import { deleteCartItem } from './handle';
 
 interface CartItemProps {
 	cartItem: ICartItem;
 }
 
 export const CartItem = ({ cartItem }: CartItemProps) => {
+	const [selectedCartItem, setSelectedCartItem] = useState<string | null>();
+
 	const [qty, setQty] = useState<number>(cartItem.quantity);
 	const handleAddQty = () => {
 		let newQty = qty + 1;
@@ -26,12 +28,13 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 		}
 	};
 
-	const deleteCartItem = async (id: string) => {
-		const cartItemDelete = await getProduct(id);
-		console.log('cartItemDelete:', cartItemDelete);
+	const handleSelectedCartItem = (id: string) => {
+		setSelectedCartItem(id);
+	};
 
-		if (cartItemDelete && cartItemDelete.data) {
-			await deleteProductInCart(cartItemDelete.data.id);
+	const handleDeleteCartItem = async (id: string) => {
+		if (selectedCartItem) {
+			await deleteCartItem(id);
 			Alert.alert('Success', 'Delete Success');
 		}
 	};
@@ -39,7 +42,12 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 	return (
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
-				<Checkbox status="checked" />
+				<Checkbox
+					onPress={() => handleSelectedCartItem(cartItem.id)}
+					status={
+						selectedCartItem === cartItem.id ? 'checked' : 'unchecked'
+					}
+				/>
 				<Image
 					width={100}
 					height={100}
@@ -61,7 +69,11 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 						</Pressable>
 					</View>
 				</View>
-				<Pressable onPress={() => deleteCartItem(cartItem.id)}>
+				<Pressable
+					onPress={() =>
+						selectedCartItem && handleDeleteCartItem(selectedCartItem)
+					}
+				>
 					<Trash color={'red'} width={30} height={30} />
 				</Pressable>
 			</View>
