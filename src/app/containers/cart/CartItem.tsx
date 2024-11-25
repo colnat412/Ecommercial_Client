@@ -13,7 +13,9 @@ interface CartItemProps {
 }
 
 export const CartItem = ({ cartItem }: CartItemProps) => {
-	const [selectedCartItem, setSelectedCartItem] = useState<string | null>();
+	const [selectedCartItems, setSelectedCartItems] = useState<
+		string[] | null
+	>();
 
 	const [qty, setQty] = useState<number>(cartItem.quantity);
 	const handleAddQty = () => {
@@ -29,12 +31,24 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 	};
 
 	const handleSelectedCartItem = (id: string) => {
-		setSelectedCartItem(id);
+		setSelectedCartItems((prevSelected) => {
+			if (prevSelected) {
+				if (prevSelected.includes(id)) {
+					return prevSelected.filter((itemId) => itemId !== id);
+				} else {
+					return [...prevSelected, id];
+				}
+			} else {
+				return [id];
+			}
+		});
 	};
 
 	const handleDeleteCartItem = async (id: string) => {
-		if (selectedCartItem) {
-			await deleteCartItem(id);
+		if (selectedCartItems) {
+			for (let id of selectedCartItems) {
+				await deleteCartItem(id);
+			}
 			Alert.alert('Success', 'Delete Success');
 		}
 	};
@@ -45,7 +59,9 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 				<Checkbox
 					onPress={() => handleSelectedCartItem(cartItem.id)}
 					status={
-						selectedCartItem === cartItem.id ? 'checked' : 'unchecked'
+						selectedCartItems?.includes(cartItem.id)
+							? 'checked'
+							: 'unchecked'
 					}
 				/>
 				<Image
@@ -71,7 +87,8 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 				</View>
 				<Pressable
 					onPress={() =>
-						selectedCartItem && handleDeleteCartItem(selectedCartItem)
+						selectedCartItems &&
+						selectedCartItems.forEach((id) => handleDeleteCartItem(id))
 					}
 				>
 					<Trash color={'red'} width={30} height={30} />

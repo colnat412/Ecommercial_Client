@@ -85,7 +85,7 @@ export const ShoppingCart = () => {
 				]}
 			>
 				<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>
-					Next
+					Check Out
 				</Text>
 				<Arrow width={20} height={20} color={'white'} />
 			</Pressable>
