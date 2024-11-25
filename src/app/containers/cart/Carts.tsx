@@ -25,7 +25,7 @@ export const ShoppingCart = () => {
 	const [data, setData] = useState<CartItemI[]>([]);
 	const [dataChanged, setDataChanged] = useState<boolean>(false);
 
-	const handleNavigation = () => {
+	const goPayment = () => {
 		navigation.navigate('PaymentOption');
 	};
 
@@ -36,13 +36,13 @@ export const ShoppingCart = () => {
 				const cartItems = response.data.data?.cartItems ?? [];
 
 				if (cartItems.length) {
-					const mappedItems = cartItems.map((cartItem: any) => ({
+					const mappedItems = cartItems.map((cartItem: CartItemI) => ({
 						id: cartItem.id,
 						quantity: cartItem.quantity,
 						item: cartItem.item,
-						// listOptions: cartItem.options.map(
-						// 	(option: Option) => option.listOption.name,
-						// ),
+						listOptions: cartItem.options.map(
+							(option: Option) => option.listOption,
+						),
 					}));
 					setData(mappedItems);
 					console.log('Cart items:', mappedItems);
@@ -74,7 +74,7 @@ export const ShoppingCart = () => {
 				/>
 			</View>
 			<Pressable
-				onPress={handleNavigation}
+				onPress={goPayment}
 				style={[
 					style.button,
 					{

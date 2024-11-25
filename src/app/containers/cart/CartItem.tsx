@@ -48,7 +48,7 @@ export const CartItem = ({ cartItem }: CartItemProps) => {
 				<View style={styles.info}>
 					<Text style={styles.nameText}>{cartItem.item.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
-						HMMMM
+						{cartItem.listOptions.map((option) => option.name).join(', ')}
 					</Text>
 					<Text style={styles.priceText}>${cartItem.item.price}</Text>
 					<View style={styles.qtyContainer}>

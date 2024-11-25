@@ -35,7 +35,9 @@ export const HomePageHeader = () => {
 		}
 	};
 
-	const goCart = async () => {};
+	const goCart = async () => {
+		navigation.navigate('Cart', { productId: '' });
+	};
 
 	return (
 		<View style={[style.headerContainer, { backgroundColor: 'white' }]}>
