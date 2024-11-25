@@ -15,7 +15,7 @@ export const ShoppingCart = () => {
 	const [data, setData] = useState<CartItemI[]>([]);
 	const [dataChanged, setDataChanged] = useState<boolean>(false);
 
-	const [selectedItems, setSelectedItems] = useState<string[]>([]);
+	const [selectedItems, setSelectedItems] = useState<CartItemI[]>([]);
 	const [selectAll, setSelectAll] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -42,16 +42,16 @@ export const ShoppingCart = () => {
 		if (selectAll) {
 			setSelectedItems([]);
 		} else {
-			setSelectedItems(data.map((item) => item.id));
+			setSelectedItems(data.map((item) => item));
 		}
 		setSelectAll(!selectAll);
 	};
 
 	const toggleSelectItem = (id: string) => {
 		setSelectedItems((prev) =>
-			prev.includes(id)
-				? prev.filter((itemId) => itemId !== id)
-				: [...prev, id],
+			prev.some((item) => item.id === id)
+				? prev.filter((item) => item.id !== id)
+				: [...prev, data.find((item) => item.id === id)!],
 		);
 	};
 
@@ -75,11 +75,16 @@ export const ShoppingCart = () => {
 		} else {
 			try {
 				const response = await Promise.all(
-					selectedItems.map((id) => deleteCartItem(id)),
+					selectedItems.map((item) => deleteCartItem(item.id)),
 				);
 				if (response.every((res) => res.status === 200)) {
 					setData((prev) =>
-						prev.filter((item) => !selectedItems.includes(item.id)),
+						prev.filter(
+							(item) =>
+								!selectedItems.some(
+									(selectedItem) => selectedItem.id === item.id,
+								),
+						),
 					);
 					setSelectedItems([]);
 					setSelectAll(false);
@@ -114,7 +119,9 @@ export const ShoppingCart = () => {
 					renderItem={({ item }) => (
 						<CartItem
 							cartItem={item}
-							isSelected={selectedItems.includes(item.id)}
+							isSelected={selectedItems.some(
+								(selectedItem) => selectedItem.id === item.id,
+							)}
 							toggleSelectItem={toggleSelectItem}
 							onDelete={handleDeleteCartItem}
 						/>

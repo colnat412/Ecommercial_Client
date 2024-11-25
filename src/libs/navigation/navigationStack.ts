@@ -13,7 +13,7 @@ export type RootStackParamList = {
 	Register: undefined;
 	ProductDetail: { productId: string };
 	SubCategory: undefined;
-	PaymentOption: { selectedItems: string[] };
+	PaymentOption: { selectedItems: CartItem[] };
 	Order: undefined;
 	OrderDetail: { order: Order };
 	Feedback: undefined;
