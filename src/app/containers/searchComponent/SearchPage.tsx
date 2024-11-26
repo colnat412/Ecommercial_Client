@@ -26,6 +26,7 @@ import {
 import { HeaderTitle } from '../../navigation/components';
 import { searchProduct, searchProductByPriceRange } from './handle';
 import { SearchInput } from './SearchInput';
+import { useIsFocused } from '@react-navigation/native';
 interface shippingOptionsProps {
 	instant: boolean;
 	express: boolean;
@@ -40,6 +41,7 @@ interface OthersOptionsProps {
 }
 
 export const SearchPage = () => {
+	const [searchText, setSearchText] = useState<string>('');
 	const [data, setData] = useState<Product[]>([]);
 	const [filteredData, setFilteredData] = useState<Product[]>([]);
 
@@ -105,6 +107,7 @@ export const SearchPage = () => {
 	};
 
 	const handleSearch = (text: string) => {
+		setSearchText(text);
 		// Xóa timer cũ nếu người dùng tiếp tục nhập
 		if (timeoutRef.current) {
 			clearTimeout(timeoutRef.current);
@@ -136,6 +139,16 @@ export const SearchPage = () => {
 		};
 	}, []);
 
+
+	const focus = useIsFocused();
+	useEffect(() => {
+		if (focus) {
+			setData([]);
+			setFilteredData([]);
+			setSearchText('');
+			
+		}
+	}, [focus]);
 	return (
 		<DismissKeyboardView>
 			<View style={[style.body]}>
@@ -146,6 +159,7 @@ export const SearchPage = () => {
 						<SearchInput
 							handleSearch={handleSearch}
 							handleShowFilter={handleVisible}
+							text={searchText}
 						/>
 					</View>
 					{filteredData.length > 0 ? (
