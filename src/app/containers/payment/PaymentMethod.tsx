@@ -3,7 +3,7 @@ import QrCode from '@/src/assets/svgs/Qr';
 import { colors, style } from '@/src/constants';
 import { Payment } from '@/src/types';
 import { useEffect, useState } from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { Button, RadioButton, Text } from 'react-native-paper';
 import { getPaymentSuccess, postPaymentData } from './handle';
 import { useNavigation } from '@react-navigation/native';
@@ -88,14 +88,14 @@ export const PaymentMethod = () => {
 					status={qrChecked ? 'checked' : 'unchecked'}
 				/>
 			</View>
-			<Button
+			<Pressable
 				onPress={handlePayNow}
-				style={[style.button]}
-				mode="contained"
-				textColor={colors.textBrand}
+				style={[style.button, { padding: 14 }]}
 			>
-				Pay now
-			</Button>
+				<Text style={{ color: colors.textBrand, fontWeight: 'bold' }}>
+					Pay now
+				</Text>
+			</Pressable>
 		</View>
 	);
 };
