@@ -12,7 +12,7 @@ export type RootStackParamList = {
 	Login: undefined;
 	Register: undefined;
 	ProductDetail: { productId: string };
-	SubCategory: undefined;
+	SubCategory: { categoryId: string };
 	PaymentOption: undefined;
 	Order: undefined;
 	OrderDetail: { order: Order };
@@ -35,3 +35,4 @@ export type ProductDetailRouteProp = RouteProp<RootStackParamList, 'ProductDetai
 export type OrderDetailRouteProp = RouteProp<RootStackParamList, 'OrderDetail'>;
 export type CartRouteProp = RouteProp<RootStackParamList, 'Cart'>;
 export type ChatAdminRouteProp = RouteProp<RootStackParamList, 'ChatAdmin'>;
+export type SubCategoryRouteProp = RouteProp<RootStackParamList, 'SubCategory'>;

@@ -41,9 +41,10 @@ interface OthersOptionsProps {
 
 export const SearchPage = () => {
 	const [data, setData] = useState<Product[]>([]);
+	const [filteredData, setFilteredData] = useState<Product[]>([]);
 
+	const [isVisible, setIsVisible] = useState<boolean>(true);
 	const [priceRange, setPriceRange] = useState<number[]>([0, 800]);
-	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
 		{
 			instant: false,
@@ -58,10 +59,16 @@ export const SearchPage = () => {
 		shipToStore: false,
 	});
 
+	const [rating, setRating] = useState<number>(5);
+
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const handleVisible = () => {
 		setIsVisible(!isVisible);
 	};
+
+	const handleRating = (value: number) => {
+		setRating(value);
+	}
 
 	const handleShippingOptions = (option: number) => {
 		setShippingOptions({
@@ -81,9 +88,19 @@ export const SearchPage = () => {
 	};
 
 	const handleConfirmModal = () => {
-		searchProductByPriceRange(priceRange[0], priceRange[1]).then((data) => {
-			setData(data);
-		});
+		// searchProductByPriceRange(priceRange[0], priceRange[1]).then((data) => {
+		// 	setData(data);
+		// });
+
+		const productData = data.filter(
+			(product) =>
+				product.price >= priceRange[0] &&
+				product.price <= priceRange[1] &&
+				product.rating >= rating
+		);
+
+		setFilteredData(productData);
+
 		setIsVisible(false);
 	};
 
@@ -125,25 +142,35 @@ export const SearchPage = () => {
 				<HeaderTitle title="Search" />
 
 				<View style={{ flex: 1, padding: 4 }}>
-					<View style={{height: 40, paddingHorizontal: 4}}>
+					<View style={{ height: 40, paddingHorizontal: 4 }}>
 						<SearchInput
 							handleSearch={handleSearch}
 							handleShowFilter={handleVisible}
 						/>
 					</View>
-					<FlatList
-						data={data}
-						renderItem={({ item, index }) => (
-							<ProductItemVertical product={item} index={index} />
-						)}
-						numColumns={2}
-						contentContainerStyle={{ gap: 8, padding: 8}}
-						showsHorizontalScrollIndicator={false}
-						showsVerticalScrollIndicator={false}
-						style={{ marginTop: 4}}
-					/>
+					{filteredData.length > 0 ? (
+						<FlatList
+							data={filteredData}
+							renderItem={({ item, index }) => (
+								<ProductItemVertical index={index} product={item} />
+							)}
+							numColumns={2}
+							contentContainerStyle={{ padding: 8, gap: 8 }}
+							keyExtractor={(item) => item.id.toString()}
+						/>
+					) : (
+						<FlatList
+							data={data}
+							renderItem={({ item, index }) => (
+								<ProductItemVertical index={index} product={item} />
+							)}
+							numColumns={2}
+							contentContainerStyle={{ padding: 8, gap: 8 }}
+							keyExtractor={(item) => item.id.toString()}
+						/>
+					)}
 				</View>
-				{/* <Portal>
+				<Portal>
 					<Modal
 						style={{ justifyContent: 'flex-end' }}
 						visible={isVisible}
@@ -288,20 +315,60 @@ export const SearchPage = () => {
 											gap: 16,
 										}}
 									>
-										<Pressable>
-											<Star width={27} height={27} />
+										<Pressable onPress={() => handleRating(1)}>
+											<Star
+												width={50}
+												height={50}
+												color={
+													rating < 1
+														? colors.secondText
+														: '#F3C63F'
+												}
+											/>
 										</Pressable>
-										<Pressable>
-											<Star width={27} height={27} />
+										<Pressable onPress={() => handleRating(2)}>
+											<Star
+												width={50}
+												height={50}
+												color={
+													rating < 2
+														? colors.secondText
+														: '#F3C63F'
+												}
+											/>
 										</Pressable>
-										<Pressable>
-											<Star width={27} height={27} />
+										<Pressable onPress={() => handleRating(3)}>
+											<Star
+												width={50}
+												height={50}
+												color={
+													rating < 3
+														? colors.secondText
+														: '#F3C63F'
+												}
+											/>
 										</Pressable>
-										<Pressable>
-											<Star width={27} height={27} />
+										<Pressable onPress={() => handleRating(4)}>
+											<Star
+												width={50}
+												height={50}
+												color={
+													rating < 4
+														? colors.secondText
+														: '#F3C63F'
+												}
+											/>
 										</Pressable>
-										<Pressable>
-											<Star width={27} height={27} />
+										<Pressable onPress={() => handleRating(5)}>
+											<Star
+												width={50}
+												height={50}
+												color={
+													rating < 5
+														? colors.secondText
+														: '#F3C63F'
+												}
+											/>
 										</Pressable>
 										<Text>& Up</Text>
 									</View>
@@ -460,7 +527,7 @@ export const SearchPage = () => {
 							</View>
 						</ScrollView>
 					</Modal>
-				</Portal> */}
+				</Portal>
 			</View>
 		</DismissKeyboardView>
 	);
