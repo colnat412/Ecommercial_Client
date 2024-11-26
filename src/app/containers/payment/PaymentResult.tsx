@@ -3,8 +3,11 @@ import { Button, Text } from 'react-native-paper';
 import Checked from '@/src/assets/svgs/Checked';
 import { colors, style } from '@/src/constants';
 import Warning from '@/src/assets/svgs/Warning';
+import { useNavigation } from '@react-navigation/native';
+import { StackScreenNavigationProp } from '@/src/libs';
 
 export const PaymentResult = () => {
+	const navigation = useNavigation<StackScreenNavigationProp>();
 	return (
 		<View style={styles.container}>
 			<Checked width={80} height={80} />
@@ -19,6 +22,7 @@ export const PaymentResult = () => {
 				Order Successful
 			</Text>
 			<Button
+				onPress={() => navigation.navigate('TabScreenApp')}
 				style={[style.button]}
 				mode="contained"
 				textColor={colors.textBrand}

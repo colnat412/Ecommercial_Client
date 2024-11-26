@@ -32,7 +32,7 @@ export const CartItem = ({
 				(sum, option) => sum + option.listOption.adjustPrice,
 				0,
 			);
-		return priceTotal;
+		return priceTotal.toFixed(2);
 	};
 
 	return (

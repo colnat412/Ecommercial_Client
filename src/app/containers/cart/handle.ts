@@ -46,7 +46,9 @@ export const saveProductToCart = async (product: Product) => {
 
 export const updateProductInCart = async (id: string) => {
 	try {
-		const response = await api.put(`${BE_URL}/carts/${id}`);
+		const response = await api.put(
+			`${BE_URL}/api/carts/update-product/${id}`,
+		);
 		return {
 			data: response.data,
 			status: response.status,

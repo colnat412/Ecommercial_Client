@@ -33,7 +33,7 @@ export const PaymentOption = () => {
 					<Text
 						style={{ fontSize: 26, fontWeight: 'bold', letterSpacing: 3 }}
 					>
-						${route.params.totalPrice}
+						${route.params.totalPrice.toFixed(2)}
 					</Text>
 				</View>
 				<Line />
