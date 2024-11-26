@@ -20,8 +20,6 @@ export const TabScreenApp = () => {
 	const role: Role | null = useAppSelector(
 		(state) => state.auth?.role ?? null,
 	);
-
-	console.log('role', role);
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({

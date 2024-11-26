@@ -37,9 +37,12 @@ api.interceptors.response.use(
 	(response) => response, // Trả về response nếu thành công
 	(error) => {
 		if (axios.isAxiosError(error)) {
-			console.error('Error URL:', error.config?.url);
+			console.log(
+				'\x1b[41m Axios \x1b[0m \x1b[31m \x1b[0m',
+				error.config?.url,
+			);
 		} else {
-			console.error('Unknown Error:', error);
+			console.log('Unknown Error:', error);
 		}
 		return Promise.reject(error); // Trả về lỗi để xử lý thêm nếu cần
 	},

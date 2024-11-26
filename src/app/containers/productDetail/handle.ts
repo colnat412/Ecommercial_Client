@@ -1,6 +1,12 @@
 import { BE_URL } from '@/env';
 import { api } from '@/src/libs';
-import { Feedback, ProductDetail } from '@/src/types';
+import {
+	BaseAxiosResponse,
+	Feedback,
+	FeedbackProductDetail,
+	Product,
+	ProductDetail,
+} from '@/src/types';
 import { Option } from '@/src/types/option';
 export const getProduct = async (productId: string) => {
 	try {
@@ -12,7 +18,7 @@ export const getProduct = async (productId: string) => {
 			message: response.statusText,
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		return {
 			data: null,
 			status: 500,
@@ -22,20 +28,21 @@ export const getProduct = async (productId: string) => {
 };
 export const getReviews = async (productId: string) => {
 	try {
-		const response = await api.get(`${BE_URL}/feedbacks`);
-		const data: Feedback[] = response.data;
-		return {
-			data: data,
-			status: response.status,
-			message: response.statusText,
+		const response = await api.get(`${BE_URL}/api/feedbacks/${productId}`);
+		const data: BaseAxiosResponse<FeedbackProductDetail[]> = {
+			data: response.data.data,
+			statusCode: response.data.statusCode,
+			message: response.data.message,
 		};
+		return data;
 	} catch (error) {
-		console.error(error);
-		return {
-			data: [],
-			status: 500,
+		console.log(error);
+		const data: BaseAxiosResponse<FeedbackProductDetail[]> = {
+			data: null,
+			statusCode: 500,
 			message: 'Internal Server Error',
 		};
+		return data;
 	}
 };
 export const getOptionsOfProduct = async (productId: string) => {
@@ -50,7 +57,7 @@ export const getOptionsOfProduct = async (productId: string) => {
 			message: response.statusText,
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		return {
 			data: [],
 			status: 500,
@@ -70,7 +77,7 @@ export const getListOptionsOfOption = async (optionId: string) => {
 			message: response.statusText,
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		return {
 			data: [],
 			status: 500,
@@ -96,11 +103,31 @@ export const addProductToCart = async (
 			message: response.statusText,
 		};
 	} catch (error) {
-		console.error(error);
+		console.log(error);
 		return {
 			data: null,
 			status: 500,
 			message: 'Internal Server Error',
 		};
+	}
+};
+
+export const getRelationProduct = async () => {
+	try {
+		const response = await api.get(`${BE_URL}/api/products/relation-product`);
+		const data: BaseAxiosResponse<Product[]> = {
+			data: response.data.data,
+			statusCode: response.data.statusCode,
+			message: response.data.message,
+		};
+		return data;
+	} catch (error) {
+		console.log(error);
+		const data: BaseAxiosResponse<Product[]> = {
+			data: [],
+			statusCode: 500,
+			message: 'Internal Server Error',
+		};
+		return data;
 	}
 };

@@ -2,6 +2,7 @@ import { colors, style } from '@/src/constants';
 import {
 	Alert,
 	Dimensions,
+	FlatList,
 	Image,
 	Platform,
 	Pressable,
@@ -40,12 +41,14 @@ import {
 	Feedback,
 	Product,
 	ProductDetail as IProductDetail,
+	FeedbackProductDetail,
 } from '@/src/types';
 import {
 	addProductToCart,
 	getListOptionsOfOption,
 	getOptionsOfProduct,
 	getProduct,
+	getRelationProduct,
 	getReviews,
 } from './handle';
 import { HeaderTitleWithBack } from '../../navigation/components';
@@ -54,6 +57,8 @@ import { ProductDetailRouteProp, StackScreenNavigationProp } from '@/src/libs';
 import { Line } from '../../components/Line';
 import { Option } from '@/src/types/option';
 import { ListOption } from '@/src/types/list-option';
+import { dateBefore } from '@/src/utils';
+import { ProductItemHorizontal } from '../../components';
 
 interface SelectedOptions {
 	[key: string]: number;
@@ -66,11 +71,31 @@ export const ProductDetail = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [product, setProduct] = useState<IProductDetail>();
 	const [visibleCart, setVisibleCart] = useState<boolean>(false);
-	const [feedback, setFeedback] = useState<Feedback[] | undefined>([]);
+	const [feedback, setFeedback] = useState<FeedbackProductDetail[]>([]);
 
 	const [options, setOptions] = useState<Option[] | undefined>([]);
 	const [listOptions, setListOptions] = useState<ListOption[][]>([]);
 	const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
+	const [relationProducts, setRelationProducts] = useState<Product[]>([]);
+
+	const avg = () => {
+		let total = 0;
+		feedback?.map((item) => {
+			total += item.rating;
+		});
+		return total / feedback?.length;
+	};
+
+	const ratingOfTotal = (rating: number) => {
+		const total = feedback?.length;
+		let count = 0;
+		feedback?.map((item) => {
+			if (item.rating === rating) {
+				count += 1;
+			}
+		});
+		return (count / total) * 100;
+	};
 
 	useEffect(() => {
 		const getContainer = async () => {
@@ -81,12 +106,14 @@ export const ProductDetail = () => {
 				setProduct(productResult.data ? productResult.data : undefined);
 			}
 
-			// const feedbackResult = await getReviews(
-			// 	route.params?.productId ? route.params.productId : '',
-			// );
-			// if (feedbackResult) {
-			// 	setFeedback(feedbackResult.data ? feedbackResult.data : []);
-			// }
+			const feedbackResult = await getReviews(
+				route.params?.productId ? route.params.productId : '',
+			);
+
+			if (feedbackResult && feedbackResult.statusCode === 200) {
+				setFeedback(feedbackResult.data ? feedbackResult.data : []);
+			}
+
 			const optionsResult = await getOptionsOfProduct(
 				productResult.data?.id ? productResult.data.id : '',
 			);
@@ -103,6 +130,14 @@ export const ProductDetail = () => {
 						(result) => result.data as unknown as ListOption[],
 					),
 				);
+			}
+
+			const relationProductsResult = await getRelationProduct();
+			if (
+				relationProductsResult &&
+				relationProductsResult.statusCode === 200
+			) {
+				setRelationProducts(relationProductsResult.data || []);
 			}
 
 			setLoading(false);
@@ -158,20 +193,39 @@ export const ProductDetail = () => {
 	};
 
 	return (
-		<View style={{ marginTop: 32, flex: 1, justifyContent: 'center' }}>
+		<View
+			style={{
+				marginTop: 32,
+				flex: 1,
+				justifyContent: 'center',
+				backgroundColor: colors.mainBackground,
+			}}
+		>
 			{loading ? (
 				<ActivityIndicator size={'large'} color={colors.brand} />
 			) : (
 				<>
+					<HeaderTitleWithBack
+						title={product?.name ? product?.name : ''}
+					/>
 					<ScrollView
 						showsHorizontalScrollIndicator={false}
 						showsVerticalScrollIndicator={false}
+						style={[{ backgroundColor: colors.mainBackground }]}
+						nestedScrollEnabled={true}
 					>
-						<HeaderTitleWithBack
-							title={product?.name ? product?.name : ''}
-						/>
-						<View style={[style.body]}>
-							<View style={[style.contentBody]}>
+						<View
+							style={[
+								style.body,
+								{ backgroundColor: colors.mainBackground },
+							]}
+						>
+							<View
+								style={[
+									style.contentBody,
+									{ backgroundColor: colors.mainBackground, paddingBottom: 0 },
+								]}
+							>
 								<View
 									style={[
 										style.rowCenterCenter,
@@ -210,7 +264,7 @@ export const ProductDetail = () => {
 											<Text
 												style={{ fontWeight: 'bold', fontSize: 16 }}
 											>
-												4.5
+												{avg().toFixed(1)}
 											</Text>
 										</View>
 										<Text
@@ -220,7 +274,7 @@ export const ProductDetail = () => {
 												color: colors.secondText,
 											}}
 										>
-											(99 reviews)
+											{`(${feedback?.length} reviews)`}
 										</Text>
 									</View>
 								</View>
@@ -357,7 +411,7 @@ export const ProductDetail = () => {
 														fontSize: 16,
 													}}
 												>
-													4.5/5
+													{avg().toFixed(1)}/5
 												</Text>
 											</View>
 											<Text
@@ -367,14 +421,21 @@ export const ProductDetail = () => {
 													color: colors.secondText,
 												}}
 											>
-												(99 reviews)
+												({feedback?.length} reviews)
 											</Text>
 											<View style={[style.rowCenter, { gap: 0 }]}>
-												<Star />
-												<Star />
-												<Star />
-												<Star />
-												<HalfStar />
+												{Array.from(
+													{ length: avg() },
+													(_, index) => (
+														<Star />
+													),
+												)}
+												{Array.from(
+													{ length: 5 - avg() },
+													(_, index) => (
+														<HalfStar />
+													),
+												)}
 											</View>
 										</View>
 
@@ -396,7 +457,7 @@ export const ProductDetail = () => {
 																position: 'relative',
 																top: -6,
 																borderRadius: 8,
-																width: '80%',
+																width: `${ratingOfTotal(5)}%`,
 																height: 6,
 																backgroundColor:
 																	colors.rateStar,
@@ -423,7 +484,7 @@ export const ProductDetail = () => {
 																position: 'relative',
 																top: -6,
 																borderRadius: 8,
-																width: '44%',
+																width: `${ratingOfTotal(4)}%`,
 																height: 6,
 																backgroundColor:
 																	colors.rateStar,
@@ -450,7 +511,7 @@ export const ProductDetail = () => {
 																position: 'relative',
 																top: -6,
 																borderRadius: 8,
-																width: '33%',
+																width: `${ratingOfTotal(3)}%`,
 																height: 6,
 																backgroundColor:
 																	colors.rateStar,
@@ -477,7 +538,7 @@ export const ProductDetail = () => {
 																position: 'relative',
 																top: -6,
 																borderRadius: 8,
-																width: '22%',
+																width: `${ratingOfTotal(2)}%`,
 																height: 6,
 																backgroundColor:
 																	colors.rateStar,
@@ -504,7 +565,7 @@ export const ProductDetail = () => {
 																position: 'relative',
 																top: -6,
 																borderRadius: 8,
-																width: '12%',
+																width: `${ratingOfTotal(1)}%`,
 																height: 6,
 																backgroundColor:
 																	colors.rateStar,
@@ -518,24 +579,31 @@ export const ProductDetail = () => {
 									</View>
 								</View>
 
-								<View style={{ gap: 12, marginTop: 32 }}>
+								<View style={{ gap: 20, marginTop: 32 }}>
 									{feedback ? (
 										feedback.slice(0, 5).map((item, index) => (
 											<View
 												key={index}
 												style={[
 													style.rowCenterCenter,
-													{ gap: 32, alignItems: 'flex-start' },
+													{ gap: 12, alignItems: 'flex-start' },
 												]}
 											>
 												<Image
-													source={{ uri: item.imageUrl }}
+													source={{
+														uri: item.account.detailInformation
+															.avatar_url,
+													}}
 													width={40}
 													height={40}
 													alt="avatar"
-													style={{ borderRadius: 300 }}
+													style={{
+														borderRadius: 300,
+														borderWidth: 2,
+														borderColor: colors.brand,
+													}}
 												/>
-												<View style={{ flex: 1 }}>
+												<View style={{ flex: 1, gap: 4 }}>
 													<View style={[style.rowCenterBetween]}>
 														<Text
 															style={{
@@ -544,7 +612,10 @@ export const ProductDetail = () => {
 																color: colors.mainText,
 															}}
 														>
-															{item.detailInfomation.full_name}
+															{
+																item.account.detailInformation
+																	.full_name
+															}
 														</Text>
 														<Text
 															style={{
@@ -552,7 +623,11 @@ export const ProductDetail = () => {
 																color: colors.secondText,
 															}}
 														>
-															1 day ago
+															{dateBefore(
+																item.createdAt
+																	? new Date(item.createdAt)
+																	: new Date(),
+															)}
 														</Text>
 													</View>
 													<View style={[style.rowCenterBetween]}>
@@ -582,6 +657,24 @@ export const ProductDetail = () => {
 									}}
 								/>
 							</View>
+							<View>
+								<Text
+									style={[
+										style.headerText,
+										{ fontSize: 16, color: colors.mainText, paddingHorizontal: 16 },
+									]}
+								>
+									Relation Products
+								</Text>
+								<FlatList
+									data={relationProducts}
+									renderItem={({ item }) => (
+										<ProductItemHorizontal product={item} />
+									)}
+									horizontal={true}
+									style={{ paddingHorizontal: 8, paddingVertical: 8 }}
+								/>
+							</View>
 						</View>
 					</ScrollView>
 
@@ -589,8 +682,14 @@ export const ProductDetail = () => {
 						style={[
 							style.rowCenter,
 							{
+								marginVertical: 4,
 								paddingVertical: Platform.OS === 'ios' ? 20 : 4,
 								paddingHorizontal: 16,
+								marginHorizontal: 4,
+								backgroundColor: colors.mainBackground,
+								borderWidth: 1,
+								borderColor: colors.outline,
+								borderRadius: 8,
 							},
 						]}
 					>
@@ -651,44 +750,74 @@ export const ProductDetail = () => {
 								>
 									<View style={{ gap: 12 }}>
 										{feedback ? (
-											feedback.slice(0, 5).map((item, index) => (
+											feedback.map((item, index) => (
 												<View
 													key={index}
 													style={[
 														style.rowCenterCenter,
-														{ gap: 32, alignItems: 'flex-start' },
+														{ gap: 12, alignItems: 'flex-start' },
 													]}
 												>
 													<Image
-														source={{ uri: item.imageUrl }}
+														source={{
+															uri: item.account.detailInformation
+																.avatar_url,
+														}}
 														width={40}
 														height={40}
 														alt="avatar"
-														style={{ borderRadius: 300 }}
+														style={{
+															borderRadius: 300,
+															borderWidth: 2,
+															borderColor: colors.brand,
+														}}
 													/>
-													<View style={{ flex: 1 }}>
+													<View style={{ flex: 1, gap: 4 }}>
 														<View
 															style={[style.rowCenterBetween]}
 														>
-															<Text
-																style={{
-																	fontWeight: 'bold',
-																	fontSize: 16,
-																	color: colors.mainText,
-																}}
-															>
-																{
-																	item.detailInfomation
-																		.full_name
-																}
-															</Text>
+															<View style={[style.rowCenter]}>
+																<Text
+																	style={{
+																		fontWeight: 'bold',
+																		fontSize: 16,
+																		color: colors.mainText,
+																		justifyContent: 'center',
+																		alignItems: 'center',
+																	}}
+																>
+																	{
+																		item.account
+																			.detailInformation
+																			.full_name
+																	}
+																</Text>
+																<View
+																	style={{
+																		justifyContent: 'center',
+																		alignItems: 'center',
+																		flexDirection: 'row',
+																	}}
+																>
+																	<Star
+																		width={15}
+																		height={15}
+																	/>
+																	<Text>{item.rating}</Text>
+																</View>
+															</View>
+
 															<Text
 																style={{
 																	fontSize: 12,
 																	color: colors.secondText,
 																}}
 															>
-																1 day ago
+																{dateBefore(
+																	item.createdAt
+																		? new Date(item.createdAt)
+																		: new Date(),
+																)}
 															</Text>
 														</View>
 														<View
@@ -748,7 +877,7 @@ export const ProductDetail = () => {
 														fontSize: 16,
 													}}
 												>
-													4.5
+													{avg().toFixed(1)}
 												</Text>
 											</View>
 											<Text
@@ -758,7 +887,7 @@ export const ProductDetail = () => {
 													color: colors.secondText,
 												}}
 											>
-												(99 reviews)
+												({feedback?.length} reviews)
 											</Text>
 										</View>
 									</View>
