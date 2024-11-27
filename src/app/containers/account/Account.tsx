@@ -13,17 +13,29 @@ import {
 	setCart,
 	setDetailInfomation,
 	setFavorite,
+	setOrder,
 } from '@/src/libs/redux/store';
 import { setFeedback } from '@/src/libs/redux/store/feedbackSlice';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import {
+	ActivityIndicator,
+	Alert,
+	Image,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	View,
+} from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { DismissKeyboardView } from '../../components';
 import { fetchDetailInformation } from '../../localHandle';
 import { HeaderTitle } from '../../navigation/components/HeaderTitle';
-import { fetchUpdateDetailInformation } from '../register/handle';
+import {
+	fetchUpdateDetailInformation,
+	fetchUpdatePassword,
+} from '../register/handle';
 
 export const Account = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
@@ -51,9 +63,42 @@ export const Account = () => {
 	};
 
 	const [editSecurity, setEditSecurity] = useState<boolean>(false);
+	const [password, setPassword] = useState<string>('');
+	const [repeatPassword, setRepeatPassword] = useState<string>('');
+	const [currentPassword, setCurrentPassword] = useState<string>('');
 
-	const handleEditSecurity = () => {
+	const [error, setError] = useState<string>('');
+
+	const handleCancelEditSecurity = () => {
 		setEditSecurity(!editSecurity);
+		setPassword('');
+		setRepeatPassword('');
+		setCurrentPassword('');
+	};
+
+	const handleSaveEditSecurity = async () => {
+		if (password !== repeatPassword) {
+			setError('Password not match');
+			return;
+		}
+
+		const response = await fetchUpdatePassword(currentPassword, password);
+		if (response && response.statusCode === 200) {
+			Alert.alert('Success', 'Update password success');
+			setError('');
+			setEditSecurity(!editSecurity);
+			setPassword('');
+			setRepeatPassword('');
+			setCurrentPassword('');
+		}
+		else if (response){
+			setError(response.message);
+			
+		}
+		setEditSecurity(!editSecurity);
+		setPassword('');
+		setRepeatPassword('');
+		setCurrentPassword('');
 	};
 
 	const handleLogout = () => {
@@ -65,6 +110,7 @@ export const Account = () => {
 		dispatch(setFavorite(null));
 		dispatch(setFeedback(null));
 		dispatch(setCart(null));
+		dispatch(setOrder(null));
 
 		navigation.navigate('Login');
 	};
@@ -90,13 +136,12 @@ export const Account = () => {
 	useEffect(() => {
 		if (detailsInformation.detailInfomation === null) {
 			navigation.navigate('Login');
-		}else{
+		} else {
 			setLoading(false);
 		}
-		if (!isFocused){
-					setLoading(true);
+		if (!isFocused) {
+			setLoading(true);
 		}
-				
 	}, [isFocused]);
 
 	return (
@@ -110,7 +155,13 @@ export const Account = () => {
 			>
 				<HeaderTitle title="Account" />
 				{loading ? (
-					<View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+					<View
+						style={{
+							flex: 1,
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
 						<ActivityIndicator color={colors.brand} size={'large'} />
 					</View>
 				) : (
@@ -336,7 +387,7 @@ export const Account = () => {
 								>
 									<Text style={[style.headerText]}>Details</Text>
 									{!editSecurity && (
-										<Pressable onPress={handleEditSecurity}>
+										<Pressable onPress={handleCancelEditSecurity}>
 											<Edit
 												color={colors.secondText}
 												width={15}
@@ -353,16 +404,40 @@ export const Account = () => {
 									}}
 								/>
 								<View style={[style.columnCenter, { gap: 20 }]}>
-									<TextFields
-										label="Password"
-										secureTextEntry={true}
-										edit={editSecurity}
-									/>
-									{editSecurity && (
+									{error !== '' && (
+										<>
+											<Text style={{ color: 'red' }}>{error}</Text>
+										</>
+									)}
+									{editSecurity ? (
+										<>
+											<TextFields
+												label="Current Password"
+												secureTextEntry={true}
+												edit={true}
+												value={currentPassword}
+												onChangeText={setCurrentPassword}
+											/>
+											<TextFields
+												label="New Password"
+												secureTextEntry={true}
+												edit={true}
+												value={password}
+												onChangeText={setPassword}
+											/>
+											<TextFields
+												label="Repeat Password"
+												secureTextEntry={true}
+												edit={true}
+												value={repeatPassword}
+												onChangeText={setRepeatPassword}
+											/>
+										</>
+									) : (
 										<TextFields
-											label="Repeat Password"
+											label="Password"
 											secureTextEntry={true}
-											edit={true}
+											edit={editSecurity}
 										/>
 									)}
 								</View>
@@ -372,7 +447,7 @@ export const Account = () => {
 											mode="contained"
 											style={{ borderRadius: 8 }}
 											buttonColor={colors.secondText}
-											onPress={handleEditSecurity}
+											onPress={handleCancelEditSecurity}
 										>
 											Cancel
 										</Button>
@@ -380,6 +455,7 @@ export const Account = () => {
 											mode="contained"
 											style={{ borderRadius: 8 }}
 											buttonColor={colors.brand}
+											onPress={handleSaveEditSecurity}
 										>
 											Save
 										</Button>

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { authReducer, cartReducer, detailInfomationReducer, favoriteReducer, feedbackReducer } from "./store";
+import { authReducer, cartReducer, detailInfomationReducer, favoriteReducer, feedbackReducer, orderReducer } from "./store";
 
 
 export const store = configureStore({
@@ -10,7 +10,8 @@ export const store = configureStore({
 		favorite: favoriteReducer,
 		auth: authReducer,
 		feedback: feedbackReducer,
-		cart: cartReducer
+		cart: cartReducer,
+		order: orderReducer
 	},
 });
 

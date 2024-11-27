@@ -1,8 +1,8 @@
-import { Product } from '@/src/types';
+import { Feedback, Product } from '@/src/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FeedbackState {
-	feedback: Product[] | null;
+	feedback: Feedback[] | null;
 }
 
 const initialState: FeedbackState = {
@@ -13,10 +13,10 @@ const feedbackSlice = createSlice({
 	name: 'feedback',
 	initialState,
 	reducers: {
-		setFeedback: (state, action: PayloadAction<Product[] | null>) => {
+		setFeedback: (state, action: PayloadAction<Feedback[] | null>) => {
 			state.feedback = action.payload;
 		},
-		addFeedback: (state, action: PayloadAction<Product>) => {
+		addFeedback: (state, action: PayloadAction<Feedback>) => {
 			if (!state.feedback) {
 				state.feedback = [action.payload];
 			} else {

@@ -5,6 +5,8 @@ import {
 	BaseAxiosResponse,
 	CartItem,
 	DetailInformation,
+	Feedback,
+	Order,
 	Product,
 	Role,
 } from '@/src/types';
@@ -78,8 +80,8 @@ export const fetchCart = async () => {
 export const fetchFeedback = async () => {
 	try {
 		const response = await api.get(`${BE_URL}/api/feedbacks`);
-		const data: BaseAxiosResponse<Product[]> = {
-			data: response.data.data.map((item: any) => item.product),
+		const data: BaseAxiosResponse<Feedback[]> = {
+			data: response.data.data,
 			statusCode: response.data.statusCode,
 			message: response.data.message,
 		};
@@ -87,7 +89,7 @@ export const fetchFeedback = async () => {
 	} catch (err) {
 		console.log(err);
 		if (axios.isAxiosError(err)) {
-			const data: BaseAxiosResponse<Product[]> = {
+			const data: BaseAxiosResponse<Feedback[]> = {
 				data: null,
 				statusCode: err.response?.data.statusCode || 500,
 				message: err.response?.data.message || 'Internal Server Error',
@@ -130,3 +132,25 @@ export const fetchMyAccount = async () => {
 		}
 	}
 };
+
+export const fetchOrder = async () => {
+	try {
+		const response = await api.get(`${BE_URL}/api/orders`);
+		const data: BaseAxiosResponse<Order[]> = {
+			data: response.data.data,
+			statusCode: response.data.statusCode,
+			message: response.data.message,
+		};
+		return data;
+	} catch (err) {
+		console.log(err);
+		if (axios.isAxiosError(err)) {
+			const data: BaseAxiosResponse<Order[]> = {
+				data: null,
+				statusCode: err.response?.data.statusCode || 500,
+				message: err.response?.data.message || 'Internal Server Error',
+			};
+			return data;
+		}
+	}
+}

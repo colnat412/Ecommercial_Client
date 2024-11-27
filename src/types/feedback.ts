@@ -1,9 +1,10 @@
 import { Account } from './account';
 import { DetailInformation } from './detailInfomation';
+import { Product, ProductFeedback } from './product';
 
 export interface Feedback {
 	id: string;
-	productId: string;
+	product: Product;
 	imageUrl: string;
 	rating: number;
 	comment: string;

@@ -3,33 +3,25 @@ import { View, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { Button } from 'react-native-paper';
 import { colors, style } from '@/src/constants';
+import { FileDetails } from '@/src/types/others';
 
-export const ImageInput = () => {
-	const [file, setFile] = useState<any>(null);
+interface ImageInputProps {
+	onPress: () => void;
+	value?: FileDetails | null;
+}
 
-	const handleDocumentPick = async () => {
-		const result: DocumentPicker.DocumentPickerResult =
-			await DocumentPicker.getDocumentAsync({
-				type: 'image/*',
-				copyToCacheDirectory: true,
-			});
-		if (result.assets !== null) {
-			setFile(result.assets[0]);
-		}
-		console.log(result);
-	};
-
+export const ImageInput = ({onPress, value}: ImageInputProps) => {
 	return (
 		<View style={{ flex: 1, gap: 4 }}>
 			<Button
 				mode="contained"
 				style={{ borderRadius: 8 }}
 				buttonColor={colors.brand}
-				onPress={handleDocumentPick}
+				onPress={onPress}
 			>
 				Add Image
 			</Button>
-			{file && (
+			{value && (
 				<View
 					style={[
 						style.outline,
@@ -43,7 +35,7 @@ export const ImageInput = () => {
 					]}
 				>
 					<Image
-						source={{ uri: file.uri }}
+						source={{ uri: value.uri }}
 						width={400}
 						height={150}
 						resizeMode="contain"
