@@ -21,14 +21,12 @@ export const PaymentResult = () => {
 			>
 				Order Successful
 			</Text>
-			<Button
+			<Pressable
 				onPress={() => navigation.navigate('TabScreenApp')}
-				style={[style.button]}
-				mode="contained"
-				textColor={colors.textBrand}
+				style={[style.button, { padding: 12 }]}
 			>
-				Back to Home
-			</Button>
+				<Text style={{ color: colors.textBrand }}>Back to Home</Text>
+			</Pressable>
 			{/* <Button
 				style={[style.button, { backgroundColor: '#FFF' }]}
 				mode="contained"

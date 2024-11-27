@@ -38,3 +38,7 @@ export type ProductDetailRouteProp = RouteProp<
 export type OrderDetailRouteProp = RouteProp<RootStackParamList, 'OrderDetail'>;
 export type CartRouteProp = RouteProp<RootStackParamList, 'Cart'>;
 export type ChatAdminRouteProp = RouteProp<RootStackParamList, 'ChatAdmin'>;
+export type PaymentOptionRouteProp = RouteProp<
+	RootStackParamList,
+	'PaymentOption'
+>;

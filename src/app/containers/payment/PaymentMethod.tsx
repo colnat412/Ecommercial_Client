@@ -2,10 +2,10 @@ import { Momo } from '@/src/assets';
 import QrCode from '@/src/assets/svgs/Qr';
 import { colors, style } from '@/src/constants';
 import { Payment } from '@/src/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { Button, RadioButton, Text } from 'react-native-paper';
-import { getPaymentSuccess, postPaymentData } from './handle';
+import { getOrderById, getPaymentSuccess, postPaymentData } from './handle';
 import { useNavigation } from '@react-navigation/native';
 import { StackScreenNavigationProp } from '@/src/libs';
 
@@ -15,6 +15,8 @@ export const PaymentMethod = () => {
 	const [momoChecked, setMomoChecked] = useState<boolean>(true);
 	const [qrChecked, setQrChecked] = useState<boolean>(false);
 	const [paymentData, setPaymentData] = useState<Payment>();
+
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	const handleChooseQr = () => {
 		setQrChecked(true);
@@ -29,10 +31,13 @@ export const PaymentMethod = () => {
 		if (momoChecked) {
 			if (paymentData?.shortLink) {
 				Linking.openURL(paymentData.shortLink);
-				const response = await getPaymentSuccess();
-				if (response.statusCode === 200) {
-					navigation.navigate('PaymentResult');
-				}
+				timeoutRef.current = setTimeout(async () => {
+					const response = await getOrderById('8');
+					console.log('Order data:', response.data.requestId);
+					if (response.data.isActive) {
+						navigation.navigate('PaymentResult');
+					}
+				}, 10000); // 10s
 			}
 		}
 	};

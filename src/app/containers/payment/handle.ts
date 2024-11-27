@@ -37,3 +37,21 @@ export const postPaymentData = async (orderId: string) => {
 		};
 	}
 };
+
+export const getOrderById = async (orderId: string) => {
+	try {
+		const response = await api.get(`${BE_URL}/api/orders/${orderId}`);
+		return {
+			data: response.data.data,
+			status: response.status,
+			message: response.statusText,
+		};
+	} catch (error) {
+		console.error(error);
+		return {
+			data: null,
+			status: 500,
+			message: 'Internal Server Error',
+		};
+	}
+};
