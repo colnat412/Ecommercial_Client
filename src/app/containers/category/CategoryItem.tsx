@@ -16,7 +16,7 @@ interface CategoryItemProps {
 export const CategoryItem = ({ category }: CategoryItemProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const handleNavigation = () => {
-		navigation.navigate('SubCategory');
+		navigation.navigate('SubCategory', {categoryId: category.id});
 	};
 	return (
 		<Pressable onPress={handleNavigation} style={styles.container}>

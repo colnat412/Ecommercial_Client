@@ -12,7 +12,7 @@ export type RootStackParamList = {
 	Login: undefined;
 	Register: undefined;
 	ProductDetail: { productId: string };
-	SubCategory: undefined;
+	SubCategory: { categoryId: string };
 	PaymentOption: { selectedItems: CartItem[]; totalPrice: number };
 	Order: undefined;
 	OrderDetail: { order: Order };
@@ -38,7 +38,3 @@ export type ProductDetailRouteProp = RouteProp<
 export type OrderDetailRouteProp = RouteProp<RootStackParamList, 'OrderDetail'>;
 export type CartRouteProp = RouteProp<RootStackParamList, 'Cart'>;
 export type ChatAdminRouteProp = RouteProp<RootStackParamList, 'ChatAdmin'>;
-export type PaymentOptionRouteProp = RouteProp<
-	RootStackParamList,
-	'PaymentOption'
->;

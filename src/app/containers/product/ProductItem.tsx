@@ -5,14 +5,18 @@ import { style } from '@/src/constants';
 import { ProductItemHorizontal } from '../../components';
 import { useEffect, useState } from 'react';
 import { Product } from '@/src/types';
-import { getData } from '../handle';
+import { getData, getDataFromDBS } from '../handle';
 
-export const ProductItem = ({ title }: { title: String }) => {
+export const ProductItem = ({ title, urlFetch }: { title: string, urlFetch: string }) => {
 	const [data, setData] = useState<Product[]>([]);
 	useEffect(() => {
-		getData({ urlApi: '/products' }).then((data) => {
-			setData(data);
-		});
+		const fetch = async () => {
+			const response = await getDataFromDBS<Product[]>({ url: urlFetch });
+			if (response.statusCode === 200 && response.data) {
+				setData(response.data);
+			}
+		};
+		fetch();
 	}, []);
 	return (
 		<View>
@@ -22,6 +26,7 @@ export const ProductItem = ({ title }: { title: String }) => {
 				</Text>
 			</View>
 			<FlatList
+			nestedScrollEnabled
 				data={data.slice(0, 5)}
 				renderItem={({ item }) => <ProductItemHorizontal product={item} />}
 				keyExtractor={(item) => item.id}

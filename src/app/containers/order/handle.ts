@@ -1,7 +1,7 @@
 import { BE_URL } from '@/env';
-import axios from 'axios';
+import { api } from '@/src/libs';
 
 export const getOrder = async () => {
-	const { data } = await axios.get(BE_URL + '/orders');
+	const { data } = await api.get(BE_URL + '/api/orders');
 	return data;
 };

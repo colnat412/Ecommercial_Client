@@ -22,9 +22,10 @@ export const Products = ({ product }: ProductProps) => {
 				</Text>
 			</View>
 			<FlatList
+			nestedScrollEnabled
 				numColumns={2}
 				data={product}
-				renderItem={({ item }) => <ProductItemVertical product={item} />}
+				renderItem={({ item, index }) => <ProductItemVertical product={item}  index={index}/>}
 			></FlatList>
 		</>
 	);

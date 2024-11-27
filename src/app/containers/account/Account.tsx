@@ -6,17 +6,19 @@ import {
 	setAccessTokenSecure,
 	StackScreenNavigationProp,
 	useAppDispatch,
-	useAppSelector
+	useAppSelector,
 } from '@/src/libs';
-import { setAuth, setCart, setDetailInfomation, setFavorite } from '@/src/libs/redux/store';
-import { setFeedback } from '@/src/libs/redux/store/feedbackSlice';
 import {
-	useIsFocused,
-	useNavigation
-} from '@react-navigation/native';
+	setAuth,
+	setCart,
+	setDetailInfomation,
+	setFavorite,
+} from '@/src/libs/redux/store';
+import { setFeedback } from '@/src/libs/redux/store/feedbackSlice';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { DismissKeyboardView } from '../../components';
 import { fetchDetailInformation } from '../../localHandle';
@@ -26,16 +28,23 @@ import { fetchUpdateDetailInformation } from '../register/handle';
 export const Account = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 
-	const detailsInformation = useAppSelector(state => state.detailInfomation);
-	const account = useAppSelector(state => state.auth?.account);
+	const [loading, setLoading] = useState<boolean>(true);
+
+	const detailsInformation = useAppSelector((state) => state.detailInfomation);
+	const account = useAppSelector((state) => state.auth?.account);
 	const dispatch = useAppDispatch<AppDispatch>();
 
 	const [editDetail, setEditDetail] = useState<boolean>(false);
 
-	const [fullname, setFullname] = useState<string>(detailsInformation.detailInfomation?.full_name);
-	const [address, setAddress] = useState<string>(detailsInformation.detailInfomation?.address);
-	const [phone, setPhone] = useState<string>(detailsInformation.detailInfomation?.phone);
-
+	const [fullname, setFullname] = useState<string>(
+		detailsInformation.detailInfomation?.full_name || '',
+	);
+	const [address, setAddress] = useState<string>(
+		detailsInformation.detailInfomation?.address || '',
+	);
+	const [phone, setPhone] = useState<string>(
+		detailsInformation.detailInfomation?.phone || '',
+	);
 
 	const handleEditDetail = () => {
 		setEditDetail(!editDetail);
@@ -51,34 +60,43 @@ export const Account = () => {
 		setAccessToken('');
 		setAccessTokenSecure('');
 
-		dispatch(setAuth(null))
-		dispatch(setDetailInfomation(null))
-		dispatch(setFavorite(null))
-		dispatch(setFeedback(null))
-		dispatch(setCart(null))
+		dispatch(setAuth(null));
+		dispatch(setDetailInfomation(null));
+		dispatch(setFavorite(null));
+		dispatch(setFeedback(null));
+		dispatch(setCart(null));
 
 		navigation.navigate('Login');
-	}
+	};
 
 	const handleUpdateDetail = async () => {
-		const result = await fetchUpdateDetailInformation({fullname, address, phone});
+		const result = await fetchUpdateDetailInformation({
+			fullname,
+			address,
+			phone,
+		});
 
-		if ( result && result.statusCode === 200) {
+		if (result && result.statusCode === 200) {
 			dispatch(setDetailInfomation(result.data));
 			setEditDetail(false);
 
 			const detailInformation = await fetchDetailInformation();
 			dispatch(setDetailInfomation(detailInformation?.data || null));
 		}
-
-	}
+	};
 
 	const isFocused = useIsFocused();
 
 	useEffect(() => {
 		if (detailsInformation.detailInfomation === null) {
 			navigation.navigate('Login');
+		}else{
+			setLoading(false);
 		}
+		if (!isFocused){
+					setLoading(true);
+		}
+				
 	}, [isFocused]);
 
 	return (
@@ -86,288 +104,299 @@ export const Account = () => {
 			<View
 				style={{
 					flex: 1,
-					justifyContent: 'flex-start',
+					justifyContent: loading ? 'center' : 'flex-start',
 					backgroundColor: colors.mainBackground,
 				}}
 			>
 				<HeaderTitle title="Account" />
-				<ScrollView
-					style={{ backgroundColor: colors.mainBackground }}
-					showsHorizontalScrollIndicator={false}
-					showsVerticalScrollIndicator={false}
-				>
-					<View
-						style={{
-							paddingHorizontal: 16,
-							paddingVertical: 16,
-							gap: 10,
-						}}
+				{loading ? (
+					<View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+						<ActivityIndicator color={colors.brand} size={'large'} />
+					</View>
+				) : (
+					<ScrollView
+						style={{ backgroundColor: colors.mainBackground }}
+						showsHorizontalScrollIndicator={false}
+						showsVerticalScrollIndicator={false}
 					>
-						<LinearGradient
-							colors={[colors.brand, colors.linear]}
-							style={[
-								style.rowCenter,
-								{
-									paddingVertical: 8,
-									gap: 30,
-									justifyContent: 'flex-start',
-									paddingHorizontal: 12,
-									borderRadius: 12,
-								},
-							]}
+						<View
+							style={{
+								paddingHorizontal: 16,
+								paddingVertical: 16,
+								gap: 10,
+							}}
 						>
-							<Image
-								source={{
-									uri: detailsInformation.detailInfomation?.avatar_url,
-								}}
-								width={95}
-								height={95}
-								style={{
-									borderRadius: 100,
-									borderWidth: 2,
-									borderColor: colors.textBrand,
-									overlayColor: 'color',
-								}}
-							/>
-							<View
+							<LinearGradient
+								colors={[colors.brand, colors.linear]}
 								style={[
-									style.columnCenter,
-									{ width: 'auto', alignItems: 'flex-start' },
+									style.rowCenter,
+									{
+										paddingVertical: 8,
+										gap: 30,
+										justifyContent: 'flex-start',
+										paddingHorizontal: 12,
+										borderRadius: 12,
+									},
 								]}
 							>
-								<Text
+								<Image
+									source={{
+										uri: detailsInformation.detailInfomation
+											?.avatar_url,
+									}}
+									width={95}
+									height={95}
+									style={{
+										borderRadius: 100,
+										borderWidth: 2,
+										borderColor: colors.textBrand,
+										overlayColor: 'color',
+									}}
+								/>
+								<View
 									style={[
-										style.headerText,
-										{ color: colors.textBrand },
+										style.columnCenter,
+										{ width: 'auto', alignItems: 'flex-start' },
 									]}
 								>
-									Welcome back!
-								</Text>
-								<Text
-									style={[
-										{
-											color: colors.disable,
-											backgroundColor: colors.textBrand,
-											borderRadius: 4,
-											paddingVertical: 4,
-											paddingHorizontal: 12,
-											fontSize: 12,
-										},
-									]}
-								>
-									{detailsInformation.detailInfomation?.full_name}
-								</Text>
-							</View>
-						</LinearGradient>
-
-						<View
-							style={[
-								style.body,
-								styles.shadow,
-								{
-									backgroundColor: colors.background,
-									gap: 10,
-									alignItems: 'center',
-									paddingHorizontal: 16,
-									borderRadius: 8,
-									paddingVertical: 16,
-								},
-							]}
-						>
-							<Text style={[style.headerText, { width: '100%' }]}>
-								Deliveries
-							</Text>
-							<View
-								style={{
-									width: '100%',
-									height: 0.5,
-									backgroundColor: colors.outline,
-								}}
-							/>
-							<View style={[style.rowCenterCenter, { gap: 120 }]}>
-								<Pressable
-									onPress={() => navigation.navigate('Order')}
-									style={{
-										justifyContent: 'center',
-										alignItems: 'center',
-										gap: 4,
-									}}
-								>
-									<Package width={25} height={25} />
-									<Text>Order</Text>
-								</Pressable>
-								<Pressable
-									onPress={() => navigation.navigate('Feedback')}
-									style={{
-										justifyContent: 'center',
-										alignItems: 'center',
-										gap: 4,
-									}}
-								>
-									<StarProduct width={25} height={25} />
-									<Text>Feedback</Text>
-								</Pressable>
-							</View>
-						</View>
-
-						<View
-							style={[
-								style.body,
-								styles.shadow,
-								{
-									backgroundColor: colors.background,
-									gap: 10,
-									alignItems: 'center',
-									paddingHorizontal: 16,
-									borderRadius: 8,
-									paddingVertical: 16,
-								},
-							]}
-						>
-							<View style={[style.rowCenterBetween, { width: '100%' }]}>
-								<Text style={[style.headerText]}>Details</Text>
-								{!editDetail && (
-									<Pressable onPress={handleEditDetail}>
-										<Edit
-											color={colors.secondText}
-											width={15}
-											height={15}
-										/>
-									</Pressable>
-								)}
-							</View>
-							<View
-								style={{
-									width: '100%',
-									height: 0.5,
-									backgroundColor: colors.outline,
-								}}
-							/>
-							<View style={[style.columnCenter, { gap: 20 }]}>
-								<TextFields
-									edit={editDetail}
-									label="Fullname"
-									value={fullname}
-									onChangeText={setFullname}
-								/>
-								<TextFields
-									edit={editDetail}
-									label="Address"
-									value={address}
-									onChangeText={setAddress}
-								/>
-								<TextFields
-									edit={editDetail}
-									label="Phone"
-									value={phone}
-									onChangeText={setPhone}
-								/>
-								<TextFields
-									edit={editDetail}
-									label="Email"
-									value={account?.email}
-								/>
-							</View>
-
-							{editDetail && (
-								<View style={[style.rowCenter, { gap: 12 }]}>
-									<Button
-										mode="contained"
-										style={{ borderRadius: 8 }}
-										buttonColor={colors.secondText}
-										onPress={handleEditDetail}
+									<Text
+										style={[
+											style.headerText,
+											{ color: colors.textBrand },
+										]}
 									>
-										Cancel
-									</Button>
-									<Button
-										onPress={handleUpdateDetail}
-										mode="contained"
-										style={{ borderRadius: 8 }}
-										buttonColor={colors.brand}
+										Welcome back!
+									</Text>
+									<Text
+										style={[
+											{
+												color: colors.disable,
+												backgroundColor: colors.textBrand,
+												borderRadius: 4,
+												paddingVertical: 4,
+												paddingHorizontal: 12,
+												fontSize: 12,
+											},
+										]}
 									>
-										Save
-									</Button>
+										{detailsInformation.detailInfomation?.full_name}
+									</Text>
 								</View>
-							)}
-						</View>
+							</LinearGradient>
 
-						<View
-							style={[
-								style.body,
-								styles.shadow,
-								{
-									backgroundColor: colors.background,
-									gap: 10,
-									alignItems: 'center',
-									paddingHorizontal: 16,
-									borderRadius: 8,
-									paddingVertical: 16,
-								},
-							]}
-						>
-							<View style={[style.rowCenterBetween, { width: '100%' }]}>
-								<Text style={[style.headerText]}>Details</Text>
-								{!editSecurity && (
-									<Pressable onPress={handleEditSecurity}>
-										<Edit
-											color={colors.secondText}
-											width={15}
-											height={15}
-										/>
-									</Pressable>
-								)}
-							</View>
 							<View
-								style={{
-									width: '100%',
-									height: 0.5,
-									backgroundColor: colors.outline,
-								}}
-							/>
-							<View style={[style.columnCenter, { gap: 20 }]}>
-								<TextFields
-									label="Password"
-									secureTextEntry={true}
-									edit={editSecurity}
+								style={[
+									style.body,
+									styles.shadow,
+									{
+										backgroundColor: colors.background,
+										gap: 10,
+										alignItems: 'center',
+										paddingHorizontal: 16,
+										borderRadius: 8,
+										paddingVertical: 16,
+									},
+								]}
+							>
+								<Text style={[style.headerText, { width: '100%' }]}>
+									Deliveries
+								</Text>
+								<View
+									style={{
+										width: '100%',
+										height: 0.5,
+										backgroundColor: colors.outline,
+									}}
 								/>
-								{editSecurity && (
+								<View style={[style.rowCenterCenter, { gap: 120 }]}>
+									<Pressable
+										onPress={() => navigation.navigate('Order')}
+										style={{
+											justifyContent: 'center',
+											alignItems: 'center',
+											gap: 4,
+										}}
+									>
+										<Package width={25} height={25} />
+										<Text>Order</Text>
+									</Pressable>
+									<Pressable
+										onPress={() => navigation.navigate('Feedback')}
+										style={{
+											justifyContent: 'center',
+											alignItems: 'center',
+											gap: 4,
+										}}
+									>
+										<StarProduct width={25} height={25} />
+										<Text>Feedback</Text>
+									</Pressable>
+								</View>
+							</View>
+
+							<View
+								style={[
+									style.body,
+									styles.shadow,
+									{
+										backgroundColor: colors.background,
+										gap: 10,
+										alignItems: 'center',
+										paddingHorizontal: 16,
+										borderRadius: 8,
+										paddingVertical: 16,
+									},
+								]}
+							>
+								<View
+									style={[style.rowCenterBetween, { width: '100%' }]}
+								>
+									<Text style={[style.headerText]}>Details</Text>
+									{!editDetail && (
+										<Pressable onPress={handleEditDetail}>
+											<Edit
+												color={colors.secondText}
+												width={15}
+												height={15}
+											/>
+										</Pressable>
+									)}
+								</View>
+								<View
+									style={{
+										width: '100%',
+										height: 0.5,
+										backgroundColor: colors.outline,
+									}}
+								/>
+								<View style={[style.columnCenter, { gap: 20 }]}>
 									<TextFields
-										label="Repeat Password"
-										secureTextEntry={true}
-										edit={true}
+										edit={editDetail}
+										label="Fullname"
+										value={fullname}
+										onChangeText={setFullname}
 									/>
+									<TextFields
+										edit={editDetail}
+										label="Address"
+										value={address}
+										onChangeText={setAddress}
+									/>
+									<TextFields
+										edit={editDetail}
+										label="Phone"
+										value={phone}
+										onChangeText={setPhone}
+									/>
+									<TextFields
+										edit={editDetail}
+										label="Email"
+										value={account?.email}
+									/>
+								</View>
+
+								{editDetail && (
+									<View style={[style.rowCenter, { gap: 12 }]}>
+										<Button
+											mode="contained"
+											style={{ borderRadius: 8 }}
+											buttonColor={colors.secondText}
+											onPress={handleEditDetail}
+										>
+											Cancel
+										</Button>
+										<Button
+											onPress={handleUpdateDetail}
+											mode="contained"
+											style={{ borderRadius: 8 }}
+											buttonColor={colors.brand}
+										>
+											Save
+										</Button>
+									</View>
 								)}
 							</View>
-							{editSecurity && (
-								<View style={[style.rowCenter, { gap: 12 }]}>
-									<Button
-										mode="contained"
-										style={{ borderRadius: 8 }}
-										buttonColor={colors.secondText}
-										onPress={handleEditSecurity}
-									>
-										Cancel
-									</Button>
-									<Button
-										mode="contained"
-										style={{ borderRadius: 8 }}
-										buttonColor={colors.brand}
-									>
-										Save
-									</Button>
+
+							<View
+								style={[
+									style.body,
+									styles.shadow,
+									{
+										backgroundColor: colors.background,
+										gap: 10,
+										alignItems: 'center',
+										paddingHorizontal: 16,
+										borderRadius: 8,
+										paddingVertical: 16,
+									},
+								]}
+							>
+								<View
+									style={[style.rowCenterBetween, { width: '100%' }]}
+								>
+									<Text style={[style.headerText]}>Details</Text>
+									{!editSecurity && (
+										<Pressable onPress={handleEditSecurity}>
+											<Edit
+												color={colors.secondText}
+												width={15}
+												height={15}
+											/>
+										</Pressable>
+									)}
 								</View>
-							)}
+								<View
+									style={{
+										width: '100%',
+										height: 0.5,
+										backgroundColor: colors.outline,
+									}}
+								/>
+								<View style={[style.columnCenter, { gap: 20 }]}>
+									<TextFields
+										label="Password"
+										secureTextEntry={true}
+										edit={editSecurity}
+									/>
+									{editSecurity && (
+										<TextFields
+											label="Repeat Password"
+											secureTextEntry={true}
+											edit={true}
+										/>
+									)}
+								</View>
+								{editSecurity && (
+									<View style={[style.rowCenter, { gap: 12 }]}>
+										<Button
+											mode="contained"
+											style={{ borderRadius: 8 }}
+											buttonColor={colors.secondText}
+											onPress={handleEditSecurity}
+										>
+											Cancel
+										</Button>
+										<Button
+											mode="contained"
+											style={{ borderRadius: 8 }}
+											buttonColor={colors.brand}
+										>
+											Save
+										</Button>
+									</View>
+								)}
+							</View>
+							<Button
+								onPress={handleLogout}
+								mode="contained"
+								style={{ borderRadius: 8 }}
+								buttonColor={colors.brand}
+							>
+								Log out
+							</Button>
 						</View>
-						<Button
-							onPress={handleLogout}
-							mode="contained"
-							style={{ borderRadius: 8 }}
-							buttonColor={colors.brand}
-						>
-							Log out
-						</Button>
-					</View>
-				</ScrollView>
+					</ScrollView>
+				)}
 			</View>
 		</DismissKeyboardView>
 	);
@@ -387,7 +416,6 @@ const TextFields = ({
 	edit = false,
 	secureTextEntry = false,
 	onChangeText,
-	
 }: TextFieldsProps) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -435,7 +463,9 @@ const TextFields = ({
 					)}
 				</View>
 			) : (
-				<Text style={[{ flex: 1 }]}>{secureTextEntry ? "*********" : value}</Text>
+				<Text style={[{ flex: 1 }]}>
+					{secureTextEntry ? '*********' : value}
+				</Text>
 			)}
 		</View>
 	);
