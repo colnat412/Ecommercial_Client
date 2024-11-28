@@ -32,12 +32,12 @@ export const PaymentMethod = () => {
 			if (paymentData?.shortLink) {
 				Linking.openURL(paymentData.shortLink);
 				timeoutRef.current = setTimeout(async () => {
-					const response = await getOrderById('8');
+					const response = await getOrderById(paymentData.requestId);
 					console.log('Order data:', response.data.requestId);
 					if (response.data.isActive) {
 						navigation.navigate('PaymentResult');
 					}
-				}, 10000); // 10s
+				}, 3000);
 			}
 		}
 	};
