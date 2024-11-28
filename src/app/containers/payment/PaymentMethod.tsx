@@ -5,11 +5,20 @@ import { Payment } from '@/src/types';
 import { useEffect, useRef, useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { Button, RadioButton, Text } from 'react-native-paper';
-import { getOrderById, getPaymentSuccess, postPaymentData } from './handle';
-import { useNavigation } from '@react-navigation/native';
+import {
+	createOrder,
+	getOrderById,
+	getPaymentSuccess,
+	postPaymentData,
+} from './handle';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackScreenNavigationProp } from '@/src/libs';
 
-export const PaymentMethod = () => {
+interface PaymentMethodProps {
+	cartItemIds: string[];
+}
+
+export const PaymentMethod = ({ cartItemIds }: PaymentMethodProps) => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
 
 	const [momoChecked, setMomoChecked] = useState<boolean>(true);
@@ -29,42 +38,37 @@ export const PaymentMethod = () => {
 
 	const handlePayNow = async () => {
 		if (momoChecked) {
-			if (paymentData?.shortLink) {
-				Linking.openURL(paymentData.shortLink);
-				timeoutRef.current = setTimeout(async () => {
-					const response = await getOrderById(paymentData.requestId);
-					console.log('Order data:', response.data.requestId);
-					if (response.data.isActive) {
-						navigation.navigate('PaymentResult');
-					}
-				}, 3000);
-			}
-		}
-	};
+			try {
+				const response = await createOrder(cartItemIds);
+				const orderId = response.data.id;
+				const paymentResponse = await postPaymentData(orderId);
+				const paymentData = paymentResponse.data;
 
-	const checkPaymentSuccess = async () => {
-		try {
-			const response = await getPaymentSuccess();
-			console.log('Payment data:', response);
-			if (response.statusCode === 200) {
-				navigation.navigate('PaymentResult');
+				if (paymentData) {
+					Linking.openURL(paymentData.shortLink);
+					timeoutRef.current = setTimeout(async () => {
+						const orderStatusResponse = await getOrderById(
+							paymentData.requestId,
+						);
+						if (orderStatusResponse.data.isActive) {
+							navigation.navigate('PaymentResult');
+						} else {
+							console.log('Payment not active yet.');
+						}
+					}, 3000);
+				}
+			} catch (error) {
+				console.error('Payment error:', error);
 			}
-		} catch (error) {
-			console.error('Error fetching payment data:', error);
 		}
 	};
 
 	useEffect(() => {
-		const fetchPaymentData = async () => {
-			try {
-				const response = await postPaymentData('3');
-				setPaymentData(response.data);
-				console.log('Payment data:', paymentData);
-			} catch (error) {
-				console.error('Error fetching payment data:', error);
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
 			}
 		};
-		fetchPaymentData();
 	}, []);
 
 	return (

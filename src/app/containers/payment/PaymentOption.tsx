@@ -46,7 +46,9 @@ export const PaymentOption = () => {
 						renderItem={({ item }) => <PaymentCartItem cartItem={item} />}
 					/>
 				</View>
-				<PaymentMethod />
+				<PaymentMethod
+					cartItemIds={data.map((item) => item.id) as string[]}
+				/>
 			</View>
 		</View>
 	);
