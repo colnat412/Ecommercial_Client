@@ -28,24 +28,34 @@ export const ShoppingCart = () => {
 			try {
 				const response = await getCartItem();
 				const cartItems: CartItemI[] = response.data.data?.cartItems ?? [];
+
 				const mappedItems = cartItems.map((cartItem: CartItemI) => {
-					const priceTotal =
+					const itemPrice =
 						cartItem.item.price +
-						cartItem.options.reduce(
-							(sum, option) => sum + option.listOption.adjustPrice,
-							0,
-						);
+						cartItem.options
+							.map((option) => option.listOption.adjustPrice)
+							.reduce((sum, adjustPrice) => sum + adjustPrice, 0);
+
+					const totalPrice = itemPrice * cartItem.quantity;
+
 					return {
 						id: cartItem.id,
 						quantity: cartItem.quantity,
 						item: cartItem.item,
-						priceTotal: priceTotal,
+						priceTotal: totalPrice,
 						options: cartItem.options,
 						listOptions: cartItem.options.map(
 							(option) => option.listOption,
 						),
 					};
 				});
+
+				const grandTotal = mappedItems.reduce(
+					(sum, item) => sum + item.priceTotal,
+					0,
+				);
+
+				console.log('Grand Total:', grandTotal); // Tổng giá tất cả CartItem
 				setDataChanged(true);
 				setData(mappedItems);
 			} catch (error) {
@@ -116,19 +126,23 @@ export const ShoppingCart = () => {
 	};
 
 	const goPayment = () => {
+		const totalPrice = calculateTotalPrice(selectedItems);
 		navigation.navigate('PaymentOption', {
-			selectedItems: selectedItems,
-			totalPrice: selectedItems.reduce(
-				(total, item) =>
-					(total +
-						item.item.price +
-						item.options
-							.map((option) => option.listOption.adjustPrice)
-							.reduce((sum, price) => sum + price, 0)) *
-					item.quantity,
-				0,
-			),
+			selectedItems,
+			totalPrice,
 		});
+	};
+
+	const calculateTotalPrice = (items: CartItemI[]) => {
+		return items.reduce((total, item) => {
+			const itemPrice =
+				item.item.price +
+				item.options.reduce(
+					(sum, option) => sum + option.listOption.adjustPrice,
+					0,
+				);
+			return total + itemPrice * item.quantity;
+		}, 0);
 	};
 
 	return (
@@ -169,19 +183,7 @@ export const ShoppingCart = () => {
 				<View style={{ maxWidth: 300, flexDirection: 'row' }}>
 					<Text style={{ fontSize: 16 }}>Total:</Text>
 					<Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-						$
-						{selectedItems
-							.reduce(
-								(total, item) =>
-									(total +
-										item.item.price +
-										item.options
-											.map((option) => option.listOption.adjustPrice)
-											.reduce((sum, price) => sum + price, 0)) *
-									item.quantity,
-								0,
-							)
-							.toFixed(2)}
+						${calculateTotalPrice(selectedItems).toFixed(2)}
 					</Text>
 				</View>
 
