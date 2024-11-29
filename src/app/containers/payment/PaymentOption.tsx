@@ -7,14 +7,15 @@ import { PaymentCartItem } from './PaymentCartItem';
 import { Line } from '../../components/Line';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { useEffect, useState } from 'react';
-import { CartItem } from '@/src/types';
+import { CartItem, DetailInformation } from '@/src/types';
 import { getData } from '../handle';
 import { useRoute } from '@react-navigation/native';
-import { PaymentOptionRouteProp } from '@/src/libs';
+import { PaymentOptionRouteProp, useAppSelector } from '@/src/libs';
 
 export const PaymentOption = () => {
 	const route = useRoute<PaymentOptionRouteProp>();
 	const [data, setData] = useState<CartItem[]>([]);
+	const deailInformation: DetailInformation | null = useAppSelector((state) => state.detailInfomation.detailInfomation);
 
 	useEffect(() => {
 		const fetchData = () => {
@@ -37,7 +38,11 @@ export const PaymentOption = () => {
 					</Text>
 				</View>
 				<Line />
-				<PaymentProfile />
+				<PaymentProfile
+					full_name={deailInformation?.full_name || ''}
+					address={deailInformation?.address || ''}
+					phone={deailInformation?.phone || ''}
+				/>
 				<Line />
 				{/* <Cart /> */}
 				<View style={{ flex: 1 }}>
