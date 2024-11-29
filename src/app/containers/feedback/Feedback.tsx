@@ -14,6 +14,7 @@ import {
 	DismissKeyboardView,
 	ImageInput,
 	Line,
+	NoData,
 	ProductList,
 } from '../../components';
 import { HeaderTitleWithBack } from '../../navigation/components';
@@ -297,14 +298,11 @@ export const Feedback = () => {
 			</Portal>
 			<HeaderTitleWithBack title="Feedback" />
 
-			<ProductList
-				style={{
-					paddingHorizontal: 8,
-					backgroundColor: colors.mainBackground,
-				}}
-				products={productData}
-				onPressCard={handlePressCard}
-			/>
+			{productData.length > 0 ? (
+				<ProductList products={productData} onPressCard={handlePressCard} />
+			) : (
+				<NoData message={`You don't have any feedback`} />
+			)}
 		</View>
 	);
 };

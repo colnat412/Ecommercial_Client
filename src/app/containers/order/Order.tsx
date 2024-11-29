@@ -6,6 +6,7 @@ import { Text } from 'react-native-paper';
 import { HeaderTitleWithBack } from '../../navigation/components';
 import { Order } from '@/src/types';
 import { parseDate } from '@/src/utils';
+import { NoData } from '../../components';
 
 export const OrderComponent = () => {
 	const navigation = useNavigation<StackScreenNavigationProp>();
@@ -19,16 +20,19 @@ export const OrderComponent = () => {
 	return (
 		<View style={[style.container, style.body, { paddingHorizontal: 0 }]}>
 			<HeaderTitleWithBack showCart={false} showUser={false} title="Order" />
-			<FlatList
-				data={orders}
-				renderItem={({ item }) => (
-					<OrderItem order={item} onPress={onOrderPress} />
-				)}
-				style={{ paddingHorizontal: 8, paddingVertical: 5 }}
-				showsHorizontalScrollIndicator={false}
-				showsVerticalScrollIndicator={false}
-				initialNumToRender={5}
-			></FlatList>
+			{orders && orders.length > 0 ? (
+				<ScrollView>
+					<FlatList
+						data={orders}
+						renderItem={({ item }) => (
+							<OrderItem order={item} onPress={onOrderPress} />
+						)}
+						keyExtractor={(item) => item.id.toString()}
+					/>
+				</ScrollView>
+			) : (
+				<NoData message={`You don't have any order`} />
+			)}
 		</View>
 	);
 };
