@@ -3,3 +3,4 @@ export * from './PaymentResult';
 export * from './PaymentProfile';
 export * from './PaymentMethod';
 export * from './PaymentCartItem';
+export * from './handle';

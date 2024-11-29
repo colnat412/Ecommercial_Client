@@ -1,5 +1,7 @@
+import { BE_URL } from '@/env';
 import { api } from '@/src/libs';
-import { BaseAxiosResponse } from '@/src/types';
+import { Account, BaseAxiosResponse } from '@/src/types';
+import { current } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchRegister = async (dataInput: {
@@ -73,3 +75,29 @@ export const fetchUpdateDetailInformation = async (dataInput: {
 		}
 	}
 };
+
+export const fetchUpdatePassword = async (currentPassword: string, newPassword: string) => {
+	try {
+		const response = await api.put(`${BE_URL}/api/auth/update-password`, {
+			currentPassword: currentPassword,
+			newPassword: newPassword,
+		});
+
+		const data: BaseAxiosResponse<Account> = {
+			data: response.data.data,
+			statusCode: response.data.statusCode,
+			message: response.data.message,
+		};
+		return data;
+	} catch (error) {
+		console.log(error);
+		if (axios.isAxiosError(error)) {
+			const data: BaseAxiosResponse<Account> = {
+				data: null,
+				statusCode: error.response?.status || 500,
+				message: error.response?.data.message || 'Internal Server Error',
+			};
+			return data;
+		}
+	}
+}

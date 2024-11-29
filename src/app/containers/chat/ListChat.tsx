@@ -21,7 +21,7 @@ export interface ChatRoom {
 
 export const ListChat = () => {
 	const [data, setData] = useState<ChatRoom[]>();
-	const [loading, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
 	const navigation = useNavigation<StackScreenNavigationProp>();
 	const account = useAppSelector((state) => state.auth.account);
 
@@ -36,7 +36,14 @@ export const ListChat = () => {
 			}
 			setLoading(false);
 		};
-		fetchData();
+		if (focus){
+			fetchData();
+		}
+
+		if (!focus){
+			setLoading(true);
+			setData([]);
+		}
 	}, [focus]);
 
 	const handlePress = (userId: string) => {

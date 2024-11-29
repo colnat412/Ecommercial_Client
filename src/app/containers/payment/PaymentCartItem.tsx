@@ -11,6 +11,15 @@ interface PaymentCartItemProps {
 }
 
 export const PaymentCartItem = ({ cartItem }: PaymentCartItemProps) => {
+	const calculateTotalPrice = () => {
+		const priceTotal =
+			cartItem.item.price +
+			cartItem.options.reduce(
+				(sum, option) => sum + option.listOption.adjustPrice,
+				0,
+			);
+		return priceTotal.toFixed(2);
+	};
 	return (
 		<View style={{ gap: 2 }}>
 			<View style={styles.container}>
@@ -22,9 +31,11 @@ export const PaymentCartItem = ({ cartItem }: PaymentCartItemProps) => {
 				<View style={styles.info}>
 					<Text style={styles.nameText}>{cartItem.item.name}</Text>
 					<Text numberOfLines={2} style={styles.listOptionText}>
-						Black, Headphone + Wire
+						{cartItem.options
+							.map((option) => option.listOption.name)
+							.join(', ')}
 					</Text>
-					<Text style={styles.priceText}>${cartItem.item.price}</Text>
+					<Text style={styles.priceText}>${calculateTotalPrice()}</Text>
 				</View>
 				<Text style={styles.qtyText}>x{cartItem.quantity}</Text>
 			</View>

@@ -23,8 +23,9 @@ import {
 	setDetailInfomation,
 	setFavorite,
 	setFeedback,
+	setOrder,
 } from '@/src/libs/redux/store';
-import { fetchCart, fetchFavorite, fetchFeedback } from '../../localHandle';
+import { fetchCart, fetchFavorite, fetchFeedback, fetchOrder } from '../../localHandle';
 
 import { login as loginAction } from '../login/handle';
 
@@ -160,6 +161,9 @@ export const Register = () => {
 
 					const cartData = await fetchCart();
 					dispatch(setCart(cartData?.data || []));
+
+					const orderData = await fetchOrder()
+					dispatch(setOrder(orderData?.data || []));
 
 					navigation.navigate('TabScreenApp');
 				}

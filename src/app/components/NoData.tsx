@@ -1,5 +1,5 @@
 import { EmptyBox } from '@/src/assets';
-import { style } from '@/src/constants';
+import { colors, style } from '@/src/constants';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
@@ -17,7 +17,7 @@ export const NoData = ({ message }: Props) => {
 			]}
 		>
 			<EmptyBox width={60} height={60} />
-			<Text style={[style.headerText]}>{message}</Text>
+			<Text style={[style.headerText, {color: colors.secondText}]}>{message}</Text>
 		</View>
 	);
 };

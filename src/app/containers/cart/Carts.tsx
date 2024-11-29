@@ -10,25 +10,52 @@ import { Arrow } from '@/src/assets';
 import { useNavigation } from '@react-navigation/native';
 import { deleteCartItem, getCartItem } from './handle';
 
+interface CartResponse {
+	shoppingCart: CartItemI[];
+	cartItems: CartItemI[];
+}
+
 export const ShoppingCart = () => {
 	const navigation = useNavigation();
 	const [data, setData] = useState<CartItemI[]>([]);
 	const [dataChanged, setDataChanged] = useState<boolean>(false);
 
-	const [selectedItems, setSelectedItems] = useState<string[]>([]);
+	const [selectedItems, setSelectedItems] = useState<CartItemI[]>([]);
 	const [selectAll, setSelectAll] = useState<boolean>(false);
 
 	useEffect(() => {
 		const fetchCartItems = async () => {
 			try {
 				const response = await getCartItem();
-				const cartItems = response.data.data?.cartItems ?? [];
-				const mappedItems = cartItems.map((cartItem: CartItemI) => ({
-					id: cartItem.id,
-					quantity: cartItem.quantity,
-					item: cartItem.item,
-					listOptions: cartItem.options.map((option) => option.listOption),
-				}));
+				const cartItems: CartItemI[] = response.data.data?.cartItems ?? [];
+
+				const mappedItems = cartItems.map((cartItem: CartItemI) => {
+					const itemPrice =
+						cartItem.item.price +
+						cartItem.options
+							.map((option) => option.listOption.adjustPrice)
+							.reduce((sum, adjustPrice) => sum + adjustPrice, 0);
+
+					const totalPrice = itemPrice * cartItem.quantity;
+
+					return {
+						id: cartItem.id,
+						quantity: cartItem.quantity,
+						item: cartItem.item,
+						priceTotal: totalPrice,
+						options: cartItem.options,
+						listOptions: cartItem.options.map(
+							(option) => option.listOption,
+						),
+					};
+				});
+
+				const grandTotal = mappedItems.reduce(
+					(sum, item) => sum + item.priceTotal,
+					0,
+				);
+
+				console.log('Grand Total:', grandTotal); // Tổng giá tất cả CartItem
 				setDataChanged(true);
 				setData(mappedItems);
 			} catch (error) {
@@ -42,16 +69,16 @@ export const ShoppingCart = () => {
 		if (selectAll) {
 			setSelectedItems([]);
 		} else {
-			setSelectedItems(data.map((item) => item.id));
+			setSelectedItems(data.map((item) => item));
 		}
 		setSelectAll(!selectAll);
 	};
 
 	const toggleSelectItem = (id: string) => {
 		setSelectedItems((prev) =>
-			prev.includes(id)
-				? prev.filter((itemId) => itemId !== id)
-				: [...prev, id],
+			prev.some((item) => item.id === id)
+				? prev.filter((item) => item.id !== id)
+				: [...prev, data.find((item) => item.id === id)!],
 		);
 	};
 
@@ -75,11 +102,16 @@ export const ShoppingCart = () => {
 		} else {
 			try {
 				const response = await Promise.all(
-					selectedItems.map((id) => deleteCartItem(id)),
+					selectedItems.map((item) => deleteCartItem(item.id)),
 				);
 				if (response.every((res) => res.status === 200)) {
 					setData((prev) =>
-						prev.filter((item) => !selectedItems.includes(item.id)),
+						prev.filter(
+							(item) =>
+								!selectedItems.some(
+									(selectedItem) => selectedItem.id === item.id,
+								),
+						),
 					);
 					setSelectedItems([]);
 					setSelectAll(false);
@@ -94,7 +126,23 @@ export const ShoppingCart = () => {
 	};
 
 	const goPayment = () => {
-		navigation.navigate('PaymentOption', { selectedItems: selectedItems });
+		const totalPrice = calculateTotalPrice(selectedItems);
+		navigation.navigate('PaymentOption', {
+			selectedItems,
+			totalPrice,
+		});
+	};
+
+	const calculateTotalPrice = (items: CartItemI[]) => {
+		return items.reduce((total, item) => {
+			const itemPrice =
+				item.item.price +
+				item.options.reduce(
+					(sum, option) => sum + option.listOption.adjustPrice,
+					0,
+				);
+			return total + itemPrice * item.quantity;
+		}, 0);
 	};
 
 	return (
@@ -114,7 +162,9 @@ export const ShoppingCart = () => {
 					renderItem={({ item }) => (
 						<CartItem
 							cartItem={item}
-							isSelected={selectedItems.includes(item.id)}
+							isSelected={selectedItems.some(
+								(selectedItem) => selectedItem.id === item.id,
+							)}
 							toggleSelectItem={toggleSelectItem}
 							onDelete={handleDeleteCartItem}
 						/>
@@ -130,8 +180,13 @@ export const ShoppingCart = () => {
 					alignItems: 'center',
 				}}
 			>
-				<Text style={{ fontSize: 16 }}>Total:</Text>
-				<Text style={{ fontSize: 16, fontWeight: 'bold' }}>$2222</Text>
+				<View style={{ maxWidth: 300, flexDirection: 'row' }}>
+					<Text style={{ fontSize: 16 }}>Total:</Text>
+					<Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+						${calculateTotalPrice(selectedItems).toFixed(2)}
+					</Text>
+				</View>
+
 				<Pressable
 					onPress={handleDeleteAll}
 					style={[

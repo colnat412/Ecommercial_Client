@@ -16,6 +16,7 @@ import {
 	setDetailInfomation,
 	setFavorite,
 	setFeedback,
+	setOrder,
 } from '@/src/libs/redux/store';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -35,6 +36,7 @@ import {
 	fetchFavorite,
 	fetchFeedback,
 	fetchMyAccount,
+	fetchOrder,
 } from '../localHandle';
 
 export const StackScreenApp = () => {
@@ -85,6 +87,9 @@ export const StackScreenApp = () => {
 
 						const cartData = await fetchCart();
 						dispatch(setCart(cartData?.data || []));
+
+						const orderData = await fetchOrder()
+						dispatch(setOrder(orderData?.data || []))
 
 						console.log('Stack Screen: AccessToken success');
 					} else {

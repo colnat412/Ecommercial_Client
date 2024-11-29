@@ -12,8 +12,8 @@ export type RootStackParamList = {
 	Login: undefined;
 	Register: undefined;
 	ProductDetail: { productId: string };
-	SubCategory: undefined;
-	PaymentOption: { selectedItems: string[] };
+	SubCategory: { categoryId: string };
+	PaymentOption: { selectedItems: CartItem[]; totalPrice: number };
 	Order: undefined;
 	OrderDetail: { order: Order };
 	Feedback: undefined;

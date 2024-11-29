@@ -7,11 +7,13 @@ import { DismissKeyboardView } from '../../components';
 interface SearchInputProps {
 	handleShowFilter?: () => void;
 	handleSearch?: (text: string) => void;
+	text?: string;
 }
 
 export const SearchInput = ({
 	handleShowFilter,
 	handleSearch,
+	text=''
 }: SearchInputProps) => {
 	return (
 
@@ -31,6 +33,7 @@ export const SearchInput = ({
 					left={<TextInput.Icon icon={SearchIcon} />}
 					placeholder="Search"
 					mode="outlined"
+					value={text}
 					activeOutlineColor={colors.brand}
 					onChangeText={handleSearch}
 					outlineColor={colors.outline}

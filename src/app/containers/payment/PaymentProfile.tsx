@@ -1,24 +1,32 @@
 import { Home, User } from '@/src/assets';
 import { Phone } from '@/src/assets/svgs/Phone';
+import { useAppSelector } from '@/src/libs';
+import { DetailInformation } from '@/src/types';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export const PaymentProfile = () => {
+interface PaymentProfileProps {
+	full_name: string;
+	phone: string;
+	address: string;
+}
+
+export const PaymentProfile = ({full_name, phone, address}: PaymentProfileProps) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.info}>
 				<User width={20} height={20} />
-				<Text>Phung Anh Minh</Text>
+				<Text>{full_name}</Text>
 			</View>
 			<View style={styles.info}>
 				<Home width={20} height={20} />
 				<Text style={{ letterSpacing: 1 }}>
-					100 Suoi Bac, Son Hoa, Phu Yen
+					{address}
 				</Text>
 			</View>
 			<View style={styles.info}>
 				<Phone width={20} height={20} />
-				<Text style={{ letterSpacing: 1 }}>0123456789</Text>
+				<Text style={{ letterSpacing: 1 }}>{phone}</Text>
 			</View>
 		</View>
 	);

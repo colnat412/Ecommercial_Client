@@ -17,7 +17,7 @@ export const ProductItemHorizontal = React.memo(({ product }: ProductItemProps) 
 	return (
 		<Pressable
 			onPress={() => {
-				navigation.navigate('ProductDetail', { productId: product.id });
+				navigation.push('ProductDetail', { productId: product.id });
 			}}
 			style={styles.container}
 		>
@@ -36,7 +36,7 @@ export const ProductItemHorizontal = React.memo(({ product }: ProductItemProps) 
 				</View>
 				<View style={styles.rating}>
 					<Star width={18} height={18} />
-					<Text>4.5</Text>
+					<Text>{product.rating}</Text>
 				</View>
 			</View>
 		</Pressable>
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		gap: 10,
 		padding: 10,
-		marginLeft: 16,
+		marginRight: 4,
+		marginLeft: 8,
 		marginBottom: 3,
 		borderRadius: 6,
 		backgroundColor: '#FFF',

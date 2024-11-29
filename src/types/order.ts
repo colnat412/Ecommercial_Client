@@ -1,7 +1,9 @@
 import { Product } from './product';
 
 export interface Order {
-	date: string;
-	total: number;
-	status: string;
+	id: string;
+	order_date: string;
+	total_price: number;
+	itemCount: number;
+	isActive: boolean;
 }
