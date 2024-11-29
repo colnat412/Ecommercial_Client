@@ -24,7 +24,11 @@ api.interceptors.request.use(
 		if (error.response.status === 401) {
 			console.log('\x1b[41m Axios\x1b[0m \x1b[31m \x1b[0m');
 		}
-
+		if (axios.isAxiosError(error)) {
+		}
+		console.log('Error in request interceptor', error);
+		console.error('Error URL:', error.config?.url);
+		console.log('Request Method:', error.config?.method);
 		return Promise.reject(error);
 	},
 );

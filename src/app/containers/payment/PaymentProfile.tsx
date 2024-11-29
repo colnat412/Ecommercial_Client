@@ -1,5 +1,7 @@
 import { Home, User } from '@/src/assets';
 import { Phone } from '@/src/assets/svgs/Phone';
+import { useAppSelector } from '@/src/libs';
+import { DetailInformation } from '@/src/types';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 

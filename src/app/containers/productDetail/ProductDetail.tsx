@@ -42,6 +42,7 @@ import {
 	Product,
 	ProductDetail as IProductDetail,
 	FeedbackProductDetail,
+	CartItem,
 } from '@/src/types';
 import {
 	addProductToCart,
@@ -72,6 +73,8 @@ export const ProductDetail = () => {
 	const [product, setProduct] = useState<IProductDetail>();
 	const [visibleCart, setVisibleCart] = useState<boolean>(false);
 	const [feedback, setFeedback] = useState<FeedbackProductDetail[]>([]);
+	const [quantity, setQuantity] = useState<number>(1);
+	const [isBuyNow, setIsBuyNow] = useState<boolean>(false);
 
 	const [options, setOptions] = useState<Option[] | undefined>([]);
 	const [listOptions, setListOptions] = useState<ListOption[][]>([]);
@@ -160,7 +163,6 @@ export const ProductDetail = () => {
 			...selectedOptions,
 			[optionIndex]: listIndex,
 		});
-		console.log('selectedOptions', selectedOptions);
 	};
 
 	const addItemToCart = async (
@@ -169,29 +171,60 @@ export const ProductDetail = () => {
 		listOptionId: string[],
 	) => {
 		try {
-			console.log('itemId', itemId);
-			console.log('qty', qty);
-			console.log('listOptionId', listOptionId);
-
-			const response = await addProductToCart(itemId, qty, listOptionId);
-			if (response.status === 200 || response.status === 201) {
-				Alert.alert('Success', 'Add to cart success');
+			if (isBuyNow) {
+				const response = await addProductToCart(itemId, qty, listOptionId);
+				if (response.status === 200 || response.status === 201) {
+					const cartItems: CartItem[] =
+						response.data.data?.cartItems ?? [];
+					const totalPrice = cartItems.reduce(
+						(total, item) =>
+							(total +
+								item.item.price +
+								item.options
+									.map((option) => option.listOption.adjustPrice)
+									.reduce((sum, price) => sum + price, 0)) *
+							item.quantity,
+						0,
+					);
+					setVisibleCart(!visibleCart);
+					navigation.navigate('PaymentOption', {
+						selectedItems: cartItems,
+						totalPrice,
+					});
+				}
 			} else {
-				Alert.alert('Error', response.message || 'Failed to add to cart');
+				const response = await addProductToCart(itemId, qty, listOptionId);
+				console.log('response', response.data.data);
+
+				if (response.status === 200 || response.status === 201) {
+					Alert.alert('Success', 'Add to cart success');
+				} else {
+					Alert.alert(
+						'Error',
+						response.message || 'Failed to add to cart',
+					);
+				}
 			}
 		} catch (error) {
 			Alert.alert('Error', 'An unexpected error occurred');
 		}
 	};
 
-	const goPayment = () => {
-		if (product?.id) {
-			navigation.navigate('Cart', { productId: product.id });
-		}
-		setTimeout(() => {
-			Alert.alert('Success', 'Add to cart success'); // set timeout for 2s
-		}, 500);
+	const handleBuyNow = () => {
+		setIsBuyNow(true);
 		setVisibleCart(!visibleCart);
+	};
+
+	const handleDecreaseQuantity = () => {
+		const newQuantity = quantity - 1;
+		if (newQuantity >= 1) {
+			setQuantity(newQuantity);
+		}
+	};
+
+	const handleIncreaseQuantity = () => {
+		const newQuantity = quantity + 1;
+		setQuantity(newQuantity);
 	};
 
 	return (
@@ -225,7 +258,10 @@ export const ProductDetail = () => {
 							<View
 								style={[
 									style.contentBody,
-									{ backgroundColor: colors.mainBackground, paddingBottom: 0 },
+									{
+										backgroundColor: colors.mainBackground,
+										paddingBottom: 0,
+									},
 								]}
 							>
 								<View
@@ -663,7 +699,11 @@ export const ProductDetail = () => {
 								<Text
 									style={[
 										style.headerText,
-										{ fontSize: 16, color: colors.mainText, paddingHorizontal: 16 },
+										{
+											fontSize: 16,
+											color: colors.mainText,
+											paddingHorizontal: 16,
+										},
 									]}
 								>
 									Relation Products
@@ -713,7 +753,7 @@ export const ProductDetail = () => {
 							<Favorite width={20} height={20} />
 						</Pressable>
 						<Button
-							onPress={() => navigation.navigate('PaymentOption')}
+							onPress={handleBuyNow}
 							style={[
 								style.outline,
 								{ borderColor: colors.brand, flex: 1 },
@@ -973,6 +1013,7 @@ export const ProductDetail = () => {
 										>
 											<View style={[style.rowCenter, { gap: 20 }]}>
 												<Pressable
+													onPress={handleDecreaseQuantity}
 													style={{
 														padding: 8,
 														borderRadius: 4,
@@ -984,8 +1025,11 @@ export const ProductDetail = () => {
 														color={colors.secondText}
 													/>
 												</Pressable>
-												<Text style={{ margin: 0 }}>1</Text>
+												<Text style={{ margin: 0 }}>
+													{quantity}
+												</Text>
 												<Pressable
+													onPress={handleIncreaseQuantity}
 													style={{
 														padding: 8,
 														backgroundColor: colors.brand,
@@ -1021,7 +1065,7 @@ export const ProductDetail = () => {
 													});
 													addItemToCart(
 														product.id,
-														1,
+														quantity,
 														selectedOptionIds,
 													);
 												}
@@ -1043,7 +1087,7 @@ export const ProductDetail = () => {
 													},
 												]}
 											>
-												Add To Cart
+												{isBuyNow ? 'Buy Now' : 'Add to cart'}
 											</Text>
 										</Pressable>
 									</View>

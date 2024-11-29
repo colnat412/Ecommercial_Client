@@ -1,4 +1,4 @@
-import { Order } from '@/src/types';
+import { CartItem, Order } from '@/src/types';
 import { RouteProp } from '@react-navigation/native';
 import {
 	createNativeStackNavigator,
@@ -13,13 +13,13 @@ export type RootStackParamList = {
 	Register: undefined;
 	ProductDetail: { productId: string };
 	SubCategory: { categoryId: string };
-	PaymentOption: undefined;
+	PaymentOption: { selectedItems: CartItem[]; totalPrice: number };
 	Order: undefined;
 	OrderDetail: { order: Order };
 	Feedback: undefined;
 	PaymentResult: undefined;
-	Cart: { productId: string };
-	ChatAdmin: {userId: string};
+	Cart: { productId: string; callback: () => void };
+	ChatAdmin: { userId: string };
 };
 
 declare global {
@@ -31,8 +31,14 @@ declare global {
 export type StackScreenNavigationProp =
 	NativeStackNavigationProp<RootStackParamList>;
 
-export type ProductDetailRouteProp = RouteProp<RootStackParamList, 'ProductDetail'>;
+export type ProductDetailRouteProp = RouteProp<
+	RootStackParamList,
+	'ProductDetail'
+>;
 export type OrderDetailRouteProp = RouteProp<RootStackParamList, 'OrderDetail'>;
 export type CartRouteProp = RouteProp<RootStackParamList, 'Cart'>;
 export type ChatAdminRouteProp = RouteProp<RootStackParamList, 'ChatAdmin'>;
-export type SubCategoryRouteProp = RouteProp<RootStackParamList, 'SubCategory'>;
+export type PaymentOptionRouteProp = RouteProp<
+	RootStackParamList,
+	'PaymentOption'
+>;
