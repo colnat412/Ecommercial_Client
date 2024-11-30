@@ -465,13 +465,13 @@ export const ProductDetail = () => {
 												{Array.from(
 													{ length: avg() },
 													(_, index) => (
-														<Star />
+														<Star key={index} />
 													),
 												)}
 												{Array.from(
 													{ length: 5 - avg() },
 													(_, index) => (
-														<HalfStar />
+														<HalfStar key={index} />
 													),
 												)}
 											</View>

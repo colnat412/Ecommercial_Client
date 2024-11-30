@@ -45,7 +45,7 @@ export const SearchPage = () => {
 	const [data, setData] = useState<Product[]>([]);
 	const [filteredData, setFilteredData] = useState<Product[]>([]);
 
-	const [isVisible, setIsVisible] = useState<boolean>(true);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [priceRange, setPriceRange] = useState<number[]>([0, 800]);
 	const [shippingOptions, setShippingOptions] = useState<shippingOptionsProps>(
 		{

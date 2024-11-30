@@ -36,7 +36,12 @@ export const HomePageHeader = () => {
 	};
 
 	const goCart = async () => {
-		navigation.navigate('Cart', { productId: '', callback: () => {} });
+		if (detailsInformation){
+			navigation.navigate('Cart', { productId: '', callback: () => {} });
+		}
+		else {
+			navigation.navigate('Login');
+		}
 	};
 
 	return (

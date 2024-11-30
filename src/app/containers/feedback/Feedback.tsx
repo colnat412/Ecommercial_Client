@@ -1,6 +1,6 @@
 import { BE_URL } from '@/env';
 import { colors, style } from '@/src/constants';
-import { Product } from '@/src/types';
+import { Feedback as FeedbackType, Product } from '@/src/types';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
@@ -14,6 +14,7 @@ import {
 	DismissKeyboardView,
 	ImageInput,
 	Line,
+	NoData,
 	ProductList,
 } from '../../components';
 import { HeaderTitleWithBack } from '../../navigation/components';
@@ -26,40 +27,134 @@ import {
 	TextInput,
 } from 'react-native-paper';
 import { Cancel, Star } from '@/src/assets';
-import { useAppSelector } from '@/src/libs';
-
+import { api, AppDispatch, useAppSelector } from '@/src/libs';
+import { fetchAddFeedback } from './handle';
+import * as DocumentPicker from 'expo-document-picker';
+import { FileDetails } from '@/src/types/others';
+import { useDispatch } from 'react-redux';
+import { fetchFeedback } from '../../localHandle';
+import { setFeedback } from '@/src/libs/redux/store';
 export const Feedback = () => {
-	const productData: Product[] = useAppSelector(
+	const feedbackData: FeedbackType[] = useAppSelector(
 		(state) => state.feedback?.feedback || [],
 	);
+
 	const [visibleFeedback, setVisibleFeedback] = useState<boolean>(false);
 	const [rating, setRating] = useState<number>(5);
 	const [comment, setComment] = useState<string>('');
 	const [image, setImage] = useState<string>('');
-	const [productId, setProductId] = useState<string>('');
+	const [feedbackId, setFeedbackId] = useState<string>('');
+
+	const [productData, setProductData] = useState<Product[]>([]);
+
+	useEffect(() => {
+		const products = feedbackData.map((item) => item.product);
+		setProductData(products);
+	}, [feedbackData]);
+
+	const [file, setFile] = useState<FileDetails | null>(null);
+	const dispatch = useDispatch<AppDispatch>();
+
+	const pickDocument = async () => {
+		try {
+			const result = await DocumentPicker.getDocumentAsync({
+				type: 'image/*',
+				copyToCacheDirectory: true,
+			});
+
+			console.log (result);
+			if (result.canceled === false) {
+				setFile({
+					uri: result.assets[0].uri,
+					name: result.assets[0].name,
+					size: result.assets[0].size ?? 0,
+					type: result.assets[0].mimeType ?? 'unknown',
+				});
+			}
+		} catch (error) {
+			console.error('Error picking document:', error);
+		}
+	};
+
+	const uploadImage = async () => {
+		try {
+			if (file?.uri && file?.type && file?.name) {
+				const formData = new FormData();
+				formData.append('file', {
+					uri: file.uri,
+					name: file.name,
+					type: file.type,
+					size: file.size,
+				} as unknown as Blob);
+				const result = await api.post('/api/cloud/upload-file', formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				});
+				return (
+					result.data.data.url ??
+					'https://i.pinimg.com/236x/7d/7e/b6/7d7eb65a1e0f84780188d62c7b7eef0d.jpg'
+				);
+			}
+			return 'https://i.pinimg.com/236x/7d/7e/b6/7d7eb65a1e0f84780188d62c7b7eef0d.jpg';
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const handleRating = (value: number) => {
 		setRating(value);
 	};
 
 	const handlePressCard = (id: string) => {
-		setVisibleFeedback(!visibleFeedback);
-		console.log('id', id);
+		const feedbackIdPress = feedbackData.find(
+			(item) => item.product.id === id,
+		);
+		setVisibleFeedback(true);
+		setFeedbackId(feedbackIdPress?.id || '');
 	};
 
 	const handleSubmit = async () => {
-	}
+		const imageResponse = await uploadImage();
+
+		const response = await fetchAddFeedback(
+			feedbackId,
+			comment,
+			rating,
+			imageResponse,
+		);
+
+		if (response && response.statusCode === 200) {
+			setVisibleFeedback(false);
+			setRating(5);
+			setComment('');
+			setImage('');
+			setFeedbackId('');
+			setFile(null);
+
+			const responseFeedback = await fetchFeedback();
+			if (responseFeedback && responseFeedback.statusCode === 200) {
+				dispatch(setFeedback(responseFeedback.data));
+			}
+		}
+	};
 
 	const toggleModalCart = () => {
 		setVisibleFeedback(!visibleFeedback);
 		setRating(5);
 		setComment('');
 		setImage('');
-		setProductId('');
+		setFeedbackId('');
+		setFile(null);
 	};
 
 	return (
-		<View style={[style.body, { paddingTop: 32, backgroundColor: colors.background }]}>
+		<View
+			style={[
+				style.body,
+				{ paddingTop: 32, backgroundColor: colors.background },
+			]}
+		>
 			<Portal>
 				<Modal
 					visible={visibleFeedback}
@@ -90,6 +185,8 @@ export const Feedback = () => {
 											Comment
 										</Text>
 										<TextInput
+											value={comment}
+											onChangeText={setComment}
 											multiline={true}
 											mode="outlined"
 											numberOfLines={6}
@@ -111,7 +208,7 @@ export const Feedback = () => {
 										>
 											Image
 										</Text>
-										<ImageInput />
+										<ImageInput onPress={pickDocument} value={file} />
 									</View>
 
 									<Line />
@@ -190,6 +287,7 @@ export const Feedback = () => {
 									mode="contained"
 									style={{ borderRadius: 8, marginTop: 16 }}
 									buttonColor={colors.brand}
+									onPress={handleSubmit}
 								>
 									Submit
 								</Button>
@@ -200,11 +298,11 @@ export const Feedback = () => {
 			</Portal>
 			<HeaderTitleWithBack title="Feedback" />
 
-			<ProductList
-				style={{ paddingHorizontal: 8, backgroundColor: colors.mainBackground }}
-				products={productData}
-				onPressCard={handlePressCard}
-			/>
+			{productData.length > 0 ? (
+				<ProductList products={productData} onPressCard={handlePressCard} />
+			) : (
+				<NoData message={`You don't have any feedback`} />
+			)}
 		</View>
 	);
 };

@@ -17,7 +17,7 @@ export const ProductItemHorizontal = React.memo(({ product }: ProductItemProps) 
 	return (
 		<Pressable
 			onPress={() => {
-				navigation.navigate('ProductDetail', { productId: product.id });
+				navigation.push('ProductDetail', { productId: product.id });
 			}}
 			style={styles.container}
 		>
